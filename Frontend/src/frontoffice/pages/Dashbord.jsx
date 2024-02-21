@@ -53,6 +53,10 @@ function Dashboard(){
               <div className="icon"><i className="bx bxl-dribbble"></i></div>
               <h4 className="title"><a href="">Lorem Ipsum</a></h4>
               <p className="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+              <div className="buttons">
+        <a href="#" className="btn btn-primary">Apply</a>
+        <a href="#" className="btn btn-secondary">Details</a>
+      </div>
             </div>
           </div>
 

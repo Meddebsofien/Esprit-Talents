@@ -153,8 +153,8 @@ function Navbar() {
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
-        <a href="home" className="logo  ">
-         <img src="/src/assets/img/logo.png" alt="" className="img-fluid" /> 
+        <a href="home" className="w-25 h-10">
+         <img src="/src/assets/img/logo.png" alt="" className="img-fluid" style={{ width: '150px', height: '50px' }} /> 
         </a>
      
 
@@ -169,66 +169,39 @@ function Navbar() {
             </li>
             <li>
               <a className="nav-link scrollto text-black" href="#about">
-                About
+                Campanies
               </a>
             </li>
             <li>
               <a className="nav-link scrollto text-black" href="#services">
-                Services
+                Offer
               </a>
-            </li>
-            <li>
-              <a className="nav-link scrollto text-black" href="#team">
-                Team
-              </a>
-            </li>
-            <li className="dropdown">
-              <a href="#">
-                <span className='text-black'>Drop Down</span> <i className="bi bi-chevron-down"></i>
-              </a>
-              <ul>
-                <li>
-                  <a href="#">Drop Down 1</a>
-                </li>
-                <li className="dropdown">
-                  <a href="#">
-                    <span>Deep Drop Down</span>{' '}
-                    <i className="bi bi-chevron-right"></i>
-                  </a>
-                  <ul>
-                    <li>
-                      <a href="#">Deep Drop Down 1</a>
-                    </li>
-                    <li>
-                      <a href="#">Deep Drop Down 2</a>
-                    </li>
-                    <li>
-                      <a href="#">Deep Drop Down 3</a>
-                    </li>
-                    <li>
-                      <a href="#">Deep Drop Down 4</a>
-                    </li>
-                    <li>
-                      <a href="#">Deep Drop Down 5</a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#">Drop Down 2</a>
-                </li>
-                <li>
-                  <a href="#">Drop Down 3</a>
-                </li>
-                <li>
-                  <a href="#">Drop Down 4</a>
-                </li>
-              </ul>
             </li>
             <li>
               <a className="nav-link scrollto text-black" href="#contact">
                 Contact
               </a>
             </li>
+          
+            <li className="dropdown">
+              <a href="#">
+                <span className='text-black'>Profil</span> <i className="bi bi-chevron-down"></i>
+              </a>
+              <ul>
+                <li>
+                  <a href="#">Edit profil</a>
+                </li>
+                
+                <li>
+    <a href="#">
+    Logout
+    </a>
+</li>
+
+               
+              </ul>
+            </li>
+           
           </ul>
           <i className="bi bi-list mobile-nav-toggle text-black"></i>
         </nav>
