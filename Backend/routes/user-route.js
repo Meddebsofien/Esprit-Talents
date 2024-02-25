@@ -1,3 +1,6 @@
+const { registerUser, currentUser } = require("../Controllers/user-controller");
+
+const validateToken = require("../middleware/validateTokenHandler");
 var express = require('express');
 var router = express.Router();
 
@@ -10,8 +13,14 @@ router.get('/api', (req, res)=> {
 
 
 
+
+
+
 const userController = require('../Controllers/user-controller');
-router.post('/AjouterUtilisateur', userController.createUser);
+
+router.post("/register", registerUser);
+
+router.get("/current", validateToken, currentUser);
 
 // Lire tous les utilisateurs
 router.get('/GetUtilisateurs', userController.getAllUsers);
