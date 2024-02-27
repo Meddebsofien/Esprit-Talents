@@ -9,6 +9,8 @@ import List from './backoffice/pages/list/List'
 import Home from './backoffice/pages/home/Home'
 import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
+import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
+import { Link } from 'react-router-dom'
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
 
@@ -45,6 +47,7 @@ function App() {
           <Route index  element={<Hero />} />
             <Route path="Signup" element={<Signup />} />
             <Route path="Signin" element={<Signin />} />
+            <Route path ="addOffer" element ={<AjouterOffer/>} />
            
           </Route>
 

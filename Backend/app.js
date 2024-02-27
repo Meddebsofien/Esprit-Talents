@@ -6,6 +6,7 @@ var logger = require('morgan');
 var usersRouter = require('./routes/user-route');
 var mongoose = require('mongoose');
 require('dotenv').config();
+var  offerRouter = require('./routes/offer-route');
 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>console.log("Connected to MongoDB..."))
@@ -20,5 +21,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
-
+app.use('/offers', offerRouter);
 module.exports = app;
