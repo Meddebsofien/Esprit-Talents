@@ -3,36 +3,58 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-registerUser = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password } = req.body;
-    if (!nom || !prenom || !password || !role || !mail) {
+    const { nom, prenom, role, mail, password, companyName, numeroTel, fax, adresse, specialite } = req.body;
+
+    if (!password || !role || !mail) {
       res.status(400);
-      throw new Error("All fields are mandatory!");
+      throw new Error('All fields are mandatory!');
     }
+
     const userAvailable = await User.findOne({ mail });
+
     if (userAvailable) {
       res.status(400);
-      throw new Error("User already registered!");
+      throw new Error('User already registered!');
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Hashed Password: ", hashedPassword);
-    const user = await User.create({
+
+    let userFields = {
       nom,
       prenom,
       role,
       mail,
       password: hashedPassword,
-    });
+    };
+
+    // Set role-specific fields based on the user's role
+    if (role === 'Company') {
+      userFields = {
+        ...userFields,
+        companyName,
+        numeroTel,
+        fax,
+        adresse,
+      };
+    } else if (role === 'Student') {
+      userFields = {
+        ...userFields,
+        specialite,
+      };
+    }
+
+    const user = await User.create(userFields);
 
     console.log(`User created ${user}`);
+
     if (user) {
       res.status(201).json({ _id: user.id, mail: user.mail });
     } else {
       res.status(400);
-      throw new Error("User data is not valid");
+      throw new Error('User data is not valid');
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -42,11 +64,12 @@ registerUser = async (req, res) => {
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });
+
 exports.createUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password } = req.body;
+    const { nom, prenom, role, mail, password, companyName, numeroTel, fax, adresse,specialite } = req.body;
 
-    if (!nom || !prenom || !password || !role || !mail) {
+    if (!password || !role || !mail) {
       res.status(400);
       throw new Error("All fields are mandatory!");
     }
@@ -68,6 +91,11 @@ exports.createUser = async (req, res) => {
       role,
       mail,
       password: hashedPassword,
+      companyName,
+      numeroTel,
+      fax,
+      adresse,
+      specialite,
     });
 
     console.log(`User created ${user}`);
@@ -128,9 +156,6 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
-
 
 module.exports.registerUser = registerUser;
 module.exports.currentUser = currentUser;

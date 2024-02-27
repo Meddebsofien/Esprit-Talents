@@ -2,36 +2,56 @@ import React, { useState } from 'react';
 import { Button, Container, Grid, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 function Signup() {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     nom: '',
     prenom: '',
     role: '',
     mail: '',
     password: '',
-    
-  });
-
-
-
+    companyName: '',
+    numeroTel: '',
+    fax: '',
+    adresse: '',
+    specialite: '',
+  };
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
+  // Fonction de gestion du changement de rôle
+  const handleRoleChange = (role) => {
+    setFormData(initialFormData); // Réinitialiser le formulaire lorsque le rôle change
+    setFormData((prevFormData) => ({ ...prevFormData, role }));
+  };
+
+  // Fonction de gestion de l'inscription
   const handleSignUp = async () => {
-    // Check if passwords match before submitting the form
-
-
-    // Check if all required fields are filled
-    for (const key in formData) {
+    // Champs obligatoires pour chaque rôle
+    const requiredFields = ['nom', 'prenom', 'role', 'mail', 'password'];
+  
+    // Champs spécifiques à chaque rôle
+    const roleSpecificFields = {
+      Student: ['specialite'],
+      Company: ['companyName', 'adresse', 'numeroTel'],
+      Staff: ['mail'],
+    };
+  
+    // Fusionner les champs spécifiques au rôle avec les champs généraux
+    const allRequiredFields = [...requiredFields, ...(roleSpecificFields[formData.role] || [])];
+  
+    // Vérifier si les champs obligatoires sont remplis
+    for (const key of allRequiredFields) {
       if (formData[key] === '') {
-        console.error('All fields are mandatory!');
+        console.error('Tous les champs obligatoires ne sont pas remplis !');
         return;
       }
     }
 
     try {
+      // Effectuer la requête POST vers l'API
       const response = await fetch('http://localhost:3700/users/register', {
         method: 'POST',
         headers: {
@@ -40,27 +60,26 @@ function Signup() {
         body: JSON.stringify(formData),
       });
 
-      console.log('Response:', response);
-      
-      // Check if the response is successful (status code 2xx)
+      console.log('Réponse :', response);
+
+      // Vérifier si la réponse est réussie (code d'état 2xx)
       if (response.ok) {
         const data = await response.json();
-        // Handle the response from the server as needed
         console.log(data);
-        // Redirect or perform additional actions based on the response
+        // Rediriger ou effectuer des actions supplémentaires en fonction de la réponse
       } else {
         const errorData = await response.json();
-        console.error('Error:', errorData);
+        console.error('Erreur :', errorData);
       }
-
     } catch (error) {
-      console.error('Fetch Error:', error);
+      console.error('Erreur Fetch :', error);
     }
   };
 
+  // Fonction de gestion de la soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleSignUp(); // Call handleSignUp when the form is submitted
+    handleSignUp();
   };
 
   return (
@@ -105,7 +124,7 @@ function Signup() {
                   id="role"
                   name="role"
                   value={formData.role}
-                  onChange={handleChange}
+                  onChange={(e) => handleRoleChange(e.target.value)}
                   required
                 >
                   <MenuItem value="" disabled>Select Role</MenuItem>
@@ -115,13 +134,52 @@ function Signup() {
                 </Select>
               </FormControl>
 
+              {formData.role === 'Company' && (
+                <>
+                  <TextField
+                    fullWidth
+                    label="Company Name"
+                    id="companyName"
+                    type="text"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleChange}
+                    required
+                    className="mb-4"
+                  />
+                  {/* ... rest of the company-specific fields ... */}
+                </>
+              )}
+
+              {formData.role === 'Student' && (
+                <>
+                  <FormControl fullWidth className="mb-4">
+                    <InputLabel htmlFor="specialite">Specialization</InputLabel>
+                    <Select
+                      label="Specialization"
+                      id="specialite"
+                      name="specialite"
+                      value={formData.specialite}
+                      onChange={handleChange}
+                      required
+                    >
+                      <MenuItem value="" disabled>Select Specialization</MenuItem>
+                      <MenuItem value="Information technology(IT)">Information technology(IT)</MenuItem>
+                      <MenuItem value="Business">Business</MenuItem>
+                      <MenuItem value="Civil Engineering">Civil Engineering</MenuItem>
+                      <MenuItem value="Mechanical">Mechanical</MenuItem>
+                    </Select>
+                  </FormControl>
+                </>
+              )}
+
               <TextField
                 fullWidth
                 label="Email address"
-                id="email"
+                id="mail"
                 type="email"
-                name="email"
-                value={formData.email}
+                name="mail"
+                value={formData.mail}
                 onChange={handleChange}
                 required
                 className="mb-4"
@@ -139,7 +197,41 @@ function Signup() {
                 className="mb-4"
               />
 
- 
+              {formData.role === 'Company' && (
+                <>
+                  <TextField
+                    fullWidth
+                    label="Phone Number"
+                    id="numeroTel"
+                    type="tel"
+                    name="numeroTel"
+                    value={formData.numeroTel}
+                    onChange={handleChange}
+                    required
+                    className="mb-4"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Fax"
+                    id="fax"
+                    type="text"
+                    name="fax"
+                    value={formData.fax}
+                    onChange={handleChange}
+                    className="mb-4"
+                  />
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    id="adresse"
+                    type="text"
+                    name="adresse"
+                    value={formData.adresse}
+                    onChange={handleChange}
+                    className="mb-4"
+                  />
+                </>
+              )}
 
               <div className="text-center pt-1 mb-5 pb-1">
                 <Button type="submit" variant="contained" className="mb-4 w-100 gradient-custom-2">
