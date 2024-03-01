@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Hero from './frontoffice/pages/hero'
-import Signup from './components/sign-up'
+import Signup from './components/signup/sign-up'
 import Signin from './components/sign-in'
 import { productInputs, userInputs } from "./backoffice/formSource";
 import List from './backoffice/pages/list/List'

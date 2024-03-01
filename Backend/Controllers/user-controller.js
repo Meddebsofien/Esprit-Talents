@@ -1,11 +1,115 @@
 const User = require('../Models/user');
+const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-// Créer un utilisateur
+const registerUser = async (req, res) => {
+  try {
+    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
+
+    if (!password || !role || !mail ||!confirmPassword) {
+      res.status(400);
+      throw new Error('All fields are mandatory!');
+    }
+
+    const userAvailable = await User.findOne({ mail });
+
+    if (userAvailable) {
+      res.status(400);
+      throw new Error('User already registered!');
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    let userFields = {
+      nom,
+      prenom,
+      role,
+      mail,
+      password: hashedPassword,
+      confirmPassword:hashedPassword,
+    };
+
+    // Set role-specific fields based on the user's role
+    if (role === 'Company') {
+      userFields = {
+        ...userFields,
+        companyName,
+        numeroTel,
+        fax,
+        adresse,
+      };
+    } else if (role === 'Student') {
+      userFields = {
+        ...userFields,
+        specialite,
+      };
+    }
+
+    const user = await User.create(userFields);
+
+    console.log(`User created ${user}`);
+
+    if (user) {
+      res.status(201).json({ _id: user.id, mail: user.mail });
+    } else {
+      res.status(400);
+      throw new Error('User data is not valid');
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+const currentUser = asyncHandler(async (req, res) => {
+  res.json(req.user);
+});
+
 exports.createUser = async (req, res) => {
   try {
-    const newUser = new User(req.body);
-    const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
+
+    if (!password || !role || !mail ||!confirmPassword) {
+      res.status(400);
+      throw new Error("All fields are mandatory!");
+    }
+
+    const userAvailable = await User.findOne({ mail });
+
+    if (userAvailable) {
+      res.status(400);
+      throw new Error("User already registered!");
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Hashed Password: ", hashedPassword);
+
+    const user = await User.create({
+      nom,
+      prenom,
+      role,
+      mail,
+      password: hashedPassword,
+      companyName,
+      numeroTel,
+      fax,
+      adresse,
+      specialite,
+    });
+
+    console.log(`User created ${user}`);
+
+    if (user) {
+      res.status(201).json({ _id: user.id, mail: user.mail });
+    } else {
+      res.status(400);
+      throw new Error("User data is not valid");
+    }
+
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -21,7 +125,6 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Lire un utilisateur par son ID
 exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -34,7 +137,6 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// Mettre à jour un utilisateur par son ID
 exports.updateUser = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -57,3 +159,6 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+module.exports.registerUser = registerUser;
+module.exports.currentUser = currentUser;
