@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cros());
 
+
 app.use('/users', usersRouter);
 app.use('/offers', offerRouter);
 module.exports = app;
