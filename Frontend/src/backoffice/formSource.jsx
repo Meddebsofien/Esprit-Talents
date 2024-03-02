@@ -47,7 +47,7 @@ export const userInputs = [
       id: 1,
       label: "Title",
       type: "text",
-      placeholder: "Apple Macbook Pro",
+      placeholder: "Apple Macbook Pro",     
     },
     {
       id: 2,
@@ -74,4 +74,59 @@ export const userInputs = [
       placeholder: "in stock",
     },
   ];
+
+  export const formOffer=[
+    {
+      id: 1,
+      label: "Title",
+      type: "text",
+      placeholder: "Software Engineer",
+
+      name:"title"
+    },{
+      id: 2,                      
+      label: "Description",
+      type: "text",
+      placeholder: "Description",
+      
+      name:"description"
+    },
+    {
+      id: 3,
+      label: "company",
+      type: "text",
+      placeholder: "Esprit",
+      
+      name:"company"
+    },
+    {
+      id: 4,
+      label:"location",
+      type : "text",
+      placeholder:"tunis",
+      name:"location"
+    },
+    {
+      id:5,
+      label:"requirements",
+      type :"string",
+      placeholder:"ci/cd",
+      isArray: true,
+      name:"requirements"
+    },
+    {
+      id:6,
+      label:"startDate",
+      type : "Date",
+      name:"startDate"
+    },
+    {
+      id: 7,
+      label: "Type",
+      type: "select",
+      options: ["Emploi", "Stage"],
+      placeholder: "Sélectionnez le type",
+      name:"type"
+    }
+  ]
   

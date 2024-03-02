@@ -172,17 +172,26 @@ function Navbar() {
               <Link className="nav-link scrollto text-black" >
                 Campanies
              </Link>
+
             </li>
             <li>
               <Link className="nav-link scrollto text-black" href="#services" to={`/addOffer`}>
                 Ajouter Offer
              </Link>
+
             </li>
+          
+            
             <li>
+
+              <Link className="nav-link scrollto text-black" to={``}>
+                Mes Application
+
               <Link className="nav-link scrollto text-black" href="#contact">
                 Contact
              </Link>
             </li>
+           
           
             <li className="dropdown">
               <Link  href="#">

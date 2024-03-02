@@ -1,32 +1,40 @@
 import React, { useState } from 'react';
 import './login.css';
-import Register from './registre';
 import { Link } from 'react-router-dom';
-const SignUpPage = () => {
+const Registre = () => {
+   
     const [activeTab, setActiveTab] = useState('sign-in');
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
 
+
     return (
         <div className="container1" id="container1">
             <div className="form-container1 sign-in1">
-                <form>
-                    <h1>Sign In</h1>
-                    <div className="social-icons1">
-                        <a href="#" className="icon1"><i className="fab fa-google-plus-g"></i></a>
-                        <a href="#" className="icon1"><i className="fab fa-facebook-f"></i></a>
-                        <a href="#" className="icon1"><i className="fab fa-github"></i></a>
-                        <a href="#" className="icon1"><i className="fab fa-linkedin-in"></i></a>
-                    </div>
-                    <span>or use your email password</span>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
-                    <a href="#">Forget Your Password?</a>
-                    <Link to={`/registre`}>registre</Link>
-                    <button>Sign In</button>
-                </form>
+            <form>
+          <h1>Create Account</h1>
+          <div className="social-icons1">
+            <a href="#" className="icon">
+              <i className="fab fa-google-plus-g"></i>
+            </a>
+            <a href="#" className="icon">
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" className="icon">
+              <i className="fab fa-github"></i>
+            </a>
+            <a href="#" className="icon">
+              <i className="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" placeholder="Name" />
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button>Sign Up</button>
+        </form>
             </div>
             <div className="toggle-container1">
                 <div className="toggle1">
@@ -46,4 +54,4 @@ const SignUpPage = () => {
     );
 };
 
-export default SignUpPage;
+export default Registre;
