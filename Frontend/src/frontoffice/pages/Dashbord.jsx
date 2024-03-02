@@ -1,31 +1,41 @@
-import { useEffect, useState } from "react"
-import Offer from "../layout/offer/Offer"
-import axios from "axios";
-
 function Dashboard(){
-
-    const [offer,setOffer]=useState([])
-/* find all offers */
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:3700/offers/getAllOffers");
-      setOffer(response.data);
-    } catch (error) {
-      // Gérer les erreurs ici
-      console.error("Une erreur s'est produite lors de la récupération des offres :", error);
-    }
-  };
-
-  fetchData();
-}, []); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
-
-
-
-return(
+    return(
 <main id="main">
 
-   
+    {/* ======= About Section ======= */}
+    <section id="about" className="about">
+      <div className="container">
+
+        <div className="section-title">
+          <h2>About</h2>
+          <h3>Learn More <span>About Us</span></h3>
+          <p>Ut possimus qui ut temporibus culpa velit eveniet modi omnis est adipisci expedita at voluptas atque vitae autem.</p>
+        </div>
+
+        <div className="row content">
+          <div className="col-lg-6">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+              magna aliqua.
+            </p>
+            <ul>
+              <li><i className="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
+              <li><i className="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit</li>
+              <li><i className="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
+            </ul>
+          </div>
+          <div className="col-lg-6 pt-4 pt-lg-0">
+            <p>
+              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+              culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <a href="#" className="btn-learn-more">Learn More</a>
+          </div>
+        </div>
+
+      </div>
+    </section>{/* End About Section */}
 
     {/* ======= Services Section ======= */}
     <section id="services" className="services">
@@ -38,37 +48,104 @@ return(
         </div>
 
         <div className="row">
-        
-            
-            
+          <div className="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div className="icon-box">
+              <div className="icon"><i className="bx bxl-dribbble"></i></div>
+              <h4 className="title"><a href="">Lorem Ipsum</a></h4>
+              <p className="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+              <div className="buttons">
+        <a href="#" className="btn btn-primary">Apply</a>
+        <a href="#" className="btn btn-secondary">Details</a>
+      </div>
+            </div>
+          </div>
 
-           {offer.map(({title,description,company,location,type,startDate,requirements,experience,createdAt,createdBy,_id})=> (
-            <Offer
-            title={title}
-            description={description}
-            company={company}
-            location={location}
-            type={type}
-            startDate={startDate}
-            requirements={requirements}
-            Id={_id}
-            experience={experience}
-            createdAt={createdAt}
-            createdBy={createdBy}
-             />
-            
-           ))}
+          <div className="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div className="icon-box">
+              <div className="icon"><i className="bx bx-file"></i></div>
+              <h4 className="title"><a href="">Sed ut perspiciatis</a></h4>
+              <p className="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+            </div>
+          </div>
 
-         
+          <div className="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div className="icon-box">
+              <div className="icon"><i className="bx bx-tachometer"></i></div>
+              <h4 className="title"><a href="">Magni Dolores</a></h4>
+              <p className="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+            </div>
+          </div>
 
-          
-
-          
+          <div className="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div className="icon-box">
+              <div className="icon"><i className="bx bx-world"></i></div>
+              <h4 className="title"><a href="">Nemo Enim</a></h4>
+              <p className="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+            </div>
+          </div>
 
         </div>
 
       </div>
-    </section>
+    </section>{/* End Services Section */}
+
+    {/* ======= Features Section ======= */}
+    <section id="features" className="features">
+      <div className="container">
+
+        <div className="row">
+          <div className="col-lg-3 col-md-4 col-6 col-6">
+            <div className="icon-box">
+              <i className="ri-store-line" style={{color: '#ffbb2c'}}></i>
+              <h3><a href="">Lorem Ipsum</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-bar-chart-box-line" style={{color: '#5578ff'}}></i>
+              <h3><a href="">Dolor Sitema</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-calendar-todo-line" style={{color: '#e80368'}}></i>
+              <h3><a href="">Sed perspiciatis</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-paint-brush-line" style={{color: '#e361ff'}}></i>
+              <h3><a href="">Magni Dolores</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-database-2-line" style={{color: '#47aeff'}}></i>
+              <h3><a href="">Nemo Enim</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-gradienter-line" style={{color: '#ffa76e'}}></i>
+              <h3><a href="">Eiusmod Tempor</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-file-list-3-line" style={{color: '#11dbcf'}}></i>
+              <h3><a href="">Midela Teren</a></h3>
+            </div>
+          </div>
+          <div className="col-lg-3 col-md-4 col-6">
+            <div className="icon-box">
+              <i className="ri-price-tag-2-line" style={{color: '#4233ff'}}></i>
+              <h3><a href="">Pira Neve</a></h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>{/* ======= aaa Section ======= */}
     <section id="faq" className="faq">
       <div className="container">
 

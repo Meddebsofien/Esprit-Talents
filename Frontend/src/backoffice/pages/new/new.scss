@@ -2,10 +2,8 @@
   width: 100%;
   display: flex;
 
-
   .newContainer {
     flex: 6;
-    padding-top: 1%;
 
     .top,
     .bottom {
@@ -66,12 +64,11 @@
             width: 150px;
             padding: 10px;
             border: none;
-            background-color: #e43c5c ;
+            background-color: teal;
             color: white;
             font-weight: bold;
             cursor: pointer;
             margin-top: 10px;
-            border-radius: 50px;
           }
         }
       }
