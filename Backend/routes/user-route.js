@@ -27,5 +27,6 @@ router.put('/updateUtilisateur/:userId', userController.updateUser);
 // Supprimer un utilisateur par son ID
 router.delete('/deleteUtilisateur/:userId', userController.deleteUser);
 
-
+// Route pour la connexion (signin)
+router.post('/signin', userController.signin);
 module.exports = router;

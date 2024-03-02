@@ -2,17 +2,21 @@ const User = require('../Models/user');
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const config = require("../Config/auth.config");
 
+// Liste des rôles autorisés
+const allowedRoles = ['Company', 'Student'];
+//signup user
 const registerUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
+    const { nom, prenom, role, email, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
 
-    if (!password || !role || !mail ||!confirmPassword) {
+    if (!password || !role || !email ||!confirmPassword) {
       res.status(400);
       throw new Error('All fields are mandatory!');
     }
 
-    const userAvailable = await User.findOne({ mail });
+    const userAvailable = await User.findOne({ email });
 
     if (userAvailable) {
       res.status(400);
@@ -26,7 +30,7 @@ const registerUser = async (req, res) => {
       nom,
       prenom,
       role,
-      mail,
+      email,
       password: hashedPassword,
       confirmPassword:hashedPassword,
     };
@@ -52,7 +56,7 @@ const registerUser = async (req, res) => {
     console.log(`User created ${user}`);
 
     if (user) {
-      res.status(201).json({ _id: user.id, mail: user.mail });
+      res.status(201).json({ _id: user.id, email: user.email });
     } else {
       res.status(400);
       throw new Error('User data is not valid');
@@ -61,8 +65,42 @@ const registerUser = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+//signin user
+exports.signin = (req, res) => {
+  User.findOne({ email: req.body.email })
+    .populate("role", "-__v")
+    .exec() // Utilisez exec() sans callback
+    .then(user => {
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
 
+      var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
+      if (!passwordIsValid) {
+        return res.status(401).send({ accessToken: null, message: "Invalid Password!" });
+      }
+
+      const token = jwt.sign({ id: user.id },
+                              config.secret,
+                              {
+                                algorithm: 'HS256',
+                                allowInsecureKeySizes: true,
+                                expiresIn: 86400, // 24 hours
+                              });
+
+      res.status(200).send({
+        id: user._id,
+        nom: user.nom,
+        email: user.email,
+        role: user.role,
+        accessToken: token
+      });
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
+};
 
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
@@ -70,14 +108,14 @@ const currentUser = asyncHandler(async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
+    const { nom, prenom, role, email, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
 
-    if (!password || !role || !mail ||!confirmPassword) {
+    if (!password || !role || !email ||!confirmPassword) {
       res.status(400);
       throw new Error("All fields are mandatory!");
     }
 
-    const userAvailable = await User.findOne({ mail });
+    const userAvailable = await User.findOne({ email });
 
     if (userAvailable) {
       res.status(400);
@@ -92,7 +130,7 @@ exports.createUser = async (req, res) => {
       nom,
       prenom,
       role,
-      mail,
+      email,
       password: hashedPassword,
       companyName,
       numeroTel,
@@ -104,7 +142,7 @@ exports.createUser = async (req, res) => {
     console.log(`User created ${user}`);
 
     if (user) {
-      res.status(201).json({ _id: user.id, mail: user.mail });
+      res.status(201).json({ _id: user.id, email: user.email });
     } else {
       res.status(400);
       throw new Error("User data is not valid");
