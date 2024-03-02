@@ -35,6 +35,10 @@ const offerSchema = new mongoose.Schema({
         type: Number, 
         required: false 
     },
+    experience: {
+        type: Number, 
+        required: true 
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', 
