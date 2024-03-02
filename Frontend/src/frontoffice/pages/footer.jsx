@@ -6,7 +6,7 @@ function Footer(){
       <div className="row">
 
         <div className="col-lg-3 col-md-6 footer-contact">
-        <img src="/src/assets/img/logofinal.png" alt="" className="img-fluid" />
+        <img src="/src/assets/img/logofinal.png" alt="" className="img-fluid" style={{ width: '150px', height: '50px' }} />
 
           <p>
             A108 Adam Street <br />
@@ -55,7 +55,7 @@ function Footer(){
 
     <div className="me-md-auto text-center text-md-start">
       <div className="copyright">
-        &copy; Copyright <strong><span>Tempo</span></strong>. All Rights Reserved
+        &copy; Copyright <strong><span>Esprit_Talents</span></strong>. All Rights Reserved
       </div>
       <div className="credits">
         
