@@ -115,7 +115,7 @@ function Signup() {
    
 
     // Instantly validate the "Email Address" field
-    if (name === 'mail') {
+    if (name === 'email') {
       validateEmail(value);
     }
     if (name === 'prenom') {
@@ -384,13 +384,13 @@ function Signup() {
                   <TextField
                     fullWidth
                     label="Email Address"
-                    id="mail"
+                    id="email"
                     type="email"
-                    name="mail"
+                    name="email"
                     onBlur={validateEmail}
                     error={Boolean(emailError)}
                     helperText={emailError}
-                    value={formData.mail}
+                    value={formData.email}
                     onChange={handleChange}
                     required
                     className="mb-4"

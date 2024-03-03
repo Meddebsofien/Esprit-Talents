@@ -9,14 +9,14 @@ const allowedRoles = ['Company', 'Student'];
 //signup user
 const registerUser = async (req, res) => {
   try {
-    const { nom, prenom, role, email, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
+    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
 
-    if (!password || !role || !email ||!confirmPassword) {
+    if (!password || !role || !mail ||!confirmPassword) {
       res.status(400);
       throw new Error('All fields are mandatory!');
     }
 
-    const userAvailable = await User.findOne({ email });
+    const userAvailable = await User.findOne({ mail });
 
     if (userAvailable) {
       res.status(400);
@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
       nom,
       prenom,
       role,
-      email,
+      mail,
       password: hashedPassword,
       confirmPassword:hashedPassword,
     };
@@ -56,7 +56,7 @@ const registerUser = async (req, res) => {
     console.log(`User created ${user}`);
 
     if (user) {
-      res.status(201).json({ _id: user.id, email: user.email });
+      res.status(201).json({ _id: user.id, mail: user.mail });
     } else {
       res.status(400);
       throw new Error('User data is not valid');
@@ -67,7 +67,7 @@ const registerUser = async (req, res) => {
 };
 //signin user
 exports.signin = (req, res) => {
-  User.findOne({ email: req.body.email })
+  User.findOne({ mail: req.body.mail })
     .populate("role", "-__v")
     .exec() // Utilisez exec() sans callback
     .then(user => {
@@ -92,7 +92,7 @@ exports.signin = (req, res) => {
       res.status(200).send({
         id: user._id,
         nom: user.nom,
-        email: user.email,
+        mail: user.mail,
         role: user.role,
         accessToken: token
       });
@@ -108,14 +108,14 @@ const currentUser = asyncHandler(async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { nom, prenom, role, email, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
+    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
 
-    if (!password || !role || !email ||!confirmPassword) {
+    if (!password || !role || !mail ||!confirmPassword) {
       res.status(400);
       throw new Error("All fields are mandatory!");
     }
 
-    const userAvailable = await User.findOne({ email });
+    const userAvailable = await User.findOne({ mail });
 
     if (userAvailable) {
       res.status(400);
@@ -130,7 +130,7 @@ exports.createUser = async (req, res) => {
       nom,
       prenom,
       role,
-      email,
+      mail,
       password: hashedPassword,
       companyName,
       numeroTel,
@@ -142,7 +142,7 @@ exports.createUser = async (req, res) => {
     console.log(`User created ${user}`);
 
     if (user) {
-      res.status(201).json({ _id: user.id, email: user.email });
+      res.status(201).json({ _id: user.id, mail: user.mail });
     } else {
       res.status(400);
       throw new Error("User data is not valid");

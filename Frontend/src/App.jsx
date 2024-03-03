@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Hero from './frontoffice/pages/hero'
 import Signup from './components/signup/sign-up'
-import Signin from './components/sign-in'
+import Signin from './components/signin/signin'
 import { productInputs, userInputs } from "./backoffice/formSource";
 import List from './backoffice/pages/list/List'
 import Home from './backoffice/pages/home/Home'
@@ -13,7 +13,7 @@ import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
 import { Link } from 'react-router-dom'
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
-
+  const user = localStorage.getItem("token");
     const OpenSidebar = () => {
     setOpenSidebarToggle(!openSidebarToggle)
     }

@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   adresse:{type :String },
   prenom: { type: String },
   role: { type: String, enum: ['Company', 'Student', 'Staff'] },
-  email: { type: String, required:[true, "Please add the user email address"], unique:  [true,"Email address already taken"] },
+  mail: { type: String, required:[true, "Please add the user email address"], unique:  [true,"Email address already taken"] },
   password: { type: String, required: [true,"Please Enter your Password"] },
   confirmPassword: { type: String, required: [true,"Please Enter your Password"] },
   specialite :{type:String , enum: ['Information technology(IT)', 'Business', 'Civil Engineering' , 'Mechanical']}
