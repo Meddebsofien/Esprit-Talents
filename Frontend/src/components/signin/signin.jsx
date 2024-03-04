@@ -1,116 +1,190 @@
-import React, { useState } from "react"; 
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import HashLoader from "react-spinners/HashLoader";
 import styled from "styled-components";
 import Button from "../Button";
 import Icon from "../Icon";
 import Input from "../Input";
+import { useNavigate  } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 
-
-
-import axios from "axios";
-
-
-function SignInComponent() {
-   
-  
-  const FacebookBackground =
-    "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
-  const InstagramBackground =
-    "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
-  const TwitterBackground =
-    "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
-    
-    const [mail, setEmail] = useState('');
+export default function Login() {
+    const navigate = useNavigate();
+  const [role, setRole] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [mail, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
-
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [color, setColor] = useState("#BD2C43");
+  const [emailSent, setEmailSent] = useState(false);
+  const FacebookBackground =
+  "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
+const InstagramBackground =
+  "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
+const TwitterBackground =
+  "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(event.target.value)) {
+      setEmailError('Invalid email format');
+    } else {
+      setEmailError('');
+    }
   };
 
+  // Fonction pour l'authentification
+  const signIn = async () => {
+    if (!mail || !password) {
+      setErrorMessage('Please fill in all fields correctly');
+      return;
+    }
+    const userData = {
+      mail,
+      password,
+    };
+    try {
+      const response = await axios.post('http://localhost:3700/users/signin', userData);
+      setIsLoading(true)
+      console.log(response);
+      navigate("/");
+    } catch (error) {
+      console.error(error.response.data);
+      if (error.response.status === 401) {
+        setErrorMessage("Incorrect Password");
+      } else if (error.response.status === 404) {
+        setErrorMessage("User Not Found");
+      } 
+      if(error.response.status === 403) {
+        setErrorMessage("Please verify");
+      }
+    
+    }
+  };
+
+  // Fonction de gestion du changement de mot de passe
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-    
-  const handleSubmit = async (e, mail, password) => {
-    e.preventDefault();
-    const data = {
-        mail: mail,
-        password: password
-      };
-  
-    try {
-      const url = "http://localhost:3700/users/signin";
-      const response = await axios.post(url, {
-        mail: mail,
-        password: password,
-      
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*' // Vérifiez la configuration CORS côté serveur
-        } ,
-        method: 'POST',
-       
-       
-      });
-      localStorage.setItem("token", response.data.token);
-      history.push("/admin"); 
-    } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-        console.log(error.response.data.message); 
-      } else {
-        console.log("Une erreur s'est produite lors de la connexion."); 
-      }
-    }
-  };
- 
-      return (
-        <div className="signin-background">
-        <Container>
-          <WelcomeText>Welcome</WelcomeText>
-          <form onSubmit={(e) => handleSubmit(e, mail, password)}>
-          <InputContainer>
-            <Input
-              type="email"
-              id="mail"
-              name="mail"
-              value={mail}
-              onChange={handleEmailChange}
-              required
-            />
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={handlePasswordChange}
-              required
-            />
-          </InputContainer>
-          <ButtonContainer>
-          <Button type="submit" content="Sign In" />
-          </ButtonContainer>
-          </form>
-          <LoginWith>OR LOGIN WITH</LoginWith>
-          <HorizontalRule />
-          <IconsContainer>
-            <Icon color={FacebookBackground}>
-              <FaFacebookF />
-            </Icon>
-            <Icon color={InstagramBackground}>
-              <FaInstagram />
-            </Icon>
-            <Icon color={TwitterBackground}>
-              <FaTwitter />
-            </Icon>
-          </IconsContainer>
-          <ForgotPassword>Forgot Password ?</ForgotPassword>
-         
-        </Container>
-        </div>
-      );
-}
 
-const Container = styled.div`
+  // Fonction de gestion du changement de rôle
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
+  };
+const handleForgotPassword = async () => {
+  if(!mail){
+    setErrorMessage('Please type your email address');
+    return
+  }
+  
+  try {
+    const response = await axios.post('http://localhost:5000/auth/forgot-password', { mail: mail });
+    console.log(response.data);
+    setEmailSent(true);
+  } catch (error) {
+    console.error(error);
+    setErrorMessage(error.response.data.message);
+  }
+};
+
+  // Vérifie si le formulaire est valide
+  const isFormValid = () => {
+    return mail && !emailError && password;
+  };
+
+  return (
+<div className="signin-background">
+    <MainContainer>
+    <WelcomeText>Welcome</WelcomeText>
+      
+    <>
+    {isLoading ? (
+     <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+     <HashLoader
+       color={color}
+       loading={isLoading}
+       size={150}
+       aria-label="Loading Spinner"
+       data-testid="loader"
+     />
+   </div>
+    ) : (
+      <>
+      
+      <form className="signin-form">
+      <div className=" mb-3">
+  {/* Champ Email */}
+  <div className="input-wrapper mb-3">
+    <label htmlFor="email">Email</label>
+    <input type="email" id="email" value={mail} required onChange={handleEmailChange} className="custom-input" />
+    {emailError && <div className="error-message">{emailError}</div>}
+  </div>
+
+  {/* Champ Mot de passe */}
+  <div className="input-wrapper">
+    <label htmlFor="password">Password</label>
+    <div className="relative">
+   
+    <div className="password-input">
+      <input
+        type={passwordVisible ? "text" : "password"}
+        id="password"
+        value={password}
+        required
+        onChange={handlePasswordChange}
+        className="custom-input"
+      />
+       </div>
+      <i
+        onClick={() => setPasswordVisible(!passwordVisible)}
+        className={`fa-solid ${passwordVisible ? 'fa-eye-slash' : 'fa-eye'} `}
+      />
+    </div>
+    </div>
+  </div>
+  <div className="text-center mt-6 mb-3">
+  {/* Bouton Se connecter */}
+  <div className="button-wrapper">
+    <button type="button" onClick={() => signIn()} className="custom-button">Login</button>
+  </div>
+  </div>
+  {/* Affichage du message d'erreur */}
+  {errorMessage && !emailSent && (
+    <div className="error-message">{errorMessage}</div>
+  )}
+
+  {emailSent && (
+    <div className="success-message">A recovery email has been sent</div>
+  )}
+</form>
+
+              
+            
+    </>
+    )}
+  </>
+  <LoginWith>OR LOGIN WITH</LoginWith>
+  <IconsContainer>
+        <Icon color={FacebookBackground}>
+          <FaFacebookF />
+        </Icon>
+        <Icon color={InstagramBackground}>
+          <FaInstagram />
+        </Icon>
+        <Icon color={TwitterBackground}>
+          <FaTwitter />
+        </Icon>
+      </IconsContainer>
+      <ForgotPassword>Forgot Password ?</ForgotPassword>
+  </MainContainer>
+  </div>
+
+  );
+}
+  const MainContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -206,5 +280,3 @@ const IconsContainer = styled.div`
 const ForgotPassword = styled.h4`
   cursor: pointer;
 `;
-
-export default SignInComponent;

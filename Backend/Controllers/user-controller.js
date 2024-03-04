@@ -68,39 +68,38 @@ const registerUser = async (req, res) => {
 //signin user
 exports.signin = (req, res) => {
   User.findOne({ mail: req.body.mail })
-    .populate("role", "-__v")
-    .exec() // Utilisez exec() sans callback
+
+    .exec()
     .then(user => {
       if (!user) {
-        return res.status(404).send({ message: "User Not found." });
+        return res.status(404).send({ message: "User not found." });
       }
+     
+      // Comparer le mot de passe saisi avec le mot de passe haché stocké en base de données
+      bcrypt.compare(req.body.password, user.password, (err, result) => {
+        if (err || !result) {
+          return res.status(401).send({ accessToken: null, message: "Invalid password." });
+        }
 
-      var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
-      if (!passwordIsValid) {
-        return res.status(401).send({ accessToken: null, message: "Invalid Password!" });
-      }
-
-      const token = jwt.sign({ id: user.id },
-                              config.secret,
-                              {
-                                algorithm: 'HS256',
-                                allowInsecureKeySizes: true,
-                                expiresIn: 86400, // 24 hours
-                              });
-
-      res.status(200).send({
-        id: user._id,
-        nom: user.nom,
-        mail: user.mail,
-        role: user.role,
-        accessToken: token
+        // Si le mot de passe est valide, générer le token JWT
+        const token = jwt.sign({ id: user.id },
+                                config.secret,
+                                {
+                                  algorithm: 'HS256',
+                                  allowInsecureKeySizes: true,
+                                  expiresIn: 86400, // 24 hours
+                                });
+                               
+        res.status(200).send({
+          accessToken: token
+        });
       });
     })
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
 };
+
 
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
