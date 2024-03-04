@@ -10,7 +10,9 @@ import Home from './backoffice/pages/home/Home'
 import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
 import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
+import Signupggle from './components/signup_withggle/Signupggle'
 import { Link } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google';
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
   const user = localStorage.getItem("token");
@@ -48,7 +50,7 @@ function App() {
             <Route path="Signup" element={<Signup />} />
             <Route path="Signin" element={<Signin />} />
             <Route path ="addOffer" element ={<AjouterOffer/>} />
-           
+            <Route path ="ggle" element ={<Signupggle/>} />
           </Route>
 
           <Route path='*' element={<Hero />} />

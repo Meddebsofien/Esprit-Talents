@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
-
 var mongoose = require('mongoose');
 require('dotenv').config();
 var  offerRouter = require('./routes/offer-route');
@@ -24,6 +23,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 
 app.use((req, res, next) => {

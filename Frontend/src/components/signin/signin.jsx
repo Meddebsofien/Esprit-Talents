@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
@@ -8,7 +8,7 @@ import Icon from "../Icon";
 import Input from "../Input";
 import { useNavigate  } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
-
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 export default function Login() {
     const navigate = useNavigate();
   const [role, setRole] = useState('');
@@ -20,7 +20,14 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [color, setColor] = useState("#BD2C43");
   const [emailSent, setEmailSent] = useState(false);
-  const FacebookBackground =
+  const [ user, setUser ] = useState([]);
+  const [ profile, setProfile ] = useState([]);
+
+  const login = useGoogleLogin({
+      onSuccess: (codeResponse) => {setUser(codeResponse), console.log(codeResponse)},
+      onError: (error) => console.log('Login Failed:', error)
+  });
+  const GoogleBackground =
   "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
 const InstagramBackground =
   "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
@@ -94,7 +101,37 @@ const handleForgotPassword = async () => {
   const isFormValid = () => {
     return mail && !emailError && password;
   };
+  const googleAuth = () => {
+    window.open(
+        `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+        "_self"
+    );
+};
 
+//loginwith google 
+useEffect(
+    () => {
+        if (user) {
+            axios
+                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                    headers: {
+                        Authorization: `Bearer ${user.access_token}`,
+                        Accept: 'application/json'
+                    }
+                })
+                .then((res) => {
+                    setProfile(res.data);
+                })
+                .catch((err) => console.log(err));
+        }
+    },
+    [ user ]
+);
+ // log out function to log the user out of google and set the profile array to null
+ const logOut = () => {
+    googleLogout();
+    setProfile(null);
+};
   return (
 <div className="signin-background">
     <MainContainer>
@@ -168,9 +205,12 @@ const handleForgotPassword = async () => {
   </>
   <LoginWith>OR LOGIN WITH</LoginWith>
   <IconsContainer>
-        <Icon color={FacebookBackground}>
+    <button onClick={login}>
+    <Icon  color={GoogleBackground}>
           <FaFacebookF />
         </Icon>
+    </button>
+      
         <Icon color={InstagramBackground}>
           <FaInstagram />
         </Icon>
