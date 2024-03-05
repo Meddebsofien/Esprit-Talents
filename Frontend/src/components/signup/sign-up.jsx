@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Container,
@@ -12,9 +13,15 @@ import {
   CardContent,
   InputAdornment
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
 function Signup() {
+  
+  const navigate = useNavigate();
+
+  // Function to handle the "Forgot password" link click
+  
   const initialFormData = {
     nom: '',
     prenom: '',
@@ -115,7 +122,7 @@ function Signup() {
    
 
     // Instantly validate the "Email Address" field
-    if (name === 'email') {
+    if (name === 'mail') {
       validateEmail(value);
     }
     if (name === 'prenom') {
@@ -192,7 +199,9 @@ function Signup() {
   
       if (response.ok) {
         const data = await response.json();
+        
         console.log('Data:', data);
+        navigate('/signin');
       } else {
         const errorData = await response.json();
         console.error('Error:', errorData);
@@ -201,7 +210,7 @@ function Signup() {
         }
       }
     } catch (error) {
-      console.error('Fetch Error:', error);
+      
     }
   };
   
@@ -384,13 +393,13 @@ function Signup() {
                   <TextField
                     fullWidth
                     label="Email Address"
-                    id="email"
+                    id="mail"
                     type="email"
-                    name="email"
+                    name="mail"
                     onBlur={validateEmail}
                     error={Boolean(emailError)}
                     helperText={emailError}
-                    value={formData.email}
+                    value={formData.mail}
                     onChange={handleChange}
                     required
                     className="mb-4"
@@ -439,9 +448,8 @@ function Signup() {
                     >
                       Sign up
                     </Button>
-                    <a className="text-muted" href="#!" style={{ color: 'red' }}>
-                      Forgot password?
-                    </a>{' '}
+                    <Link to="/forgetpass">Forgot password?</Link>
+
                     <br />
                     <a className="text-muted" href="#!" style={{ color: 'red' }}>
                       Sign in

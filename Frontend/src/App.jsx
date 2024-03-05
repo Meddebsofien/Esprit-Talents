@@ -11,6 +11,8 @@ import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
 import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
 import Signupggle from './components/signup_withggle/Signupggle'
+import ResetPassword from  './components/forgetpassword/reset-password'
+import ForgetPasswordForm from  './components/forgetpassword/forget-password'
 import { Link } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google';
 function App() {
@@ -51,6 +53,8 @@ function App() {
             <Route path="Signin" element={<Signin />} />
             <Route path ="addOffer" element ={<AjouterOffer/>} />
             <Route path ="ggle" element ={<Signupggle/>} />
+            <Route path="/resetpass/:id/:token" element={<ResetPassword />}></Route>
+            <Route path ="forgetpass" element ={<ForgetPasswordForm/>} />
           </Route>
 
           <Route path='*' element={<Hero />} />
