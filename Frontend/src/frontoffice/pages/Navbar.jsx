@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 function Navbar() {
   useEffect(() => {
     const select = (el, all = false) => {
@@ -171,12 +172,23 @@ function Navbar() {
               <Link className="nav-link scrollto text-black" >
                 Campanies
              </Link>
+
+            </li>
+            <li>
+              <Link className="nav-link scrollto text-black" href="#services" to={`/addOffer`}>
+                Ajouter Offer
+             </Link>
+
             </li>
           
             
             <li>
+
               <Link className="nav-link scrollto text-black" to={``}>
                 Mes Application
+
+              <Link className="nav-link scrollto text-black" href="#contact">
+                Contact
              </Link>
             </li>
            

@@ -10,6 +10,11 @@ import Home from './backoffice/pages/home/Home'
 import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
 import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
+
+import { Link } from 'react-router-dom'
+
+import Offer from './frontoffice/layout/offer/Offer'
+import ListOffers from './frontoffice/layout/offer/ListOffers'
 import SignUpPage from './backoffice/pages/login/Login'
 import Registre from './backoffice/pages/login/registre'
 import HeroEntreprise from './frontoffice/pages/heroEntreprise'
@@ -17,6 +22,8 @@ import Listofferscomponent from './frontoffice/layout/offer/Listofferscomponent'
 import ListOfferBack from './backoffice/layout/offer/listOfferBack'
 import UpdateOffer from './frontoffice/layout/offer/updateOffer'
 import DetailsOffer from './frontoffice/layout/offer/detailsOffer'
+
+
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
 
@@ -59,6 +66,8 @@ function App() {
            
             <Route path="Signin" element={<Signin />} />
             <Route path="registre" element={<Registre/>} />
+
+            <Route path ="addOffer" element ={<AjouterOffer/>} />
            
           </Route>
 
