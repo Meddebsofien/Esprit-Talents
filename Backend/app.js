@@ -18,12 +18,12 @@ mongoose.connect(process.env.MONGO_URI)
 
 var app = express();
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow both origins
   credentials: true, // enable set cookie
+  allowedHeaders: 'Content-Type',
 };
 
 app.use(cors(corsOptions));
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -34,13 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
-//   res.setHeader('Access-Control-Allow-Methods', 'POST');
-//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//   res.setHeader('Access-Control-Allow-Credentials', 'true'); // Autoriser les credentials
-//   next();
-// });
+
 
 
 
