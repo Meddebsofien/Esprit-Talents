@@ -40,13 +40,15 @@ const Sidebar = () => {
           <Link to="/products" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />
-              <span>Products</span>
+              <span>Entreprise</span>
             </li>
           </Link>
+          <Link to={"/admin/offers"}>
           <li>
             <CreditCardIcon className="icon" />
-            <span>Orders</span>
-          </li>
+            <span>Offer</span>
+          </li></Link>
+          
           <li>
             <LocalShippingIcon className="icon" />
             <span>Delivery</span>

@@ -3,10 +3,14 @@ const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 const User = require('./Models/user');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcrypt");
+
+
+var usersRouter = require('./routes/user-route');
 
 var mongoose = require('mongoose');
 require('dotenv').config();
@@ -32,15 +36,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
-
-
-
-
-
-
-app.use('/users', require('./routes/user-route'));
 
 
 //Ghofrane
@@ -156,5 +151,10 @@ app.post('/reset-password/:id/:token', (req, res) => {
   });
   
  
+
+
+
+app.use('/users', usersRouter);
+
 app.use('/offers', offerRouter);
 module.exports = app;
