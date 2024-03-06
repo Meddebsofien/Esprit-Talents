@@ -4,12 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Hero from './frontoffice/pages/hero'
 import Signup from './components/sign-up'
 import Signin from './components/sign-in'
-import { productInputs, userInputs,formOffer } from "./backoffice/formSource";
+import {  userInputs,formOffer } from "./backoffice/formSource";
 import List from './backoffice/pages/list/List'
 import Home from './backoffice/pages/home/Home'
 import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
 import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
+
 import { Link } from 'react-router-dom'
 
 import Offer from './frontoffice/layout/offer/Offer'
@@ -19,6 +20,9 @@ import Registre from './backoffice/pages/login/registre'
 import HeroEntreprise from './frontoffice/pages/heroEntreprise'
 import Listofferscomponent from './frontoffice/layout/offer/Listofferscomponent'
 import ListOfferBack from './backoffice/layout/offer/listOfferBack'
+import UpdateOffer from './frontoffice/layout/offer/updateOffer'
+import DetailsOffer from './frontoffice/layout/offer/detailsOffer'
+
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
@@ -50,6 +54,9 @@ function App() {
               <Route index element={<HeroEntreprise />} />
               <Route path ="addOffer" element ={<AjouterOffer inputs={formOffer} />} />
               <Route path="offers" element={<Listofferscomponent />} />
+              <Route path="update/:id" element={<UpdateOffer />} />
+              <Route path="details/:id" element={<DetailsOffer />} />
+
 
             </Route>
           <Route path="/" >
