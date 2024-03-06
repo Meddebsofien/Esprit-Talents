@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../../backoffice/pages/new/new.scss";
+import './details.css'
 import Navbar from "../../pages/Navbar";
 import Footer from "../../pages/footer";
 import axios from "axios";
@@ -12,8 +12,7 @@ const AjouterOffer = ({ inputs, title }) => {
 
   const onSubmitHandler = (e)=>{
     e.preventDefault();
-
-    // Remplir le champ createdBy  static pour le moment
+  // Remplir le champ createdBy  static pour le moment
     const formData = { ...form, createdBy: '65d8e9e5006ea987c7fdead8' };
 
     axios.post("http://localhost:3700/offers/addoffer", formData)
@@ -44,36 +43,51 @@ const AjouterOffer = ({ inputs, title }) => {
             <div className="right">
             <form onSubmit={onSubmitHandler}>
                 <div className="right">
-                  <InputGroup
+                  <div className="w-1/2"><InputGroup
                     label="title"
                     type="text"
                     name="title"
                     onChangeHandler={onChangeHandler}
 
-                  />
-                  <InputGroup
-                    label="description"
-                    type="text"
-                    name="description"
-                    onChangeHandler={onChangeHandler}
-
-                  />
-                  <InputGroup
+                  /></div>
+                  
+                 
+                  <div className="w-1/2"><InputGroup
                     label="company"
                     type="text"
                     name="company"
                     onChangeHandler={onChangeHandler}
 
-                  />
-                  <InputGroup
+                  /></div>
+
+                  <div className="  "> <InputGroup
                     label="location"
                     type="text"
                     name="location"
                     onChangeHandler={onChangeHandler}
 
+                  /></div>
+                 
+                 <div className='flex flex-col'>
+              <label className='text-gray-600 text-l mb-1'>
+                Job Description
+              </label>
+              <InputGroup
+                    label="description"
+                    type="textarea"
+                    name="description"
+                    onChangeHandler={onChangeHandler}
+
                   />
+             
+             
+            </div>
+                 
                 </div>
+
                 <div className="left">
+
+                  
                   <InputGroup
                     label="requirements"
                     type="text"
@@ -91,7 +105,7 @@ const AjouterOffer = ({ inputs, title }) => {
                   />
                   <InputGroup
                     label="type"
-                    type="text"
+                    type="select"
                     name="type"
                     onChangeHandler={onChangeHandler}
 
@@ -103,6 +117,7 @@ const AjouterOffer = ({ inputs, title }) => {
                     onChangeHandler={onChangeHandler}
 
                   />
+                  
                    
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <button type="submit">Ajouter</button>

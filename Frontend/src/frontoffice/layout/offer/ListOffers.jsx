@@ -30,7 +30,14 @@ const ListOffers = () => {
     setTimeout(()=>setShow(false),3000)
    }
  }
+ const OnUpdate = (id)=>{
 
+  window.location.replace(`/Entreprise/update/${id}`);
+ }
+ const OnView = (id)=>{
+
+  window.location.replace(`/Entreprise/details/${id}`);
+ }
 
 
   /* find all offers */
@@ -92,9 +99,9 @@ const ListOffers = () => {
                       {experience} ans
                     </TableCell>
                     <TableCell className="tableCell">
-                     <button className="viewButton">View</button> &nbsp;
+                     <button className="viewButton"     onClick={()=>OnView(_id)}>View</button> &nbsp;
                      <button className="deleteButton"   onClick={() => Ondelete(_id)}>delete</button> &nbsp;
-                     <button className="editerButton">Update</button>
+                     <button className="editerButton"   onClick={()=>OnUpdate(_id)}>Update</button>
                     </TableCell>
                   </TableRow>
                 )
