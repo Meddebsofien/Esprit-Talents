@@ -27,7 +27,9 @@ const ForgotPassword = () => {
   };
 
   return (
+    
     <ForgotPasswordContainer>
+       <div className="signin-background">
       <ForgotPasswordBox>
         <h4>Forgot Password</h4>
         <form onSubmit={handleSubmit}>
@@ -45,13 +47,14 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-success w-100">
+          <button type="submit" className="btn btn-success w-100" style={{backgroundColor:'rgba(31, 38, 135)' ,border:'none'}}>
             Send
           </button>
         </form>
         {successMessage && <div className="success-message">{successMessage}</div>}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
       </ForgotPasswordBox>
+      </div>
     </ForgotPasswordContainer>
   );
 };

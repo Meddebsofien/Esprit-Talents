@@ -41,6 +41,7 @@ const ResetPassword = () => {
 
   return (
     <ResetPasswordContainer>
+       <div className="signin-background">
       <ResetPasswordBox>
         <h4>Reset Password</h4>
         <form onSubmit={handleSubmit}>
@@ -55,13 +56,14 @@ const ResetPassword = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <SubmitButton type="submit" className="btn btn-success">
+          <SubmitButton type="submit" className="btn btn-success" style={{backgroundColor:'rgba(31, 38, 135)' ,border:'none'}}>
             Update
           </SubmitButton>
         </form>
         {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ResetPasswordBox>
+      </div>
     </ResetPasswordContainer>
   );
 };
