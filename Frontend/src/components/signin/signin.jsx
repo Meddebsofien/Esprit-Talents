@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
 import styled from "styled-components";
-import Button from "../Button";
+import Buttonn from "../Button";
 import Icon from "../Icon";
 
 import {
@@ -30,9 +30,14 @@ export default function Login() {
   const [ profile, setProfile ] = useState([]);
 
   const login = useGoogleLogin({
-      onSuccess: (codeResponse) => {setUser(codeResponse), console.log(codeResponse)},
-      onError: (error) => console.log('Login Failed:', error)
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      console.log(codeResponse);
+      navigate("/");
+    },
+    onError: (error) => console.log('Login Failed:', error)
   });
+  
   const handleGoogleLogin = () => {
     login(); // Appel de la fonction de connexion Google
   };
@@ -224,9 +229,13 @@ useEffect(
   <LoginWith>OR LOGIN WITH</LoginWith>
   <IconsContainer>
     
-    <Icon  color={InstagramBackground}   style={{ cursor: 'pointer' }} onClick={() => handleGoogleLogin()}>
-          <FaGoogle />
-        </Icon>
+  <button
+  className="styled-button"
+  color={InstagramBackground}
+  onClick={handleGoogleLogin}
+>
+  <FaGoogle />
+</button>
     
       
         <Icon color={InstagramBackground}>

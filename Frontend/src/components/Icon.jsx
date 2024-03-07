@@ -9,6 +9,7 @@ const StyledIcon = styled.div`
   width: 3.5rem;
  background: ${props => props.color}; 
   display: flex;
+  
   justify-content: center;
   align-items: center;
   border-radius: 5rem;

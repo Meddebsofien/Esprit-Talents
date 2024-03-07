@@ -26,6 +26,23 @@ body {
   width: 100vw;
   font-family: "Raleway", sans-serif;
 }
+.styled-button {
+  height: 3.5rem;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5rem;
+  color: #03217b;
+  cursor: pointer;
+  border: 1px solid #03217b;
+  background: transparent;
+}
+
+.styled-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
 .custom-button {
   background: linear-gradient(to right, #14163c 0%, #03217b 79%);
   text-transform: uppercase;

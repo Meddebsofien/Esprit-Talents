@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from "styled-components";
 import Stack from '@mui/material/Stack';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import Icon from "../Icon";
 import Input from "../Input";
 import {
@@ -18,7 +19,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTwitter,FaGoogle } from "react-icons/fa";
 
 function Signup() {
   
@@ -51,7 +52,18 @@ function Signup() {
   const [adresseError, setAdresseError] = useState('');
   const [numeroTelError, setNumeroTelError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
-
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      console.log(codeResponse);
+      navigate("/");
+    },
+    onError: (error) => console.log('signup Failed:', error)
+  });
+  
+  const handleGoogleLogin = () => {
+    login(); // Appel de la fonction de connexion Google
+  };
   const GoogleBackground =
   "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
 const InstagramBackground =
@@ -219,7 +231,7 @@ const TwitterBackground =
     e.preventDefault();
     handleSignUp();
   };
-
+ 
   return (
     <div className="signin-background">
     <MainContainer >
@@ -235,9 +247,10 @@ const TwitterBackground =
                     variant={selectedRole === 'Company' ? 'contained' : 'outlined'}
                     onClick={() => handleRoleChange('Company')}
                     style={{
-                      backgroundColor: selectedRole === 'Company' ? 'white' : 'gray',
-                      color: selectedRole === 'Company' ? 'red' : 'white',
+                      backgroundColor: selectedRole === 'Company' ? 'white' : '#14163c',
+                      color: selectedRole === 'Company' ? '#14163c' : 'white',
                       border: 'none',
+                      marginRight: '10px',
                       
                       
                     }}
@@ -248,9 +261,10 @@ const TwitterBackground =
                     variant={selectedRole === 'Staff' ? 'contained' : 'outlined'}
                     onClick={() => handleRoleChange('Staff')}
                     style={{
-                      backgroundColor: selectedRole === 'Staff' ? 'white' : 'red',
-                      color: selectedRole === 'Staff' ? 'red' : 'white',
+                      backgroundColor: selectedRole === 'Staff' ? 'white' : '#14163c',
+                      color: selectedRole === 'Staff' ? '#14163c' : 'white',
                       border: 'none',
+                      marginRight: '10px',
                     }}
                   >
                     Staff
@@ -259,8 +273,8 @@ const TwitterBackground =
                     variant={selectedRole === 'Student' ? 'contained' : 'outlined'}
                     onClick={() => handleRoleChange('Student')}
                     style={{
-                      backgroundColor: selectedRole === 'Student' ? 'white' : 'red',
-                      color: selectedRole === 'Student' ? 'red' : 'white',
+                      backgroundColor: selectedRole === 'Student' ? 'white' : '#14163c',
+                      color: selectedRole === 'Student' ? '#14163c' : 'white',
                       border: 'none',
                     }}
                   >
@@ -414,16 +428,17 @@ const TwitterBackground =
             <div style={{ color: 'red' }}>{passwordMismatchError}</div>
                        )}
 
-                  <div className="text-center pt-1 mb-7 pb-1">
-                  <div className=" mb-3">
+                  <div className="text-center pt-1  pb-1">
+                  <div >
                     <button type="button"  className="custom-button">Sign up</button>
                     
 
                     <br />
-                    
+                    <div style={{paddingTop:'10px'}}>
                     <a className="text-muted" href="#!" style={{ color: 'red' }}>
                       Sign in
                     </a>
+                    </div>
                     </div>
                   </div>
                 </form>
@@ -431,16 +446,20 @@ const TwitterBackground =
             </CardContent>
          
         </Grid>
-        <div className="vertical-line" />
+        {/* <div className="vertical-line" /> */}
         
       </Grid>
-      <LoginWith>OR LOGIN WITH</LoginWith>
+      <LoginWith >OR Signup WITH</LoginWith>
   <IconsContainer>
-    <button >
-    <Icon  color={GoogleBackground}>
-          <FaFacebookF />
-        </Icon>
-    </button>
+    
+  <button
+  className="styled-button"
+  color={InstagramBackground}
+  onClick={handleGoogleLogin}
+>
+  <FaGoogle />
+</button>
+    
       
         <Icon color={InstagramBackground}>
           <FaInstagram />
@@ -498,8 +517,8 @@ letter-spacing: 0.4rem;
   height: 90vh;
 }
 @media only screen and (min-width: 1280px) {
-  width: 30vw;
-  height: 120vh;
+  width: 40vw;
+  height: 130vh;
 }
 `;
 
@@ -543,7 +562,7 @@ backdrop-filter: blur(25px);
 const IconsContainer = styled.div`
 display: flex;
 justify-content: space-evenly;
-margin: 2rem 0 3rem 0;
+
 width: 80%;
 
 `;
