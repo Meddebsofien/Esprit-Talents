@@ -9,7 +9,7 @@ const allowedRoles = ['Company', 'Student'];
 //signup user
 const registerUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse, specialite } = req.body;
+    const { nom, prenom, role, mail, password,confirmPassword, companyName,  adresse, specialite } = req.body;
 
     if (!password || !role || !mail ||!confirmPassword) {
       res.status(400);
@@ -40,8 +40,8 @@ const registerUser = async (req, res) => {
       userFields = {
         ...userFields,
         companyName,
-        numeroTel,
-        fax,
+       
+        
         adresse,
       };
     } else if (role === 'Student') {
@@ -107,7 +107,7 @@ const currentUser = asyncHandler(async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password,confirmPassword, companyName, numeroTel, fax, adresse,specialite } = req.body;
+    const { nom, prenom, role, mail, password,confirmPassword, companyName,  adresse,specialite } = req.body;
 
     if (!password || !role || !mail ||!confirmPassword) {
       res.status(400);
@@ -132,8 +132,8 @@ exports.createUser = async (req, res) => {
       mail,
       password: hashedPassword,
       companyName,
-      numeroTel,
-      fax,
+      
+      
       adresse,
       specialite,
     });

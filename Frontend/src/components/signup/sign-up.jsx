@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import styled from "styled-components";
+import Stack from '@mui/material/Stack';
+import Icon from "../Icon";
+import Input from "../Input";
 import {
   Button,
   Container,
@@ -14,7 +18,7 @@ import {
   InputAdornment
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 
 function Signup() {
   
@@ -31,7 +35,7 @@ function Signup() {
     confirmPassword: '',
     companyName: '',
     numeroTel: '',
-    fax: '',
+    
     adresse: '',
     specialite: '',
   };
@@ -48,7 +52,12 @@ function Signup() {
   const [numeroTelError, setNumeroTelError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  
+  const GoogleBackground =
+  "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
+const InstagramBackground =
+  "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
+const TwitterBackground =
+  "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
   
   const validateCompanyName = () => {
     if (formData.companyName.length < 4) {
@@ -69,16 +78,7 @@ function Signup() {
     }
   };
   
-  const validateNumeroTel = () => {
-    // Validate that the Phone Number starts with '+216' and is followed by 8 digits
-    const phoneRegex = /^\d{8}$/;
   
-    if (!phoneRegex.test(formData.numeroTel)) {
-      setNumeroTelError('Invalid Phone Number. Please enter a valid number starting with +216 and followed by 8 digits.');
-    } else {
-      setNumeroTelError('');
-    }
-  };
   
 
   const validateName = () => {
@@ -221,25 +221,25 @@ function Signup() {
   };
 
   return (
-    <Container maxWidth="lg" className="my-5 px-5">
+    <div className="signin-background">
+    <MainContainer >
       <Grid container justifyContent="center">
         <Grid item md={6} className="mb-5">
-          <Card>
+         
             <CardContent>
               <div className="d-flex flex-column align-items-center">
-                <img src="/src/assets/img/logo.png" style={{ width: '185px' }} alt="logo" />
-                <h4 className="mt-1 mb-4" style={{ color: 'black' }}>
-                  We are The Siblings Team
-                </h4>
-
-                <div className="d-flex justify-content-between mb-4">
+                
+             
+                <div className="d-flex justify-content-between mb-5" >
                   <Button
                     variant={selectedRole === 'Company' ? 'contained' : 'outlined'}
                     onClick={() => handleRoleChange('Company')}
                     style={{
-                      backgroundColor: selectedRole === 'Company' ? 'white' : 'red',
+                      backgroundColor: selectedRole === 'Company' ? 'white' : 'gray',
                       color: selectedRole === 'Company' ? 'red' : 'white',
                       border: 'none',
+                      
+                      
                     }}
                   >
                     Company
@@ -267,7 +267,7 @@ function Signup() {
                     Student
                   </Button>
                 </div>
-
+               
                 <form onSubmit={handleSubmit}>
                   {selectedRole === 'Company' && (
                     <>
@@ -299,34 +299,9 @@ function Signup() {
                         helperText={adresseError}
                         
                       />
-                     <TextField
-                        fullWidth
-                        label="Phone Number"
-                        id="numeroTel"
-                        type="tel"
-                        name="numeroTel"
-                        value={formData.numeroTel}
-                        onChange={handleChange}
-                        onBlur={validateNumeroTel}
-                        error={Boolean(numeroTelError)}
-                        helperText={numeroTelError}
-                        required
-                        className="mb-4"
-                        InputProps={{
-                          startAdornment: <InputAdornment position="start">+216</InputAdornment>,
-                        }}
-                      />
+                     
 
-                      <TextField
-                        fullWidth
-                        label="Fax"
-                        id="fax"
-                        type="text"
-                        name="fax"
-                        value={formData.fax}
-                        onChange={handleChange}
-                        className="mb-4"
-                      />
+                      
                     </>
                   )}
 
@@ -422,59 +397,158 @@ function Signup() {
                   />
 
                  <TextField
-          fullWidth
-          label="Confirm Password"
-          id="confirmPassword"
-          type="password"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-          onBlur={validatePassword}
+            fullWidth
+            label="Confirm Password"
+            id="confirmPassword"
+             type="password"
+             name="confirmPassword"
+            value={formData.confirmPassword}
+           onChange={handleChange}
+            required
+               onBlur={validatePassword}
          
-          className="mb-4"
-        />
-        {/* Add a div to display the password mismatch message */}
-        {passwordMismatchError && (
-  <div style={{ color: 'red' }}>{passwordMismatchError}</div>
-)}
+            className="mb-4"
+            />
+            {/* Add a div to display the password mismatch message */}
+             {passwordMismatchError && (
+            <div style={{ color: 'red' }}>{passwordMismatchError}</div>
+                       )}
 
-                  <div className="text-center pt-1 mb-5 pb-1">
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      className="mb-4 w-100"
-                      style={{ backgroundColor: 'red', color: 'white' }}
-                    >
-                      Sign up
-                    </Button>
-                    <Link to="/forgetpass">Forgot password?</Link>
+                  <div className="text-center pt-1 mb-7 pb-1">
+                  <div className=" mb-3">
+                    <button type="button"  className="custom-button">Sign up</button>
+                    
 
                     <br />
+                    
                     <a className="text-muted" href="#!" style={{ color: 'red' }}>
                       Sign in
                     </a>
+                    </div>
                   </div>
                 </form>
               </div>
             </CardContent>
-          </Card>
+         
         </Grid>
         <div className="vertical-line" />
-        <Grid item md={6} className="mb-5 px-5">
-          <div className="d-flex flex-column justify-content-center h-100 mb-4" style={{ backgroundColor: 'red', color: 'white' }}>
-            <div className="text-white px-3 py-4 p-md-5 mx-md-4">
-              <h4 className="mb-4">We are more than just a company</h4>
-              <p className="small mb-0">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
-            </div>
-          </div>
-        </Grid>
+        
       </Grid>
-    </Container>
+      <LoginWith>OR LOGIN WITH</LoginWith>
+  <IconsContainer>
+    <button >
+    <Icon  color={GoogleBackground}>
+          <FaFacebookF />
+        </Icon>
+    </button>
+      
+        <Icon color={InstagramBackground}>
+          <FaInstagram />
+        </Icon>
+        <Icon color={TwitterBackground}>
+          <FaTwitter />
+        </Icon>
+      </IconsContainer>
+    </MainContainer>
+    </div>
   );
 }
+const MainContainer = styled.div`
+display: flex;
+align-items: center;
+flex-direction: column;
+height: 80vh;
+width: 30vw;
+background: rgba(255, 255, 255, 0.15);
+box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+backdrop-filter: blur(8.5px);
+-webkit-backdrop-filter: blur(8.5px);
+border-radius: 10px;
+color: #ffffff;
+text-transform: uppercase;
+letter-spacing: 0.4rem;
+@media only screen and (max-width: 350px) {
+  width: 80vw;
+  height: 90vh;
+  hr {
+    margin-bottom: 0.3rem;
+  }
+  h4 {
+    font-size: small;
+  }
+}
+@media only screen and (min-width: 360px) {
+  width: 80vw;
+  height: 90vh;
+  h4 {
+    font-size: small;
+  }
+}
+@media only screen and (min-width: 411px) {
+  width: 80vw;
+  height: 90vh;
+}
+
+@media only screen and (min-width: 768px) {
+  width: 90vw;
+  height: 90vh;
+}
+@media only screen and (min-width: 1024px) {
+  width: 90vw;
+  height: 90vh;
+}
+@media only screen and (min-width: 1280px) {
+  width: 30vw;
+  height: 120vh;
+}
+`;
+
+const WelcomeText = styled.h2`
+margin: 3rem 0 2rem 0;
+`;
+
+const InputContainer = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: center;
+height: 20%;
+width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+margin: 1rem 0 2rem 0;
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+`;
+
+const LoginWith = styled.h5`
+cursor: pointer;
+`;
+
+const HorizontalRule = styled.hr`
+width: 90%;
+height: 0.3rem;
+border-radius: 0.8rem;
+border: none;
+background: linear-gradient(to right, #14163c 0%, #03217b 79%);
+background-color: #ebd0d0;
+margin: 1.5rem 0 1rem 0;
+backdrop-filter: blur(25px);
+`;
+
+const IconsContainer = styled.div`
+display: flex;
+justify-content: space-evenly;
+margin: 2rem 0 3rem 0;
+width: 80%;
+`;
+
+const ForgotPassword = styled.h4`
+cursor: pointer;
+`;
+
 
 export default Signup;

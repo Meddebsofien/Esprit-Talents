@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   nom: { type: String, },
   companyName:{type :String },
   numeroTel:{type :String },
-  fax :{type:String},
+ 
   adresse:{type :String },
   prenom: { type: String },
   role: { type: String, enum: ['Company', 'Student', 'Staff'] },

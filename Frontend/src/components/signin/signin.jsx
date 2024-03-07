@@ -5,6 +5,12 @@ import HashLoader from "react-spinners/HashLoader";
 import styled from "styled-components";
 import Button from "../Button";
 import Icon from "../Icon";
+
+import {
+ 
+  TextField,
+  
+} from '@mui/material';
 import Input from "../Input";
 import { useNavigate  } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
@@ -154,38 +160,45 @@ useEffect(
       <form className="signin-form">
       <div className=" mb-3">
   {/* Champ Email */}
-  <div className="input-wrapper mb-3">
-    <label htmlFor="email">Email</label>
-    <input type="email" id="email" value={mail} required onChange={handleEmailChange} className="custom-input" />
-    {emailError && <div className="error-message">{emailError}</div>}
-  </div>
+ 
+  <TextField
+                    fullWidth
+                    label="Email Address"
+                    id="email"
+                    type="email"
+                    name="mail"
+                   
+                    error={Boolean(emailError)}
+                    helperText={emailError}
+                    
+                    value={mail}
+                    onChange={handleEmailChange}
+                    required
+                    className="mb-4"
+                   
+                  />
 
   {/* Champ Mot de passe */}
-  <div className="input-wrapper">
-    <label htmlFor="password">Password</label>
-    <div className="relative">
-   
-    <div className="password-input">
-      <input
-        type={passwordVisible ? "text" : "password"}
-        id="password"
-        value={password}
-        required
-        onChange={handlePasswordChange}
-        className="custom-input"
-      />
-       </div>
-      <i
-        onClick={() => setPasswordVisible(!passwordVisible)}
-        className={`fa-solid ${passwordVisible ? 'fa-eye-slash' : 'fa-eye'} `}
-      />
-    </div>
-    </div>
-  </div>
+ 
   <div className="text-center mt-6 mb-3">
+  <TextField
+                    fullWidth
+                    label="Password"
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    
+                    required
+                    className="mb-3"
+                  />
+                  </div>
   {/* Bouton Se connecter */}
+  <div className="text-center pt-1 mb-5 pb-1">
   <div className="button-wrapper">
     <button type="button" onClick={() => signIn()} className="custom-button">Login</button>
+  </div>
   </div>
   </div>
   {/* Affichage du message d'erreur */}
@@ -206,8 +219,8 @@ useEffect(
   <LoginWith>OR LOGIN WITH</LoginWith>
   <IconsContainer>
     <button onClick={login}>
-    <Icon  color={GoogleBackground}>
-          <FaFacebookF />
+    <Icon  color={InstagramBackground}>
+          <FaInstagram />
         </Icon>
     </button>
       
@@ -218,7 +231,8 @@ useEffect(
           <FaTwitter />
         </Icon>
       </IconsContainer>
-      <ForgotPassword>Forgot Password ?</ForgotPassword>
+      
+      <Link to="/forgetpass">Forgot password?</Link>
   </MainContainer>
   </div>
 
@@ -270,7 +284,7 @@ useEffect(
   }
   @media only screen and (min-width: 1280px) {
     width: 30vw;
-    height: 80vh;
+    height: 90vh;
   }
 `;
 
