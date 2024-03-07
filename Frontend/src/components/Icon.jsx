@@ -11,9 +11,10 @@ const StyledIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 4rem;
-  color: white;
+  border-radius: 5rem;
+  color:   #03217b;
   cursor: pointer;
+  border: 1px solid   #03217b;
   svg {
     width: 1.5rem;
     height: 1.5rem;

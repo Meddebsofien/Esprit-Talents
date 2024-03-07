@@ -526,6 +526,7 @@ justify-content: center;
 
 const LoginWith = styled.h5`
 cursor: pointer;
+color: #1e90ff;
 `;
 
 const HorizontalRule = styled.hr`
@@ -544,6 +545,7 @@ display: flex;
 justify-content: space-evenly;
 margin: 2rem 0 3rem 0;
 width: 80%;
+
 `;
 
 const ForgotPassword = styled.h4`

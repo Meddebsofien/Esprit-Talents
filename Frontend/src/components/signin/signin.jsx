@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import Input from "../Input";
 import { useNavigate  } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaTwitter,FaGoogle  } from "react-icons/fa";
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 export default function Login() {
     const navigate = useNavigate();
@@ -33,12 +33,17 @@ export default function Login() {
       onSuccess: (codeResponse) => {setUser(codeResponse), console.log(codeResponse)},
       onError: (error) => console.log('Login Failed:', error)
   });
+  const handleGoogleLogin = () => {
+    login(); // Appel de la fonction de connexion Google
+  };
   const GoogleBackground =
   "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
 const InstagramBackground =
   "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
 const TwitterBackground =
   "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
+  
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -218,11 +223,11 @@ useEffect(
   </>
   <LoginWith>OR LOGIN WITH</LoginWith>
   <IconsContainer>
-    <button onClick={login}>
-    <Icon  color={InstagramBackground}>
-          <FaInstagram />
+    
+    <Icon  color={InstagramBackground}   style={{ cursor: 'pointer' }} onClick={() => handleGoogleLogin()}>
+          <FaGoogle />
         </Icon>
-    </button>
+    
       
         <Icon color={InstagramBackground}>
           <FaInstagram />
@@ -290,6 +295,7 @@ useEffect(
 
 const WelcomeText = styled.h2`
   margin: 3rem 0 2rem 0;
+  color: #555;
 `;
 
 const InputContainer = styled.div`
@@ -311,6 +317,8 @@ const ButtonContainer = styled.div`
 
 const LoginWith = styled.h5`
   cursor: pointer;
+  color: #555;
+  
 `;
 
 const HorizontalRule = styled.hr`
@@ -329,6 +337,7 @@ const IconsContainer = styled.div`
   justify-content: space-evenly;
   margin: 2rem 0 3rem 0;
   width: 80%;
+ 
 `;
 
 const ForgotPassword = styled.h4`
