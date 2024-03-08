@@ -1,42 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import "../../../backoffice/pages/new/new.scss";
 import Footer from "../../pages/footer";
 import axios from "axios";
 import InputGroup from "./inputGroup";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 import { useParams } from "react-router-dom";
-
+import Swal from "sweetalert2";
 const UpdateOffer = () => {
   const { id } = useParams();
   const [offerData, setOfferData] = useState({}); // Pour stocker les données de l'offre
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    company: '',
-    location: '',
-    requirements: '',
-    startDate: '',
-    type: '',
-    experience: ''
+    title: "",
+    description: "",
+    company: "",
+    location: "",
+    requirements: "",
+    startDate: "",
+    type: "",
+    experience: "",
   });
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    let month = (1 + date.getMonth()).toString().padStart(2, '0');
-    let day = date.getDate().toString().padStart(2, '0');
-  
+    let month = (1 + date.getMonth()).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+
     return `${year}-${month}-${day}`;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3700/offers/getOfferById/${id}`);
+        const response = await axios.get(
+          `http://localhost:3700/offers/getOfferById/${id}`
+        );
         // Stocker les données de l'offre dans le state
         setOfferData(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des données de l'offre :", error);
+        console.error(
+          "Erreur lors de la récupération des données de l'offre :",
+          error
+        );
       }
     };
 
@@ -46,14 +51,14 @@ const UpdateOffer = () => {
   // Fonction pour mettre à jour le formulaire avec les données de l'offre
   useEffect(() => {
     setForm({
-      title: offerData.title || '',
-      description: offerData.description || '',
-      company: offerData.company || '',
-      location: offerData.location || '',
-      requirements: offerData.requirements || '',
-      startDate: formatDate(offerData.startDate) || '',
-      type: offerData.type || '',
-      experience: offerData.experience || ''
+      title: offerData.title || "",
+      description: offerData.description || "",
+      company: offerData.company || "",
+      location: offerData.location || "",
+      requirements: offerData.requirements || "",
+      startDate: formatDate(offerData.startDate) || "",
+      type: offerData.type || "",
+      experience: offerData.experience || "",
     });
   }, [offerData]);
 
@@ -64,9 +69,20 @@ const UpdateOffer = () => {
   const onUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3700/offers/updateOffer/${id}`, form).then(alert("modificetion avec succes"));
-      console.log(response.data);
-      window.location.replace("/Entreprise/offers");
+      const response = await axios
+        .put(`http://localhost:3700/offers/updateOffer/${id}`, form)
+        .then(() => {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Offer updated successfully",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+
+          window.location.replace("/Entreprise/offers");
+        });
+
       // Rediriger l'utilisateur ou afficher un message de succès si nécessaire
     } catch (error) {
       console.error("Erreur lors de la mise à jour de l'offre :", error);
@@ -151,7 +167,7 @@ const UpdateOffer = () => {
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
 export default UpdateOffer;
