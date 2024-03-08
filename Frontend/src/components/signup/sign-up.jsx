@@ -61,8 +61,28 @@ function Signup() {
     onError: (error) => console.log('signup Failed:', error)
   });
   
-  const handleGoogleLogin = () => {
-    login(); // Appel de la fonction de connexion Google
+ 
+  const handleGoogleSignUp = async () => {
+    try {
+      const googleUser = await login(); // Appel de la fonction de connexion Google
+      const userData = {
+        nom: googleUser.name,
+        prenom: googleUser.firstName,
+        mail: googleUser.email,
+        role: selectedRole // Assurez-vous que le rôle est sélectionné correctement
+      };
+     
+      // Enregistrez l'utilisateur avec ces données dans votre backend
+      const response = await axios.post('http://localhost:3700/users/register', userData);
+      if (response.ok) {
+        // Enregistrement réussi, redirigez l'utilisateur vers une page de confirmation ou une autre page pertinente
+        navigate("/");
+      } else {
+        console.error('Erreur lors de l\'enregistrement de l\'utilisateur avec Google.');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la connexion avec Google :', error);
+    }
   };
   const GoogleBackground =
   "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
@@ -467,7 +487,7 @@ const TwitterBackground =
   <button
   className="styled-button"
   color={InstagramBackground}
-  onClick={handleGoogleLogin}
+  onClick={handleGoogleSignUp}
 >
   <FaGoogle />
 </button>
