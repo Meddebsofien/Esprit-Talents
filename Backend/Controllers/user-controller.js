@@ -196,6 +196,25 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// Update your backend code
+
+// Fetch users by role
+exports.getUsersByRole = async (req, res) => {
+  const { role } = req.params;
+
+  try {
+    if (!allowedRoles.includes(role)) {
+      res.status(400).json({ error: 'Invalid role specified' });
+      return;
+    }
+
+    const users = await User.find({ role });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 module.exports.registerUser = registerUser;
 module.exports.currentUser = currentUser;

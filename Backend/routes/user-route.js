@@ -27,6 +27,8 @@ router.put('/updateUtilisateur/:userId', userController.updateUser);
 // Supprimer un utilisateur par son ID
 router.delete('/deleteUtilisateur/:userId', userController.deleteUser);
 
+// Define the route for fetching users by role
+router.get('/users/:role', userController.getUsersByRole);
 
 // Route pour la connexion (signin)
 router.post('/signin', userController.signin);

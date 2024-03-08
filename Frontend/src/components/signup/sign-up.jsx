@@ -189,42 +189,47 @@ const TwitterBackground =
   
 
   const handleSignUp = async () => {
+    console.log('Starting handleSignUp...');
     validatePassword();
     validateName();
     validateEmail();
     validateConfirmPassword();
   
     if (passwordError || formData.password !== formData.confirmPassword) {
+      console.log('Validation failed, not proceeding with signup.');
       return;
     }
   
     try {
+      const formDataCopy = { ...formData };
+      console.log('formDataCopy:', formDataCopy);
+  
       const response = await fetch('http://localhost:3700/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formDataCopy),
       });
-  
-      console.log('Response:', response);
   
       if (response.ok) {
         const data = await response.json();
-        
-        console.log('Data:', data);
+        console.log('Signup successful. Data:', data);
         navigate('/signin');
       } else {
         const errorData = await response.json();
-        console.error('Error:', errorData);
+        console.error('Error during signup. Error:', errorData);
         if (errorData.error === 'User already registered!') {
           setEmailExistsError('Email already exists');
         }
       }
     } catch (error) {
-      
+      console.error('Error during signup:', error);
     }
+  
+    console.log('handleSignUp completed.');
   };
+  
   
 
   const handleSubmit = (e) => {
@@ -430,7 +435,14 @@ const TwitterBackground =
 
                   <div className="text-center pt-1  pb-1">
                   <div >
-                    <button type="button"  className="custom-button">Sign up</button>
+                  <Button
+  variant="contained"
+  type="submit"
+  className="custom-button"
+  onClick={handleSignUp}
+>
+  Sign up
+</Button>
                     
 
                     <br />
