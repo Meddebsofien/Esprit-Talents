@@ -17,6 +17,12 @@ import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent"
 import ListOfferBack from "./backoffice/layout/offer/listOfferBack";
 import UpdateOffer from "./frontoffice/layout/offer/updateOffer";
 import DetailsOffer from "./frontoffice/layout/offer/detailsOffer";
+
+import { Link } from "react-router-dom";
+
+import Offer from "./frontoffice/layout/offer/Offer";
+import ListOffers from "./frontoffice/layout/offer/ListOffers";
+
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
 
@@ -57,6 +63,7 @@ function App() {
             <Route path="Signup2" element={<SignUpPage />} />
 
             <Route path="Signin" element={<Signin />} />
+
             <Route path="registre" element={<Registre />} />
           </Route>
           <Route path="/student">
