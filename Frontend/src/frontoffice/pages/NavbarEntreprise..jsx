@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-
-function Navbar() {
+const NavbarEntreprise = () => {
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -149,7 +148,6 @@ function Navbar() {
       });
     };
   }, []);
-
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -167,18 +165,28 @@ function Navbar() {
             <li>
               <Link
                 className="nav-link scrollto active text-black"
-                to={`/Hero`}
+                to={`/Entreprise`}
               >
                 Home
               </Link>
             </li>
+
             <li>
-              <Link className="nav-link scrollto text-black">Campanies</Link>
+              <Link
+                className="nav-link scrollto text-black"
+                href="#services"
+                to={`/Entreprise/addOffer`}
+              >
+                Ajouter Offer
+              </Link>
             </li>
 
             <li>
-              <Link className="nav-link scrollto text-black" to={``}>
-                Mes Application
+              <Link
+                className="nav-link scrollto text-black"
+                to={`/Entreprise/offers`}
+              >
+                Mes Offer
               </Link>
             </li>
 
@@ -203,6 +211,6 @@ function Navbar() {
       </div>
     </header>
   );
-}
+};
 
-export default Navbar;
+export default NavbarEntreprise;
