@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { AiOutlineSafetyCertificate } from "react-icons/ai";
-import "./details.css";
-import Navbar from "../../pages/Navbar";
-import Footer from "../../pages/footer";
+import "../details.css";
+import Navbar from "../../../pages/Navbar";
+import Footer from "../../../pages/footer";
 const DetailsOffer = () => {
   const [data, setdata] = useState({});
   const { id } = useParams();
@@ -41,7 +41,6 @@ const DetailsOffer = () => {
 
   return (
     <>
-      <Navbar />
       <div className="container mx-auto pt-5 pb-5">
         <div className="w-full flex flex-col md:flex-row gap-10">
           {/* LEFT SIDE */}
@@ -125,7 +124,6 @@ const DetailsOffer = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

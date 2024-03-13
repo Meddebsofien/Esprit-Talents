@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const NavbarEntreprise = () => {
   useEffect(() => {
     const select = (el, all = false) => {
@@ -148,6 +148,11 @@ const NavbarEntreprise = () => {
       });
     };
   }, []);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -201,7 +206,7 @@ const NavbarEntreprise = () => {
                 </li>
 
                 <li>
-                  <Link href="#">Logout</Link>
+                  <button onClick={handleLogout}>logOut</button>
                 </li>
               </ul>
             </li>

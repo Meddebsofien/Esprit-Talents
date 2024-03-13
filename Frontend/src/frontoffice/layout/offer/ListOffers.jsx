@@ -15,12 +15,15 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../../../backoffice/components/Table/table.scss";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ListOffers = () => {
   const [offer, setOffer] = useState([]);
   const [message, setMessage] = useState("");
   const [IdActuel, setIdActuel] = useState("65d8e9e5006ea987c7fdead8");
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
   /* on delete */
 
   const Ondelete = (id) => {
@@ -47,10 +50,10 @@ const ListOffers = () => {
   };
 
   const OnUpdate = (id) => {
-    window.location.replace(`/Entreprise/update/${id}`);
+    navigate(`/Entreprise/update/${id}`);
   };
   const OnView = (id) => {
-    window.location.replace(`/Entreprise/details/${id}`);
+    navigate(`/Entreprise/detailsentr/${id}`);
   };
 
   /* find all offers */

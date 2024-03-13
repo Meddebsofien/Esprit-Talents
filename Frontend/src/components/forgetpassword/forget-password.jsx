@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import styled from "styled-components";
 
 const ForgotPassword = () => {
-  const [mail, setEmail] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [mail, setEmail] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
@@ -15,46 +15,58 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3700/forgot-password', { mail });
-      console.log('Response:', response);
-      setSuccessMessage('Password reset link sent successfully!');
-      setErrorMessage('');
+      const response = await axios.post(
+        "http://localhost:3700/forgot-password",
+        { mail }
+      );
+      console.log("Response:", response);
+      setSuccessMessage("Password reset link sent successfully!");
+      setErrorMessage("");
     } catch (error) {
-      console.error('Error:', error);
-      setErrorMessage('Error sending password reset link. Please try again.');
-      setSuccessMessage('');
+      console.error("Error:", error);
+      setErrorMessage("Error sending password reset link. Please try again.");
+      setSuccessMessage("");
     }
   };
 
   return (
-    
     <ForgotPasswordContainer>
-       <div className="signin-background">
-      <ForgotPasswordBox>
-        <h4>Forgot Password</h4>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">
-              <strong>Email</strong>
-            </label>
-            <input
-              type="email"
-              placeholder="Enter Email"
-              autoComplete="off"
-              name="email"
-              className="form-control"
-              value={mail}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <button type="submit" className="btn btn-success w-100" style={{backgroundColor:'rgba(31, 38, 135)' ,border:'none'}}>
-            Send
-          </button>
-        </form>
-        {successMessage && <div className="success-message">{successMessage}</div>}
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-      </ForgotPasswordBox>
-      </div>
+      <section id="hero">
+        <div className="hero-container">
+          <ForgotPasswordBox>
+            <h4>Forgot Password</h4>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">
+                  <strong>Email</strong>
+                </label>
+                <input
+                  type="email"
+                  placeholder="Enter Email"
+                  autoComplete="off"
+                  name="email"
+                  className="form-control"
+                  value={mail}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-success w-100"
+                style={{ backgroundColor: "rgba(31, 38, 135)", border: "none" }}
+              >
+                Send
+              </button>
+            </form>
+            {successMessage && (
+              <div className="success-message">{successMessage}</div>
+            )}
+            {errorMessage && (
+              <div className="error-message">{errorMessage}</div>
+            )}
+          </ForgotPasswordBox>
+        </div>
+      </section>
     </ForgotPasswordContainer>
   );
 };

@@ -6,28 +6,26 @@ import styled from "styled-components";
 import Buttonn from "../Button";
 import Icon from "../Icon";
 
-import {
- 
-  TextField,
-  
-} from '@mui/material';
+import { TextField } from "@mui/material";
 import Input from "../Input";
-import { useNavigate  } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaTwitter,FaGoogle  } from "react-icons/fa";
-import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from "react-router-dom";
+import { FaFacebookF, FaInstagram, FaTwitter, FaGoogle } from "react-icons/fa";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import Swal from "sweetalert2";
+
 export default function Login() {
-    const navigate = useNavigate();
-  const [role, setRole] = useState('');
+  const navigate = useNavigate();
+  const [role, setRole] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [mail, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [mail, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [color, setColor] = useState("#BD2C43");
   const [emailSent, setEmailSent] = useState(false);
-  const [ user, setUser ] = useState([]);
-  const [ profile, setProfile ] = useState([]);
+  const [user, setUser] = useState([]);
+  const [profile, setProfile] = useState([]);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => {
@@ -35,34 +33,33 @@ export default function Login() {
       console.log(codeResponse);
       navigate("/");
     },
-    onError: (error) => console.log('Login Failed:', error)
+    onError: (error) => console.log("Login Failed:", error),
   });
-  
+
   const handleGoogleLogin = () => {
     login(); // Appel de la fonction de connexion Google
   };
   const GoogleBackground =
-  "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
-const InstagramBackground =
-  "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
-const TwitterBackground =
-  "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
-  
-  
+    "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
+  const InstagramBackground =
+    "linear-gradient(to right, #A12AC4 0%, #ED586C 40%, #F0A853 100%)";
+  const TwitterBackground =
+    "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(event.target.value)) {
-      setEmailError('Invalid email format');
+      setEmailError("Invalid email format");
     } else {
-      setEmailError('');
+      setEmailError("");
     }
   };
 
   // Fonction pour l'authentification
   const signIn = async () => {
     if (!mail || !password) {
-      setErrorMessage('Please fill in all fields correctly');
+      setErrorMessage("Please fill in all fields correctly");
       return;
     }
     const userData = {
@@ -70,21 +67,43 @@ const TwitterBackground =
       password,
     };
     try {
-      const response = await axios.post('http://localhost:3700/users/signin', userData);
-      setIsLoading(true)
-      console.log(response);
-      navigate("/");
+      const response = await axios.post(
+        "http://localhost:3700/users/signin",
+        userData
+      );
+      //console.log(response.data.verified===true);
+
+      if (response.data.verified === true) {
+        localStorage.setItem("token", response.data.accessToken);
+        const token = localStorage.getItem("token");
+
+        if (token) {
+          const [header, payload, signature] = token.split(".");
+          const decodedPayload = JSON.parse(atob(payload));
+          const role = decodedPayload.role;
+          console.log(role);
+          setIsLoading(true);
+          if (role === "Company") {
+            navigate("/Entreprise");
+          } else {
+            navigate("/" + role);
+          }
+        } else {
+          console.log("Token non trouvé dans localStorage");
+        }
+      } else {
+        Swal.fire("Please verif your account!");
+      }
     } catch (error) {
       console.error(error.response.data);
       if (error.response.status === 401) {
         setErrorMessage("Incorrect Password");
       } else if (error.response.status === 404) {
         setErrorMessage("User Not Found");
-      } 
-      if(error.response.status === 403) {
+      }
+      if (error.response.status === 403) {
         setErrorMessage("Please verify");
       }
-    
     }
   };
 
@@ -97,21 +116,24 @@ const TwitterBackground =
   const handleRoleChange = (event) => {
     setRole(event.target.value);
   };
-const handleForgotPassword = async () => {
-  if(!mail){
-    setErrorMessage('Please type your email address');
-    return
-  }
-  
-  try {
-    const response = await axios.post('http://localhost:5000/auth/forgot-password', { mail: mail });
-    console.log(response.data);
-    setEmailSent(true);
-  } catch (error) {
-    console.error(error);
-    setErrorMessage(error.response.data.message);
-  }
-};
+  const handleForgotPassword = async () => {
+    if (!mail) {
+      setErrorMessage("Please type your email address");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/auth/forgot-password",
+        { mail: mail }
+      );
+      console.log(response.data);
+      setEmailSent(true);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(error.response.data.message);
+    }
+  };
 
   // Vérifie si le formulaire est valide
   const isFormValid = () => {
@@ -119,140 +141,151 @@ const handleForgotPassword = async () => {
   };
   const googleAuth = () => {
     window.open(
-        `${process.env.REACT_APP_API_URL}/auth/google/callback`,
-        "_self"
+      `${process.env.REACT_APP_API_URL}/auth/google/callback`,
+      "_self"
     );
-};
+  };
 
-//loginwith google 
-useEffect(
-    () => {
-        if (user) {
-            axios
-                .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.access_token}`,
-                        Accept: 'application/json'
-                    }
-                })
-                .then((res) => {
-                    setProfile(res.data);
-                })
-                .catch((err) => console.log(err));
-        }
-    },
-    [ user ]
-);
- // log out function to log the user out of google and set the profile array to null
- const logOut = () => {
+  //loginwith google
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+  // log out function to log the user out of google and set the profile array to null
+  const logOut = () => {
     googleLogout();
     setProfile(null);
-};
+  };
   return (
-<div className="signin-background">
-    <MainContainer>
-    <WelcomeText>Welcome</WelcomeText>
-      
-    <>
-    {isLoading ? (
-     <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-     <HashLoader
-       color={color}
-       loading={isLoading}
-       size={150}
-       aria-label="Loading Spinner"
-       data-testid="loader"
-     />
-   </div>
-    ) : (
-      <>
-      
-      <form className="signin-form">
-      <div className=" mb-3">
-  {/* Champ Email */}
- 
-  <TextField
-                    fullWidth
-                    label="Email Address"
-                    id="email"
-                    type="email"
-                    name="mail"
-                   
-                    error={Boolean(emailError)}
-                    helperText={emailError}
-                    
-                    value={mail}
-                    onChange={handleEmailChange}
-                    required
-                    className="mb-4"
-                   
-                  />
+    <section id="hero">
+      <div className="hero-container">
+        <MainContainer>
+          <WelcomeText>Welcome</WelcomeText>
 
-  {/* Champ Mot de passe */}
- 
-  <div className="text-center mt-6 mb-3">
-  <TextField
-                    fullWidth
-                    label="Password"
-                    id="password"
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={handlePasswordChange}
-                    
-                    required
-                    className="mb-3"
-                  />
+          <>
+            {isLoading ? (
+              <div
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <HashLoader
+                  color={color}
+                  loading={isLoading}
+                  size={150}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+            ) : (
+              <>
+                <form className="signin-form">
+                  <div className=" mb-3">
+                    {/* Champ Email */}
+
+                    <TextField
+                      fullWidth
+                      label="Email Address"
+                      id="email"
+                      type="email"
+                      name="mail"
+                      error={Boolean(emailError)}
+                      helperText={emailError}
+                      value={mail}
+                      onChange={handleEmailChange}
+                      required
+                      className="mb-4"
+                    />
+
+                    {/* Champ Mot de passe */}
+
+                    <div className="text-center mt-6 mb-3">
+                      <TextField
+                        fullWidth
+                        label="Password"
+                        id="password"
+                        type="password"
+                        name="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        required
+                        className="mb-3"
+                      />
+                    </div>
+                    {/* Bouton Se connecter */}
+                    <div className="text-center pt-1 mb-5 pb-1">
+                      <div className="button-wrapper">
+                        <button
+                          type="button"
+                          onClick={() => signIn()}
+                          className="custom-button"
+                        >
+                          Login
+                        </button>
+                      </div>
+                    </div>
                   </div>
-  {/* Bouton Se connecter */}
-  <div className="text-center pt-1 mb-5 pb-1">
-  <div className="button-wrapper">
-    <button type="button" onClick={() => signIn()} className="custom-button">Login</button>
-  </div>
-  </div>
-  </div>
-  {/* Affichage du message d'erreur */}
-  {errorMessage && !emailSent && (
-    <div className="error-message">{errorMessage}</div>
-  )}
+                  {/* Affichage du message d'erreur */}
+                  {errorMessage && !emailSent && (
+                    <div className="error-message">{errorMessage}</div>
+                  )}
 
-  {emailSent && (
-    <div className="success-message">A recovery email has been sent</div>
-  )}
-</form>
+                  {emailSent && (
+                    <div className="success-message">
+                      A recovery email has been sent
+                    </div>
+                  )}
+                </form>
+              </>
+            )}
+          </>
+          <LoginWith>OR LOGIN WITH</LoginWith>
+          <IconsContainer>
+            <button
+              className="styled-button"
+              color={InstagramBackground}
+              onClick={handleGoogleLogin}
+            >
+              <FaGoogle />
+            </button>
 
-              
-            
-    </>
-    )}
-  </>
-  <LoginWith>OR LOGIN WITH</LoginWith>
-  <IconsContainer>
-    
-  <button
-  className="styled-button"
-  color={InstagramBackground}
-  onClick={handleGoogleLogin}
->
-  <FaGoogle />
-</button>
-    
-      
-        <Icon color={InstagramBackground}>
-          <FaInstagram />
-        </Icon>
-        <Icon color={TwitterBackground}>
-          <FaTwitter />
-        </Icon>
-      </IconsContainer>
-      
-      <Link to="/forgetpass">Forgot password?</Link>
-  </MainContainer>
-  </div>
-
+            <Icon color={InstagramBackground}>
+              <FaInstagram />
+            </Icon>
+            <Icon color={TwitterBackground}>
+              <FaTwitter />
+            </Icon>
+          </IconsContainer>
+          <Link to="/Signup">SignUp</Link>
+          <Link to="/forgetpass">Forgot password?</Link>
+        </MainContainer>
+      </div>
+    </section>
   );
 }
-  const MainContainer = styled.div`
+const MainContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -327,7 +360,6 @@ const ButtonContainer = styled.div`
 const LoginWith = styled.h5`
   cursor: pointer;
   color: #555;
-  
 `;
 
 const HorizontalRule = styled.hr`
@@ -346,7 +378,6 @@ const IconsContainer = styled.div`
   justify-content: space-evenly;
   margin: 2rem 0 3rem 0;
   width: 80%;
- 
 `;
 
 const ForgotPassword = styled.h4`

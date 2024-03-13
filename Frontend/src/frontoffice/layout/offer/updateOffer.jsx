@@ -4,10 +4,12 @@ import Footer from "../../pages/footer";
 import axios from "axios";
 import InputGroup from "./inputGroup";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 const UpdateOffer = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [offerData, setOfferData] = useState({}); // Pour stocker les données de l'offre
   const [form, setForm] = useState({
     title: "",
@@ -80,7 +82,7 @@ const UpdateOffer = () => {
             timer: 2000,
           });
 
-          window.location.replace("/Entreprise/offers");
+          navigate("/Entreprise/offers");
         });
 
       // Rediriger l'utilisateur ou afficher un message de succès si nécessaire

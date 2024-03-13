@@ -1,7 +1,15 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -167,7 +175,7 @@ function Navbar() {
             <li>
               <Link
                 className="nav-link scrollto active text-black"
-                to={`/Hero`}
+                to={`/Student`}
               >
                 Home
               </Link>
@@ -189,11 +197,21 @@ function Navbar() {
               </Link>
               <ul>
                 <li>
-                  <Link href="#">Edit profil</Link>
+                  <button
+                    //onClick={handleEditProfile}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <EditIcon style={{ marginRight: "5px" }} /> Edit profil
+                  </button>
                 </li>
 
                 <li>
-                  <Link href="#">Logout</Link>
+                  <button
+                    onClick={handleLogout}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ExitToAppIcon style={{ marginRight: "5px" }} /> logOut
+                  </button>
                 </li>
               </ul>
             </li>
