@@ -1,7 +1,7 @@
 const User = require('../Models/user');
 
 // Créer un utilisateur
-exports.createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const newUser = new User(req.body);
     const savedUser = await newUser.save();
@@ -12,7 +12,7 @@ exports.createUser = async (req, res) => {
 };
 
 // Lire tous les utilisateurs
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -22,7 +22,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 // Lire un utilisateur par son ID
-exports.getUserById = async (req, res) => {
+const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId);
     if (!user) {
@@ -35,7 +35,7 @@ exports.getUserById = async (req, res) => {
 };
 
 // Mettre à jour un utilisateur par son ID
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
@@ -49,11 +49,19 @@ exports.updateUser = async (req, res) => {
 };
 
 // Supprimer un utilisateur par son ID
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.userId);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+  deleteUser
 };

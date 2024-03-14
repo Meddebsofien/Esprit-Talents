@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 function Navbar() {
   useEffect(() => {
@@ -154,9 +153,9 @@ function Navbar() {
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
-        <Link  href="home" className="w-25 h-10">
+        <a href="home" className="w-25 h-10">
          <img src="/src/assets/img/logo.png" alt="" className="img-fluid" style={{ width: '150px', height: '50px' }} /> 
-       </Link>
+        </a>
      
 
       
@@ -164,47 +163,47 @@ function Navbar() {
         <nav id="navbar" className="navbar">
           <ul>
             <li>
-              <Link className="nav-link scrollto active text-black" to={`/Hero`}>
+              <a className="nav-link scrollto active text-black" href="#hero">
                 Home
-             </Link>
+              </a>
             </li>
             <li>
-              <Link className="nav-link scrollto text-black" >
+              <a className="nav-link scrollto text-black" href="#about">
                 Campanies
-             </Link>
+              </a>
             </li>
             <li>
-              <Link className="nav-link scrollto text-black" href="#services" to={`/addOffer`}>
-                Ajouter Offer
-             </Link>
+              <a className="nav-link scrollto text-black" href="#services">
+                Offer
+              </a>
             </li>
             <li>
-              <Link className="nav-link scrollto text-black" href="#contact">
+              <a className="nav-link scrollto text-black" href="#contact">
                 Contact
-             </Link>
+              </a>
             </li>
           
             <li className="dropdown">
-              <Link  href="#">
+              <a href="#">
                 <span className='text-black'>Profil</span> <i className="bi bi-chevron-down"></i>
-             </Link>
+              </a>
               <ul>
                 <li>
-                  <Link  href="#">Edit profil</Link>
+                  <a href="#">Edit profil</a>
                 </li>
                 
                 <li>
-                <Link  href="#">
-                Logout
-              </Link>
-                </li>
+    <a href="#">
+    Logout
+    </a>
+</li>
 
                
               </ul>
             </li>
            
           </ul>
-          <i className="bi bi-list mobile-nav-toggle"></i>
+          <i className="bi bi-list mobile-nav-toggle text-black"></i>
         </nav>
       </div>
     </header>

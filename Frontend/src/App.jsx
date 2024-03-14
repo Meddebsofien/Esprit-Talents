@@ -2,6 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Hero from './frontoffice/pages/hero'
+import Entretien from './frontoffice/pages/Entretien'
+import BEntretien from './backoffice/components/BEntretien/BEntretien'
 import Signup from './components/sign-up'
 import Signin from './components/sign-in'
 import { productInputs, userInputs } from "./backoffice/formSource";
@@ -9,8 +11,6 @@ import List from './backoffice/pages/list/List'
 import Home from './backoffice/pages/home/Home'
 import Single from './backoffice/pages/single/Single'
 import New from './backoffice/pages/new/New'
-import AjouterOffer from './frontoffice/layout/offer/AjouterOffer'
-import { Link } from 'react-router-dom'
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false)
 
@@ -47,11 +47,12 @@ function App() {
           <Route index  element={<Hero />} />
             <Route path="Signup" element={<Signup />} />
             <Route path="Signin" element={<Signin />} />
-            <Route path ="addOffer" element ={<AjouterOffer/>} />
            
           </Route>
 
           <Route path='*' element={<Hero />} />
+          <Route path='/entretien' element={<Entretien/>}/>
+          <Route path='/admin/BEntretien' element={<BEntretien/>}/>
         </Routes>
       </BrowserRouter>
 

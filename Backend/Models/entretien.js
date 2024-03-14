@@ -7,16 +7,17 @@ const entretienSchema = new mongoose.Schema({
     },
     date_debut: {
         type: Date,
-        default: Date.now,
+        required: true
     },
     date_fin: {
         type: Date,
-        default: Date.now,
+        required: true
     },
     type: {
         type: String,
         enum: ["en ligne", "en présentiel"], 
-        default: "en présentiel"
+        default: "en présentiel",
+        required: true
     }
 });
 

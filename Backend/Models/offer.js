@@ -19,34 +19,36 @@ const offerSchema = new mongoose.Schema({
         required: true
     },
     type: {
-        type: String, 
-        required: true,
-        enum : ["Emploi" , "Stage"]
+        type: String, // Exemple: "Emploi" ou "Stage"
+        required: true
     },
     startDate: {
         type: Date,
         required: true
     },
+    endDate: {
+        type: Date,
+        required: true
+    },
     requirements: {
-        type: [String], 
+        type: [String], // Liste de conditions ou exigences pour l'offre
         required: true
     },
     salary: {
-        type: Number, 
-        required: false 
+        type: Number, // Salaire proposé pour l'offre
+        required: false // Peut ne pas être spécifié pour les stages non rémunérés
     },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', 
+    contactEmail: {
+        type: String, // Adresse e-mail de contact pour l'offre
         required: true
     },
     createdAt: {
         type: Date,
         default: Date.now
     }
-}
-);
+});
 
-    const Offer = mongoose.model('Offer', offerSchema);
+// Création du modèle Offer à partir du schéma
+const Offer = mongoose.model('Offer', offerSchema);
 
-    module.exports = Offer;
+module.exports = Offer;

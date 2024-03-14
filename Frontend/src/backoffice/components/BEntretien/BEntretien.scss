@@ -1,0 +1,77 @@
+.BEntretien {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .navbar {
+    position: absolute;
+    top: 0;
+    margin-left: 300px;
+    width: 500px;
+  }
+
+  .entretiens-list {
+    .entretiens-table {
+      width: 100%;
+
+      th,
+      td {
+        padding: 10px;
+      }
+      td.en-ligne {
+        background-color: rgb(5, 255, 197);
+        border-radius: 4px;
+        border-color: rgb(0, 0, 0); 
+      }
+
+      .en-presentiel {
+        background-color: rgb(253, 173, 0);
+        border-radius: 4px;
+        border-color: rgb(0, 0, 0); 
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    margin-right: 450px;
+    margin-bottom: 290px; 
+  }
+  .deleteButton,
+  .updateButton {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+  }
+
+  .deleteButton {
+    background-color: #ff5c5c;
+    color: #fff;
+  }
+
+  .deleteButton:hover {
+    background-color: #e04a4a;
+  }
+
+  .updateButton {
+    background-color: #4caf50;
+    color: #fff;
+    margin-left: 10px; 
+  }
+
+  .updateButton:hover {
+    background-color: #388e3c;
+  }
+}

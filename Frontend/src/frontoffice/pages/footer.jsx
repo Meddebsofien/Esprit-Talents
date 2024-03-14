@@ -6,7 +6,7 @@ function Footer(){
       <div className="row">
 
         <div className="col-lg-3 col-md-6 footer-contact">
-        <img src="/src/assets/img/logofinal.png" alt="" className="img-fluid" />
+        <img src="/src/assets/img/logo.png" alt="" className="img-fluid" />
 
           <p>
             A108 Adam Street <br />
