@@ -13,6 +13,7 @@ import AjouterOffer from "./frontoffice/layout/offer/AjouterOffer";
 import Signupggle from "./components/signup_withggle/Signupggle";
 import ResetPassword from "./components/forgetpassword/reset-password";
 import ForgetPasswordForm from "./components/forgetpassword/forget-password";
+import ListeCandidature from './frontoffice/layout/candidature/listeCandidatures'
 
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
@@ -70,6 +71,8 @@ function App() {
           </Route>
           <Route path="/Entreprise">
             <Route index element={<HeroEntreprise />} />
+            <Route path="listeCandidature" element={<ListeCandidature/>} />
+
             <Route
               path="addOffer"
               element={<AjouterOffer inputs={formOffer} />}

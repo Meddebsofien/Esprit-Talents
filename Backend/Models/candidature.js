@@ -5,7 +5,7 @@ const    schema = mongoose.Schema;
 const CandidatureSchema = new schema({
     idUser: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     },
     idOffer: {
         type: mongoose.Schema.Types.ObjectId,
@@ -13,16 +13,87 @@ const CandidatureSchema = new schema({
     },
     date: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+      
+
     },
     status: {
         type: String,
-        default: 'en attente'
-    }
+        default: 'pending',
+       
+        enum:["pending","rejected","accepted"],
+        
+
+    },
+    type: {
+        type: String, 
+       
+        enum : ["Job" , "Intership"],
+        
+
+    },
    
+    cvUpload: { 
+        type: String,
+        
+
+       
+    },
+    motivationLetterUpload: {
+         type: String ,
+         
+         
+        },
+    telephoneNumber:{
+            type:Number,
+          
+
+            
+        },
+    experience:{
+        type:Number,
+     
+
+       
+    },
+    intershipDuration:{
+        type:Number,
+      
+
+       
+
+
+    },
+    levelStudy:{
+        type:String,
+        enum:["Licence","Master","engineering"],
+        
+       
+
+    },
+    academicField:{
+        type:String,
+        enum:["Buisness","Computer Science"],
+       
+
+       
+
+    }
+
 });
 
 
 
 
-module.exports = mongoose.model('User',CandidatureSchema )
+    
+    
+
+
+const Candidature = mongoose.model('Candidature', CandidatureSchema);
+
+    module.exports = Candidature;
+
+
+
+
+

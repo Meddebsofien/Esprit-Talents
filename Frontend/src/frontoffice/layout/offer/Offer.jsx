@@ -77,8 +77,192 @@ const Offer = ({
             </span>
           </div>
           <div className="flex justify-start pt-3 "></div>
+          <Button
+            className="button bg-red-600  text-white w-20 h-10 hover:bg-gray-600 "
+            onClick={handleModalShow} // Show modal on button click
+          >
+            Apply Now
+          </Button>
         </div>
       </Link>
+      {/* Modal for the application form */}
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Please fill out this {type} application form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+  {/* Form fields */}
+  {/* Use type variable to conditionally render form fields */}
+  {type === 'Emploi' && (
+    <>
+      <Form.Group controlId="levelStudy">
+        <Form.Label>Level Study</Form.Label>
+        <Form.Control
+          as="select"
+          name="levelStudy"
+          value={form.levelStudy}
+          onChange={handleChange}
+          isInvalid={!!errors.levelStudy}
+        >
+          <option value="">Select Level</option>
+          <option value="Licence">Licence</option>
+          <option value="Master">Master</option>
+          <option value="Engineering">Engineering</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{errors.levelStudy}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="academicField">
+        <Form.Label>Academic Field</Form.Label>
+        <Form.Control
+          as="select"
+          name="academicField"
+          value={form.academicField}
+          onChange={handleChange}
+          isInvalid={!!errors.academicField}
+        >
+          <option value="">Select Field</option>
+          <option value="Business">Business</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Development">Development</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid" style={{color: 'red'}}>{errors.academicField}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="experience">
+        <Form.Label>Experience</Form.Label>
+        <Form.Control
+          as="select"
+          name="experience"
+          value={form.experience}
+          onChange={handleChange}
+          isInvalid={!!errors.experience}
+        >
+          <option value="">Select Experience</option>
+          <option value="Under year">Under year</option>
+          <option value="1-2">1-2 years</option>
+          <option value="2-6">2-6 years</option>
+          <option value="Over 6">Over 6 years</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{errors.experience}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="cv">
+        <Form.Label>Upload your CV PDF</Form.Label>
+        <Form.Control
+          type="file"
+          name="cv"
+          onChange={handleChange}
+          isInvalid={!!errors.cv}
+        />
+        <Form.Control.Feedback type="invalid">{errors.cv}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="motivationLetter">
+        <Form.Label>Upload your Motivation Letter PDF</Form.Label>
+        <Form.Control
+          type="file"
+          name="motivationLetter"
+          onChange={handleChange}
+          isInvalid={!!errors.motivationLetter}
+        />
+        <Form.Control.Feedback type="invalid">{errors.motivationLetter}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="telephoneNumber">
+        <Form.Label>Telephone Number</Form.Label>
+        <Form.Control
+          type="text"
+          name="telephoneNumber"
+          value={form.telephoneNumber}
+          onChange={handleChange}
+          isInvalid={!!errors.telephoneNumber}
+        />
+        <Form.Control.Feedback type="invalid">{errors.telephoneNumber}</Form.Control.Feedback>
+      </Form.Group>
+    </>
+  )}
+  {type === 'Stage' && (
+    <>
+      <Form.Group controlId="academicField">
+        <Form.Label>Academic Field</Form.Label>
+        <Form.Control
+          as="select"
+          name="academicField"
+          value={form.academicField}
+          onChange={handleChange}
+          isInvalid={!!errors.academicField}
+        >
+          <option value="">Select Field</option>
+          <option value="Business">Business</option>
+          <option value="Data Science">Data Science</option>
+          <option value="Development">Development</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{errors.academicField}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="internshipType">
+        <Form.Label>Internship Type</Form.Label>
+        <Form.Control
+          as="select"
+          name="internshipType"
+          value={form.internshipType}
+          onChange={handleChange}
+          isInvalid={!!errors.internshipType}
+        >
+          <option value="">Select Type</option>
+          <option value="PFE">PFE</option>
+          <option value="Summer Internship">Summer Internship</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{errors.internshipType}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="internshipDuration">
+        <Form.Label>Internship Duration</Form.Label>
+        <Form.Control
+          as="select"
+          name="internshipDuration"
+          value={form.internshipDuration}
+          onChange={handleChange}
+          isInvalid={!!errors.internshipDuration}
+        >
+          <option value="">Select Duration</option>
+          <option value="1-2">1-2 months</option>
+          <option value="3-6">3-6 months</option>
+          <option value="Over 6">Over 6 months</option>
+        </Form.Control>
+        <Form.Control.Feedback type="invalid">{errors.internshipDuration}</Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="telephoneNumber">
+        <Form.Label>Telephone Number</Form.Label>
+        <Form.Control
+          type="text"
+          name="telephoneNumber"
+          value={form.telephoneNumber}
+          onChange={handleChange}
+          isInvalid={!!errors.telephoneNumber}
+        />
+        <Form.Control.Feedback type="invalid">{errors.telephoneNumber}</Form.Control.Feedback>
+      </Form.Group>
+    </>
+  )}
+  {/* Add other form fields here */}
+</Form>
+
+        </Modal.Body>
+        <Modal.Footer>
+
+          <Button variant="primary" onClick={handleSubmit}>
+  Submit
+</Button>
+        <Button variant="secondary" onClick={handleModalClose}>
+  Close
+</Button>
+
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
