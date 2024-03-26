@@ -10,6 +10,26 @@ function Navbar() {
     localStorage.removeItem("token");
     navigate("/signin");
   };
+
+  
+
+  const handleProfileClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const [, payload] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      const userId = decodedPayload.id; // Supposons que l'ID utilisateur est stocké dans le token
+      if (userId) {
+        navigate(`/update/${userId}`); // Redirection vers la page de mise à jour du profil avec l'ID utilisateur
+      } else {
+        console.log("ID utilisateur non trouvé dans le token");
+      }
+    } else {
+      console.log("Token non trouvé dans localStorage");
+      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
+      navigate("/login");
+    }
+  };
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -198,7 +218,7 @@ function Navbar() {
               <ul>
                 <li>
                   <button
-                    //onClick={handleEditProfile}
+                    onClick={handleProfileClick}
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <EditIcon style={{ marginRight: "5px" }} /> Edit profil

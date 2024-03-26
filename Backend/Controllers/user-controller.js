@@ -124,7 +124,7 @@ exports.signin = (req, res) => {
         }
 
         // Si le mot de passe est valide, générer le token JWT
-        const token = jwt.sign({ id: user.id ,role: user.role, verified:user.verified},
+        const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
                                 config.secret,
                                 {
                                   algorithm: 'HS256',

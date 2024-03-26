@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Hero from "./frontoffice/pages/hero";
 import Signup from "./components/signup/sign-up";
 import Signin from "./components/signin/signin";
+import  UpdateUser  from "./components/ProfileUser/UpdateUser";
 import { formOffer, userInputs } from "./backoffice/formSource";
 import List from "./backoffice/pages/list/List";
 import Home from "./backoffice/pages/home/Home";
@@ -59,7 +60,7 @@ function App() {
               <Route path ="StudentList"  element={<ListStudent />} />
 
               
-
+            
 
               <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
               <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
@@ -89,6 +90,7 @@ function App() {
             ></Route>
             <Route path="forgetpass" element={<ForgetPasswordForm />} />
             <Route path="Signin" element={<Signin />} />
+            <Route path ="update/:userId" element ={<UpdateUser/>} />
             <Route path="/users/:id/verify/:token" element={<EmailVerify />} />
           </Route>
           <Route path="/Student">

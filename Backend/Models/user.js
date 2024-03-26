@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema({
   confirmPassword: { type: String},
   specialite :{type:String , enum: ['Information technology(IT)', 'Business', 'Civil Engineering' , 'Mechanical']},
   verified:{type:Boolean, default:false},
+  doamine:{type:String},
+  photo:{type:String},
   twofaEnabled: {
     type: Boolean,
     default: false,
