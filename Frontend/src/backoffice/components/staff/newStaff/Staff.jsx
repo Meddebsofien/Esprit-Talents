@@ -117,7 +117,7 @@ const Staff = ({ title }) => {
         <div className="top">
           <h1>Add New Staff</h1>
         </div>
-        <div className="bottom">
+        <div className="bottom1Staff">
           <div className="left">
             <div className="column">
               {/* <img

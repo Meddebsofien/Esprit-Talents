@@ -63,10 +63,10 @@ const UpdateStudent = () => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
+        <div className="topStudent">
           <h1>Update Student Information</h1>
         </div>
-        <div className="bottom">
+        <div className="bottomStudent">
           <div className="right">
             <form onSubmit={handleSubmit} className="form">
               <div className="column">
@@ -110,7 +110,7 @@ const UpdateStudent = () => {
                   />
                 </div>
 
-                <button type="submit" style={{ justifyContent: 'center' }}>Update</button>
+                <button type="submit" style={{marginLeft:'30% ' }}>Update</button>
               </div>
             </form>
           </div>
