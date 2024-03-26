@@ -26,6 +26,10 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow both origins
   credentials: true, // enable set cookie
   allowedHeaders: 'Content-Type',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: 'Authorization,Content-Type',
 };
 
 app.use(cors(corsOptions));
