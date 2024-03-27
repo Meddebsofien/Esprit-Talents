@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./details.css";
 import Navbar from "../../pages/Navbar";
 import Footer from "../../pages/footer";
@@ -7,15 +6,31 @@ import axios from "axios";
 import InputGroup from "./inputGroup";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AjouterOffer = ({ inputs, title }) => {
+  const [idc, setIdc] = useState("");
+  const [companyN, setCompanyN] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      setIdc(decodedPayload.id);
+      setCompanyN(decodedPayload.companyName);
+    } else {
+      console.log("Token non trouvé dans localStorage");
+    }
+  }, []);
+  const navigate = useNavigate();
   const [form, setForm] = useState({});
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     // Remplir le champ createdBy  static pour le moment
-    const formData = { ...form, createdBy: "65d8e9e5006ea987c7fdead8" };
-
+    const formData = { ...form, createdBy: idc, company: companyN };
+    console.log(formData);
     axios
       .post("http://localhost:3700/offers/addoffer", formData)
       .then((res) => {
@@ -28,7 +43,7 @@ const AjouterOffer = ({ inputs, title }) => {
         });
 
         setForm({});
-        window.location.replace("/Entreprise/offers");
+        navigate("/Entreprise/offers");
       })
       .catch((err) => console.log(err.response.data));
   };
@@ -50,20 +65,11 @@ const AjouterOffer = ({ inputs, title }) => {
             <div className="right">
               <form onSubmit={onSubmitHandler}>
                 <div className="right">
-                  <div className="w-1/2">
+                  <div>
                     <InputGroup
                       label="title"
                       type="text"
                       name="title"
-                      onChangeHandler={onChangeHandler}
-                    />
-                  </div>
-
-                  <div className="w-1/2">
-                    <InputGroup
-                      label="company"
-                      type="text"
-                      name="company"
                       onChangeHandler={onChangeHandler}
                     />
                   </div>
@@ -79,9 +85,6 @@ const AjouterOffer = ({ inputs, title }) => {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-gray-600 text-l mb-1">
-                      Job Description
-                    </label>
                     <InputGroup
                       label="description"
                       type="textarea"
@@ -94,9 +97,8 @@ const AjouterOffer = ({ inputs, title }) => {
                 <div className="left">
                   <InputGroup
                     label="requirements"
-                    type="text"
+                    type="textarea"
                     name="requirements"
-                    value={form.requirements}
                     onChangeHandler={onChangeHandler}
                   />
                   <InputGroup
@@ -111,13 +113,22 @@ const AjouterOffer = ({ inputs, title }) => {
                     name="type"
                     onChangeHandler={onChangeHandler}
                   />
-                  <InputGroup
+                  {/* <InputGroup
                     label="Experience (ans)"
                     type="number"
                     name="experience"
                     onChangeHandler={onChangeHandler}
+                   
+                  />*/}
+                  &nbsp;
+                  <input
+                    type="number"
+                    name="experience"
+                    className="form-control"
+                    placeholder="Experience (ans)"
+                    onChange={onChangeHandler}
+                    hidden={form.type === "Emploi" ? false : true}
                   />
-
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <button type="submit">Ajouter</button>
                   </div>
@@ -132,42 +143,3 @@ const AjouterOffer = ({ inputs, title }) => {
   );
 };
 export default AjouterOffer;
-=======
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Navbar from '../../pages/Navbar';
-import Footer from '../../pages/footer';
-
-function AjouterOffer() {
-  return (
-
-    <>
-
-    <Navbar/>
-    <Form>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" label="Check me out" />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
-    </Form>
-    <Footer/>
-    </>
-  );
-}
-
-export default AjouterOffer;
-

@@ -11,15 +11,24 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   return (
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-         <img src="/src/assets/img/logo.png" alt="" className="img-fluid" style={{ width: '150px', height: '50px' }} />
+          <img
+            src="/src/assets/img/logo.png"
+            alt=""
+            className="img-fluid"
+            style={{ width: "150px", height: "50px" }}
+          />
         </Link>
       </div>
       <hr />
@@ -44,11 +53,12 @@ const Sidebar = () => {
             </li>
           </Link>
           <Link to={"/admin/offers"}>
-          <li>
-            <CreditCardIcon className="icon" />
-            <span>Offer</span>
-          </li></Link>
-          
+            <li>
+              <CreditCardIcon className="icon" />
+              <span>Offer</span>
+            </li>
+          </Link>
+
           <li>
             <LocalShippingIcon className="icon" />
             <span>Delivery</span>
@@ -82,7 +92,8 @@ const Sidebar = () => {
           </li>
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+
+            <button onClick={handleLogout}>logOut</button>
           </li>
         </ul>
       </div>

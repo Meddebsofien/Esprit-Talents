@@ -37,7 +37,7 @@ const offerSchema = new mongoose.Schema({
     },
     experience: {
         type: Number, 
-        required: true 
+        required: false 
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,

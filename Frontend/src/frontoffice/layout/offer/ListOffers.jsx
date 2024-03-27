@@ -15,12 +15,27 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../../../backoffice/components/Table/table.scss";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ListOffers = () => {
   const [offer, setOffer] = useState([]);
   const [message, setMessage] = useState("");
-  const [IdActuel, setIdActuel] = useState("65d8e9e5006ea987c7fdead8");
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
+
+  const [idc, setIdc] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      setIdc(decodedPayload.id);
+    } else {
+      console.log("Token non trouvé dans localStorage");
+    }
+  }, []);
+
   /* on delete */
 
   const Ondelete = (id) => {
@@ -47,10 +62,10 @@ const ListOffers = () => {
   };
 
   const OnUpdate = (id) => {
-    window.location.replace(`/Entreprise/update/${id}`);
+    navigate(`/Entreprise/update/${id}`);
   };
   const OnView = (id) => {
-    window.location.replace(`/Entreprise/details/${id}`);
+    navigate(`/Entreprise/detailsentr/${id}`);
   };
 
   /* find all offers */
@@ -82,7 +97,7 @@ const ListOffers = () => {
                 <TableCell className="tableCell">company</TableCell>
                 <TableCell className="tableCell">location</TableCell>
                 <TableCell className="tableCell">type</TableCell>
-                <TableCell className="tableCell">experience</TableCell>
+                <TableCell className="tableCell">experience (ans)</TableCell>
                 <TableCell className="tableCell">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -100,15 +115,13 @@ const ListOffers = () => {
                   experience,
                   _id,
                 }) =>
-                  createdBy === IdActuel && (
+                  createdBy === idc && (
                     <TableRow key={_id}>
                       <TableCell className="tableCell">{title}</TableCell>
                       <TableCell className="tableCell">{company}</TableCell>
                       <TableCell className="tableCell">{location}</TableCell>
                       <TableCell className="tableCell">{type}</TableCell>
-                      <TableCell className="tableCell">
-                        {experience} ans
-                      </TableCell>
+                      <TableCell className="tableCell">{experience}</TableCell>
                       <TableCell className="tableCell">
                         <button
                           className="viewButton"

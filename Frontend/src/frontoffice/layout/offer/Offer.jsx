@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoLocation } from "react-icons/go";
 import moment from "moment";
 import "./details.css";
@@ -19,10 +19,11 @@ const Offer = ({
   createdBy,
   Id,
 }) => {
+  const navigate = useNavigate();
   const imgSrc =
     type === "Emploi" ? "/src/assets/img/job.jpg" : "/src/assets/img/stage.png";
   const onDetails = (id) => {
-    window.location.replace("/Entreprise/details/" + id);
+    navigate("/Entreprise/details/" + id);
   };
   return (
     <>
@@ -45,7 +46,7 @@ const Offer = ({
   */}
       <Link
         className="bg-white hover:bg-gray-500  text-black"
-        to={`details/${Id}`}
+        to={`detailsentr/${Id}`}
       >
         <div
           className="w-full md:w-[16rem] 2xl:w-[18rem] h-[14rem] md:h-[14rem] bg-white flex flex-col justify-between shadow-lg 

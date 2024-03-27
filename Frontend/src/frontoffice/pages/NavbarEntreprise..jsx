@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import EditIcon from "@mui/icons-material/Edit";
+
 const NavbarEntreprise = () => {
   useEffect(() => {
     const select = (el, all = false) => {
@@ -148,6 +152,11 @@ const NavbarEntreprise = () => {
       });
     };
   }, []);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -197,11 +206,21 @@ const NavbarEntreprise = () => {
               </Link>
               <ul>
                 <li>
-                  <Link href="#">Edit profil</Link>
+                  <button
+                    //onClick={handleEditProfile}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <EditIcon style={{ marginRight: "5px" }} /> Edit profil
+                  </button>
                 </li>
 
                 <li>
-                  <Link href="#">Logout</Link>
+                  <button
+                    onClick={handleLogout}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ExitToAppIcon style={{ marginRight: "5px" }} /> logOut
+                  </button>
                 </li>
               </ul>
             </li>

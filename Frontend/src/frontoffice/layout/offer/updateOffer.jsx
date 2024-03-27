@@ -4,10 +4,12 @@ import Footer from "../../pages/footer";
 import axios from "axios";
 import InputGroup from "./inputGroup";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 const UpdateOffer = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [offerData, setOfferData] = useState({}); // Pour stocker les données de l'offre
   const [form, setForm] = useState({
     title: "",
@@ -80,7 +82,7 @@ const UpdateOffer = () => {
             timer: 2000,
           });
 
-          window.location.replace("/Entreprise/offers");
+          navigate("/Entreprise/offers");
         });
 
       // Rediriger l'utilisateur ou afficher un message de succès si nécessaire
@@ -93,7 +95,7 @@ const UpdateOffer = () => {
     <>
       <NavbarEntreprise />
       <div className="new">
-        <div className="newContainer">
+        <div className="newContainer ">
           <div className="bottom">
             <div className="right">
               <form onSubmit={onUpdate}>
@@ -105,20 +107,7 @@ const UpdateOffer = () => {
                     value={form.title}
                     onChangeHandler={onChangeHandler}
                   />
-                  <InputGroup
-                    label="description"
-                    type="text"
-                    name="description"
-                    value={form.description}
-                    onChangeHandler={onChangeHandler}
-                  />
-                  <InputGroup
-                    label="company"
-                    type="text"
-                    name="company"
-                    value={form.company}
-                    onChangeHandler={onChangeHandler}
-                  />
+
                   <InputGroup
                     label="location"
                     type="text"
@@ -126,11 +115,19 @@ const UpdateOffer = () => {
                     value={form.location}
                     onChangeHandler={onChangeHandler}
                   />
+
+                  <InputGroup
+                    label="description"
+                    type="textarea"
+                    name="description"
+                    value={form.description}
+                    onChangeHandler={onChangeHandler}
+                  />
                 </div>
                 <div className="left">
                   <InputGroup
                     label="requirements"
-                    type="text"
+                    type="textarea"
                     name="requirements"
                     value={form.requirements}
                     onChangeHandler={onChangeHandler}
@@ -149,12 +146,14 @@ const UpdateOffer = () => {
                     value={form.type}
                     onChangeHandler={onChangeHandler}
                   />
-                  <InputGroup
-                    label="Experience (ans)"
+                  &nbsp;
+                  <input
                     type="number"
                     name="experience"
-                    value={form.experience}
-                    onChangeHandler={onChangeHandler}
+                    className="form-control"
+                    placeholder="Experience (ans)"
+                    onChange={onChangeHandler}
+                    hidden={form.type === "Emploi" ? false : true}
                   />
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <button type="submit">Modifier</button>
