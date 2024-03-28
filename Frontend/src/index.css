@@ -1,3 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +15,75 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  
+}
+.signin-background {
+  background-image: url("../src/components/signin/aa.jpg");
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 130vh;
+  width: 100vw;
+  font-family: "Raleway", sans-serif;
+}
+.styled-button {
+  height: 3.5rem;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5rem;
+  color: #03217b;
+  cursor: pointer;
+  border: 1px solid #03217b;
+  background: transparent;
+}
+
+.styled-button svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.custom-button {
+  background: linear-gradient(to right, #14163c 0%, #03217b 79%);
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  width: 65%;
+  height: 3rem;
+  border: none;
+  color: white;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background: linear-gradient(to right, #03217b 0%, #14163c 79%);
+}
+.custom-input {
+  /* Ajoutez vos styles personnalisés ici */
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border-radius: 2rem;
+  width: 80%;
+  height: 3rem;
+  padding: 1rem;
+  border: none;
+  outline: none;
+  color: #3c354e;
+  font-size: 1rem;
+  font-weight: bold;
+  &:focus {
+    display: inline-block;
+    box-shadow: 0 0 0 0.2rem #b9abe0;
+    backdrop-filter: blur(12rem);
+    border-radius: 2rem;
+  }
+  &::placeholder {
+    color: #b9abe099;
+    font-weight: 100;
+    font-size: 1rem;
+  }
 }
 
 code {
@@ -85,3 +164,5 @@ code {
     grid-template-columns: 1fr;
   } 
 }
+
+

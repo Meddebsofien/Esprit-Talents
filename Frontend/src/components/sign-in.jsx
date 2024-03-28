@@ -8,7 +8,7 @@ import {
 }
 from 'mdb-react-ui-kit';
 
-function Signin() {
+function Signi() {
   return (
 
    
@@ -69,4 +69,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Signi;

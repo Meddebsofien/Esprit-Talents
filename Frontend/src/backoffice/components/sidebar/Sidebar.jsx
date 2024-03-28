@@ -11,15 +11,24 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   return (
     <div className="sidebar">
       <div className="top">
         <Link to="/" style={{ textDecoration: "none" }}>
-         <img src="/src/assets/img/logo.png" alt="" className="img-fluid" style={{ width: '150px', height: '50px' }} />
+          <img
+            src="/src/assets/img/logo.png"
+            alt=""
+            className="img-fluid"
+            style={{ width: "150px", height: "50px" }}
+          />
         </Link>
       </div>
       <hr />
@@ -31,22 +40,44 @@ const Sidebar = () => {
             <span>Dashboard</span>
           </li>
           <p className="title">LISTS</p>
-          <Link to="/admin/users" style={{ textDecoration: "none" }}>
+          
+          <Link to="/admin/users/CompanyList" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Company</span>
+            </li>
+          </Link>
+          <Link to="/admin/users/StudentList" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Student</span>
             </li>
           </Link>
           <Link to="/admin/BEntretien" style={{ textDecoration: "none" }}>
             <li>
-              <StoreIcon className="icon" />
+              <PersonOutlineIcon className="icon" />
               <span>Entretien</span>
             </li>
+            </Link>
+          <Link to="/admin/users/staffList" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Staff</span>
+            </li>
           </Link>
-          <li>
-            <CreditCardIcon className="icon" />
-            <span>Orders</span>
-          </li>
+          <Link to="/products" style={{ textDecoration: "none" }}>
+            <li>
+              <StoreIcon className="icon" />
+              <span>Entreprise</span>
+            </li>
+          </Link>
+          <Link to={"/admin/offers"}>
+            <li>
+              <CreditCardIcon className="icon" />
+              <span>Offer</span>
+            </li>
+          </Link>
+
           <li>
             <LocalShippingIcon className="icon" />
             <span>Delivery</span>
@@ -80,7 +111,8 @@ const Sidebar = () => {
           </li>
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+
+            <button onClick={handleLogout}>logOut</button>
           </li>
         </ul>
       </div>
