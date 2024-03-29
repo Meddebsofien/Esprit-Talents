@@ -9,9 +9,7 @@ function InputGroup({ label, type, name, onChangeHandler, errors, value }) {
       {type === "select" && ( // Si le type est un select, afficher le select
         <select
           value={value}
-          className={classnames("form-control", {
-            "is-invalid": errors && errors[name],
-          })}
+          className={classnames("form-control", { "is-invalid": errors })}
           name={name}
           onChange={onChangeHandler}
         >
@@ -23,9 +21,7 @@ function InputGroup({ label, type, name, onChangeHandler, errors, value }) {
       {type === "textarea" && ( // Si le type est un textarea, afficher le textarea
         <textarea
           value={value}
-          className={classnames("form-control", {
-            "is-invalid": errors && errors[name],
-          })}
+          className={classnames("form-control", { "is-invalid": errors })}
           name={name}
           rows={4}
           cols={6}
@@ -38,17 +34,13 @@ function InputGroup({ label, type, name, onChangeHandler, errors, value }) {
           <input
             type={type}
             value={value}
-            className={classnames("form-control", {
-              "is-invalid": errors && errors[name],
-            })}
+            className={classnames("form-control", { "is-invalid": errors })}
             name={name}
             onChange={onChangeHandler}
           />
         )}
-      {/* Afficher les erreurs si elles sont présentes */}
-      {errors && errors[name] && (
-        <div className="invalid-feedback">{errors[name]}</div>
-      )}
+
+      {errors && <div className="invalid-feedback">{errors}</div>}
     </div>
   );
 }

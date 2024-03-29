@@ -22,6 +22,9 @@ import DetailsOffer from "./frontoffice/layout/offer/detailOffer/detailsOffer";
 import DetailsofferEnt from "./frontoffice/layout/offer/detailOffer/detailsofferEnt";
 import DetailsofferStudent from "./frontoffice/layout/offer/detailOffer/detailsofferStudent";
 import EmailVerify from "./components/signup/VerifyEmail";
+import Twofa from "./components/twofa";
+import TwoFALogin from "./components/TwoFALogin";
+import HeroStaf from "./frontoffice/pages/HeroStaf";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -56,11 +59,11 @@ function App() {
             <Route path="offers" element={<Listofferscomponent />} />
             <Route path="update/:id" element={<UpdateOffer />} />
             <Route path="detailsentr/:id" element={<DetailsofferEnt />} />
+            <Route path="twoFA/:id" element={<Twofa />} />
           </Route>
           <Route path="/">
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
-
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
@@ -69,10 +72,16 @@ function App() {
             <Route path="forgetpass" element={<ForgetPasswordForm />} />
             <Route path="Signin" element={<Signin />} />
             <Route path="/users/:id/verify/:token" element={<EmailVerify />} />
+            <Route path="twoFALogin" element={<TwoFALogin />} />
           </Route>
           <Route path="/Student">
             <Route index element={<Hero />} />
+            <Route path="twoFA/:id" element={<Twofa />} />
+
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
+          </Route>
+          <Route path="/Staff">
+            <Route index element={<HeroStaf />} />
           </Route>
 
           <Route path="*" element={<Signin />} />

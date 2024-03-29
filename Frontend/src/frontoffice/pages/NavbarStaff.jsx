@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
 
-function Navbar() {
+const NavbarStaff = () => {
   const [idc, setIdc] = useState("");
   const [twofa, settwofa] = useState("");
   useEffect(() => {
@@ -20,12 +21,6 @@ function Navbar() {
       console.log("Token non trouvé dans localStorage");
     }
   }, []);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/signin");
-  };
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -173,12 +168,16 @@ function Navbar() {
       });
     };
   }, []);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
 
   const handleEnable2FA = () => {
     // Redirect to the 2FA setup page for the specific user
-    navigate(`/Student/twoFA/${idc}`);
+    navigate(`/Entreprise/twoFA/${idc}`);
   };
-
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -196,19 +195,14 @@ function Navbar() {
             <li>
               <Link
                 className="nav-link scrollto active text-black"
-                to={`/Student`}
+                to={`/Entreprise`}
               >
                 Home
               </Link>
             </li>
-            <li>
-              <Link className="nav-link scrollto text-black">Campanies</Link>
-            </li>
 
             <li>
-              <Link className="nav-link scrollto text-black" to={``}>
-                Mes Application
-              </Link>
+              <Link className="nav-link scrollto text-black">All Students</Link>
             </li>
 
             <li className="dropdown">
@@ -251,6 +245,6 @@ function Navbar() {
       </div>
     </header>
   );
-}
+};
 
-export default Navbar;
+export default NavbarStaff;

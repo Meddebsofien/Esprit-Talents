@@ -21,6 +21,7 @@ const ListOffers = () => {
   const [offer, setOffer] = useState([]);
   const [message, setMessage] = useState("");
   const [show, setShow] = useState(false);
+  const [role, setrole] = useState("");
   const navigate = useNavigate();
 
   const [idc, setIdc] = useState("");
@@ -30,7 +31,10 @@ const ListOffers = () => {
     if (token) {
       const [header, payload, signature] = token.split(".");
       const decodedPayload = JSON.parse(atob(payload));
-      setIdc(decodedPayload.id);
+      const r = decodedPayload.role;
+      if (r === "admin") {
+        setIdc(decodedPayload.id);
+      }
     } else {
       console.log("Token non trouvé dans localStorage");
     }
@@ -85,7 +89,7 @@ const ListOffers = () => {
     };
 
     fetchData();
-  }); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
+  }, []); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
   return (
     <>
       <div className="ccc">
@@ -114,38 +118,39 @@ const ListOffers = () => {
                   createdBy,
                   experience,
                   _id,
-                }) =>
-                  createdBy === idc && (
-                    <TableRow key={_id}>
-                      <TableCell className="tableCell">{title}</TableCell>
-                      <TableCell className="tableCell">{company}</TableCell>
-                      <TableCell className="tableCell">{location}</TableCell>
-                      <TableCell className="tableCell">{type}</TableCell>
-                      <TableCell className="tableCell">{experience}</TableCell>
-                      <TableCell className="tableCell">
-                        <button
-                          className="viewButton"
-                          onClick={() => OnView(_id)}
-                        >
-                          View
-                        </button>{" "}
-                        &nbsp;
-                        <button
-                          className="deleteButton"
-                          onClick={() => Ondelete(_id)}
-                        >
-                          delete
-                        </button>{" "}
-                        &nbsp;
-                        <button
-                          className="editerButton"
-                          onClick={() => OnUpdate(_id)}
-                        >
-                          Update
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  )
+                }) => (
+                  <TableRow key={_id}>
+                    <TableCell className="tableCell">{title}</TableCell>
+                    <TableCell className="tableCell">{company}</TableCell>
+                    <TableCell className="tableCell">{location}</TableCell>
+                    <TableCell className="tableCell">{type}</TableCell>
+                    <TableCell className="tableCell">{experience}</TableCell>
+                    <TableCell className="tableCell">
+                      <button
+                        className="viewButton"
+                        onClick={() => OnView(_id)}
+                        hidden={role === "admin" ? false : true}
+                      >
+                        View
+                      </button>{" "}
+                      &nbsp;
+                      <button
+                        className="deleteButton"
+                        onClick={() => Ondelete(_id)}
+                      >
+                        delete
+                      </button>{" "}
+                      &nbsp;
+                      <button
+                        className="editerButton"
+                        onClick={() => OnUpdate(_id)}
+                        hidden={role === "admin" ? false : true}
+                      >
+                        Update
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                )
               )}
             </TableBody>
           </Table>

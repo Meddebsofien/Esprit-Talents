@@ -1,10 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
 
 const NavbarEntreprise = () => {
+  const [idc, setIdc] = useState("");
+  const [twofa, settwofa] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      setIdc(decodedPayload.id);
+      settwofa(decodedPayload.twofaEnabled);
+      console.log("idc", decodedPayload.id);
+      console.log("twofa", decodedPayload.twofaEnabled);
+    } else {
+      console.log("Token non trouvé dans localStorage");
+    }
+  }, []);
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -157,6 +173,11 @@ const NavbarEntreprise = () => {
     localStorage.removeItem("token");
     navigate("/signin");
   };
+
+  const handleEnable2FA = () => {
+    // Redirect to the 2FA setup page for the specific user
+    navigate(`/Entreprise/twoFA/${idc}`);
+  };
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -211,6 +232,15 @@ const NavbarEntreprise = () => {
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <EditIcon style={{ marginRight: "5px" }} /> Edit profil
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={handleEnable2FA}
+                    style={{ display: "flex", alignItems: "center" }}
+                    disabled={twofa}
+                  >
+                    <EditIcon style={{ marginRight: "5px" }} /> Enable 2FA
                   </button>
                 </li>
 

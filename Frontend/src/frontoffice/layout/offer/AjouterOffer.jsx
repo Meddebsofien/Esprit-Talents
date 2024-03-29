@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 const AjouterOffer = ({ inputs, title }) => {
   const [idc, setIdc] = useState("");
   const [companyN, setCompanyN] = useState("");
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -45,7 +46,10 @@ const AjouterOffer = ({ inputs, title }) => {
         setForm({});
         navigate("/Entreprise/offers");
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => {
+        setErrors(err.response.data);
+        console.log(err.response.data);
+      });
   };
 
   // Fonction pour gérer les changements dans le formulaire
@@ -70,6 +74,7 @@ const AjouterOffer = ({ inputs, title }) => {
                       label="title"
                       type="text"
                       name="title"
+                      errors={errors.title}
                       onChangeHandler={onChangeHandler}
                     />
                   </div>
@@ -81,6 +86,7 @@ const AjouterOffer = ({ inputs, title }) => {
                       type="text"
                       name="location"
                       onChangeHandler={onChangeHandler}
+                      errors={errors.location}
                     />
                   </div>
 
@@ -90,6 +96,7 @@ const AjouterOffer = ({ inputs, title }) => {
                       type="textarea"
                       name="description"
                       onChangeHandler={onChangeHandler}
+                      errors={errors.description}
                     />
                   </div>
                 </div>
@@ -100,18 +107,21 @@ const AjouterOffer = ({ inputs, title }) => {
                     type="textarea"
                     name="requirements"
                     onChangeHandler={onChangeHandler}
+                    errors={errors.requirements}
                   />
                   <InputGroup
                     label="startDate"
                     type="Date"
                     name="startDate"
                     onChangeHandler={onChangeHandler}
+                    errors={errors.startDate}
                   />
                   <InputGroup
                     label="type"
                     type="select"
                     name="type"
                     onChangeHandler={onChangeHandler}
+                    errors={errors.type}
                   />
                   {/* <InputGroup
                     label="Experience (ans)"

@@ -4,32 +4,32 @@ const mongoose = require('mongoose');
 const offerSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+    //    required: true
     },
     company: {
         type: String,
-        required: true
+    //    required: true
     },
     description: {
         type: String,
-        required: true
+     //   required: true
     },
     location: {
         type: String,
-        required: true
+      //  required: true
     },
     type: {
         type: String, 
-        required: true,
+      //  required: true,
         enum : ["Emploi" , "Stage"]
     },
     startDate: {
         type: Date,
-        required: true
+   //     required: true
     },
     requirements: {
         type: [String], 
-        required: true
+   //     required: true
     },
     salary: {
         type: Number, 
@@ -42,7 +42,7 @@ const offerSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', 
-        required: true
+     //   required: true
     },
     createdAt: {
         type: Date,
