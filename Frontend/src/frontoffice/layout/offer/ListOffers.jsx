@@ -60,20 +60,16 @@ const ListOffers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:3700/offers/getAllOffers"
-        );
+        const response = await axios.get("http://localhost:3700/offers/getAllOffers");
         setOffer(response.data);
       } catch (error) {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des offres :",
-          error
-        );
+        console.error("An error occurred while fetching offers:", error);
       }
     };
-
+  
     fetchData();
-  }); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
+  }, []); // Empty dependency array to ensure this effect runs only once after the initial mount
+  // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
   return (
     <>
       <div className="ccc">

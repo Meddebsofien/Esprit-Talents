@@ -47,9 +47,13 @@ const CompanyTable = () => {
   };
 
   const columns = [
-    { field: 'nom', headerName: 'Nom', flex: 1 },
+    { field: 'nom', headerName: 'Name', flex: 1 },
+    { field: 'prenom', headerName: 'Lastname', flex: 1 },
+
     { field: 'companyName', headerName: 'Company Name', flex: 1 },
     { field: 'numeroTel', headerName: 'Phone Number', flex: 1 },
+    { field: 'mail', headerName: 'Email', flex: 1 },
+
     {
       field: 'actions',
       headerName: 'Actions',
@@ -86,7 +90,7 @@ const CompanyTable = () => {
   color="success"
   style={{ marginLeft: 'auto', marginRight: '2%' }}
 >
-  Ajouter
+  Add Company
 </Button>
 
       </div>
