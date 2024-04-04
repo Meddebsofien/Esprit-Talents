@@ -81,6 +81,7 @@ export default function Login() {
           const [header, payload, signature] = token.split(".");
           const decodedPayload = JSON.parse(atob(payload));
           const role = decodedPayload.role;
+
           const enabletwoFactor = decodedPayload.twofaEnabled;
           console.log(role);
           console.log(enabletwoFactor);
@@ -94,6 +95,7 @@ export default function Login() {
             } else {
               navigate("/" + role);
             }
+
           }
         } else {
           console.log("Token non trouvé dans localStorage");

@@ -1,8 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
+
 
 const NavbarEntreprise = () => {
   const [idc, setIdc] = useState("");
@@ -174,10 +176,12 @@ const NavbarEntreprise = () => {
     navigate("/signin");
   };
 
+
   const handleEnable2FA = () => {
     // Redirect to the 2FA setup page for the specific user
     navigate(`/Entreprise/twoFA/${idc}`);
   };
+
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -245,12 +249,14 @@ const NavbarEntreprise = () => {
                 </li>
 
                 <li>
+
                   <button
                     onClick={handleLogout}
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <ExitToAppIcon style={{ marginRight: "5px" }} /> logOut
                   </button>
+
                 </li>
               </ul>
             </li>

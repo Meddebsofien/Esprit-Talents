@@ -8,7 +8,9 @@ const crypto = require("crypto");
 const VerifTokeen=require('../Models/verif');
 
 // Liste des rôles autorisés
-const allowedRoles = ['Company', 'Student'];
+//const allowedRoles = ['Company', 'Student'];
+
+const allowedRoles = ['Company', 'Student','Staff'];
 //signup user
 const registerUser = async (req, res) => {
   try {
@@ -125,6 +127,7 @@ exports.signin = (req, res) => {
 
         // Si le mot de passe est valide, générer le token JWT
         const token = jwt.sign({ id: user.id ,role: user.role, verified:user.verified, companyName: user.companyName, specialite: user.specialite,twofaEnabled: user.twofaEnabled},
+      //  const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
                                 config.secret,
                                 {
                                   algorithm: 'HS256',
@@ -150,9 +153,13 @@ const currentUser = asyncHandler(async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { nom, prenom, role, mail, password,confirmPassword, companyName,  adresse,specialite } = req.body;
+   // const { nom, prenom, role, mail, password,confirmPassword, companyName,  adresse,specialite } = req.body;
 
-    if (!password || !role || !mail ||!confirmPassword) {
+   // if (!password || !role || !mail ||!confirmPassword) {
+
+    const { nom, prenom, role, mail, password, companyName, adresse, numeroTel,specialite } = req.body;
+
+    if (!password || !role || !mail ) {
       res.status(400);
       throw new Error("All fields are mandatory!");
     }
@@ -175,10 +182,10 @@ exports.createUser = async (req, res) => {
       mail,
       password: hashedPassword,
       companyName,
-      
-      
-      adresse,
+
+      numeroTel,
       specialite,
+      adresse,
     });
 
     console.log(`User created ${user}`);
@@ -190,10 +197,15 @@ exports.createUser = async (req, res) => {
       throw new Error("User data is not valid");
     }
 
+
+
+
   } catch (error) {
+    console.error(error.message);
     res.status(400).json({ error: error.message });
   }
 };
+
 
 // Lire tous les utilisateurs
 exports.getAllUsers = async (req, res) => {

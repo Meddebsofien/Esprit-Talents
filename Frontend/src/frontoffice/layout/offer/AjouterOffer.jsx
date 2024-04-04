@@ -1,4 +1,6 @@
+
 import { useEffect, useState } from "react";
+
 import "./details.css";
 import Navbar from "../../pages/Navbar";
 import Footer from "../../pages/footer";
@@ -24,6 +26,7 @@ const AjouterOffer = ({ inputs, title }) => {
       console.log("Token non trouvé dans localStorage");
     }
   }, []);
+
   const navigate = useNavigate();
   const [form, setForm] = useState({});
 

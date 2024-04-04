@@ -8,10 +8,16 @@ const User = require('./Models/user');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcrypt");
+
 const qrcode = require("qrcode");
 const { authenticator } = require("otplib");
 const speakeasy = require('speakeasy');
 
+
+
+
+
+var cros = require('cors')
 
 var usersRouter = require('./routes/user-route');
 
@@ -28,6 +34,12 @@ const corsOptions = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow both origins
   credentials: true, // enable set cookie
   allowedHeaders: 'Content-Type',
+
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: 'Authorization,Content-Type',
+
 };
 
 app.use(cors(corsOptions));
@@ -162,6 +174,7 @@ app.post('/reset-password/:id/:token', (req, res) => {
   
  
 
+
 // 2Fa
 
 app.get("/users/qrImage/:id", async (req, res) => {
@@ -239,6 +252,10 @@ app.get("/set2FA/:id", async (req, res) => {
     });
   }
 });
+
+// app.use(cros());
+
+
 
 //app.use('/users', usersRouter);
 

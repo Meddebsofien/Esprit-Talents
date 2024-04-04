@@ -40,18 +40,26 @@ const Sidebar = () => {
             <span>Dashboard</span>
           </li>
           <p className="title">LISTS</p>
-          <Link to="/admin/users" style={{ textDecoration: "none" }}>
+          
+          <Link to="/admin/users/CompanyList" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Company</span>
             </li>
           </Link>
-          <Link to="/products" style={{ textDecoration: "none" }}>
+          <Link to="/admin/users/StudentList" style={{ textDecoration: "none" }}>
             <li>
-              <StoreIcon className="icon" />
-              <span>Entreprise</span>
+              <PersonOutlineIcon className="icon" />
+              <span>Student</span>
             </li>
           </Link>
+          <Link to="/admin/users/staffList" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Staff</span>
+            </li>
+          </Link>
+
           <Link to={"/admin/offers"}>
             <li>
               <CreditCardIcon className="icon" />

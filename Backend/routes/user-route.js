@@ -33,6 +33,8 @@ router.get('/users/:role', userController.getUsersByRole);
 // Route pour la connexion (signin)
 router.post('/signin', userController.signin);
 
+router.post('/AddUser',userController.createUser)
+
 ///sofien verification
 router.get('/:id/verify/:token', userController.verifyUser);
 

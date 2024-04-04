@@ -21,10 +21,12 @@ const ListOffers = () => {
   const [offer, setOffer] = useState([]);
   const [message, setMessage] = useState("");
   const [show, setShow] = useState(false);
+
   const [role, setrole] = useState("");
   const navigate = useNavigate();
 
   const [idc, setIdc] = useState("");
+
 
   /* on delete */
 
@@ -61,6 +63,7 @@ const ListOffers = () => {
   /* find all offers */
   useEffect(() => {
     const fetchData = async () => {
+
       const token = localStorage.getItem("token");
       if (token) {
         const [header, payload, signature] = token.split(".");
@@ -87,11 +90,14 @@ const ListOffers = () => {
             error
           );
         }
+
       }
     };
-
+  
     fetchData();
+
   });
+
   return (
     <>
       <div className="ccc">

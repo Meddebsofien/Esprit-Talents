@@ -4,6 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Hero from "./frontoffice/pages/hero";
 import Signup from "./components/signup/sign-up";
 import Signin from "./components/signin/signin";
+
+import  UpdateUser  from "./components/ProfileUser/UpdateUser";
+
 import { formOffer, userInputs } from "./backoffice/formSource";
 import List from "./backoffice/pages/list/List";
 import Home from "./backoffice/pages/home/Home";
@@ -26,6 +29,15 @@ import Twofa from "./components/twofa";
 import TwoFALogin from "./components/TwoFALogin";
 import HeroStaf from "./frontoffice/pages/HeroStaf";
 
+import ListStaff from './backoffice/pages/list/ListStaff'
+import ListStudent from './backoffice/pages/list/ListStudent'
+import Company from "./backoffice/components/company/newCompany/newCompany";
+import UpdateStaff from './backoffice/components/staff/updateStaff/updateStaff'
+import NewStudent from './backoffice/components/student/newStudent/newStudent'
+import UpdateStudent from './backoffice/components/student/updateStudent/updateStudent' ;
+import Staff from './backoffice/components/staff/newStaff/Staff'
+import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
+
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
   const user = localStorage.getItem("token");
@@ -43,10 +55,23 @@ function App() {
             <Route path="users">
               <Route index element={<List />} />
               <Route path=":userId" element={<Single />} />
-              <Route
-                path="new"
-                element={<New inputs={userInputs} title="Add New User" />}
-              />
+              <Route path="NewCompany" element={<Company  title="Add New Company" />}/>  
+              <Route path="newStaff" element={<Staff  title="Add New Staff" />}/>   
+              <Route path="newStudent" element={<NewStudent  title="Add New Student" />}/>   
+
+     
+              
+              <Route path ="CompanyList"  element={<List />} />
+              <Route path ="StaffList"  element={<ListStaff />} />
+              <Route path ="StudentList"  element={<ListStudent />} />
+
+              
+            
+
+              <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
+              <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
+              <Route path ="updateStudent/:userId" element ={<UpdateStudent/>} />
+
             </Route>
             <Route path="offers" element={<ListOfferBack />} />
           </Route>
@@ -60,10 +85,12 @@ function App() {
             <Route path="update/:id" element={<UpdateOffer />} />
             <Route path="detailsentr/:id" element={<DetailsofferEnt />} />
             <Route path="twoFA/:id" element={<Twofa />} />
+
           </Route>
           <Route path="/">
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
+
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
@@ -82,8 +109,11 @@ function App() {
           </Route>
           <Route path="/Staff">
             <Route index element={<HeroStaf />} />
-          </Route>
 
+            <Route path ="update/:userId" element ={<UpdateUser/>} />
+          </Route>
+         
+         
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>

@@ -19,6 +19,7 @@ const Offer = ({
   createdBy,
   Id,
 }) => {
+
   const [role, setrole] = React.useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,6 +41,7 @@ const Offer = ({
       console.log("Token non trouvé dans localStorage");
     }
   }, []);
+
   const navigate = useNavigate();
   const imgSrc =
     type === "Emploi" ? "/src/assets/img/job.jpg" : "/src/assets/img/stage.png";
@@ -67,7 +69,9 @@ const Offer = ({
   */}
       <Link
         className="bg-white hover:bg-gray-500  text-black"
+
         to={`${role}/${Id}`}
+
       >
         <div
           className="w-full md:w-[16rem] 2xl:w-[18rem] h-[14rem] md:h-[14rem] bg-white flex flex-col justify-between shadow-lg 
