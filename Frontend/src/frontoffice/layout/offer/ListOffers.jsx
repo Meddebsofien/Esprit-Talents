@@ -16,6 +16,7 @@ import Paper from "@mui/material/Paper";
 import "../../../backoffice/components/Table/table.scss";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const ListOffers = () => {
   const [offer, setOffer] = useState([]);
@@ -26,7 +27,6 @@ const ListOffers = () => {
   const navigate = useNavigate();
 
   const [idc, setIdc] = useState("");
-
 
   /* on delete */
 
@@ -59,11 +59,13 @@ const ListOffers = () => {
   const OnView = (id) => {
     navigate(`/Entreprise/detailsentr/${id}`);
   };
+  const onViewCandidatures = (id) => {
+    navigate(`/Entreprise/listeCandidature/${id}`);
+  };
 
   /* find all offers */
   useEffect(() => {
     const fetchData = async () => {
-
       const token = localStorage.getItem("token");
       if (token) {
         const [header, payload, signature] = token.split(".");
@@ -90,12 +92,10 @@ const ListOffers = () => {
             error
           );
         }
-
       }
     };
-  
-    fetchData();
 
+    fetchData();
   });
 
   return (
@@ -132,12 +132,13 @@ const ListOffers = () => {
                     <TableCell className="tableCell">{company}</TableCell>
                     <TableCell className="tableCell">{location}</TableCell>
                     <TableCell className="tableCell">{type}</TableCell>
-                    <TableCell className="tableCell">{experience}</TableCell>
+                    <TableCell className="tableCell">
+                      {experience} ans
+                    </TableCell>
                     <TableCell className="tableCell">
                       <button
                         className="viewButton"
                         onClick={() => OnView(_id)}
-                        hidden={role === "admin" ? true : false}
                       >
                         View
                       </button>{" "}
@@ -152,10 +153,17 @@ const ListOffers = () => {
                       <button
                         className="editerButton"
                         onClick={() => OnUpdate(_id)}
-                        hidden={role === "admin" ? true : false}
                       >
                         Update
                       </button>
+                      &nbsp; &nbsp; &nbsp;
+                      <Button
+                        variant="outlined"
+                        onClick={() => onViewCandidatures(_id)}
+                        size="small"
+                      >
+                        Candidatures
+                      </Button>
                     </TableCell>
                   </TableRow>
                 )
