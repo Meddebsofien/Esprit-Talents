@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
+
+import React, { useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { GoLocation } from "react-icons/go";
 import moment from "moment";
@@ -21,6 +25,29 @@ const Offer = ({
   createdBy,
   Id,
 }) => {
+
+  const [role, setrole] = React.useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      const r = decodedPayload.role;
+
+      if (r === "Company") {
+        setrole("detailsentr");
+      }
+      if (r === "Student") {
+        setrole("detailstudent");
+      }
+      if (r === "Staff") {
+        setrole("detailStaff");
+      }
+    } else {
+      console.log("Token non trouvé dans localStorage");
+    }
+  }, []);
+
   const navigate = useNavigate();
   const imgSrc =
     type === "Emploi" ? "/src/assets/img/job.jpg" : "/src/assets/img/stage.png";
@@ -57,7 +84,9 @@ const Offer = ({
       {" "}
       <Link
         className="bg-white hover:bg-gray-500  text-black"
-        to={`detailstudent/${Id}`}
+
+        to={`${role}/${Id}`}
+
       >
         <div
           className="w-full md:w-[16rem] 2xl:w-[18rem] h-[14rem] md:h-[14rem] bg-white flex flex-col justify-between shadow-lg 

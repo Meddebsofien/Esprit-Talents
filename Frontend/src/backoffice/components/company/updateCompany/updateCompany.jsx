@@ -69,15 +69,15 @@ const CompanyUpdate = () => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
+        <div className="topCompany">
           <h1>Update Company Information</h1>
         </div>
-        <div className="bottom">
+        <div className="bottomCompany">
           <div className="right">
             <form onSubmit={handleSubmit} className="form">
               <div className="column">
                 <div className="formInput centered">
-                  <label>First Name</label>
+                  <label> First Name</label>
                   <Input
                     type="text"
                     name="nom"

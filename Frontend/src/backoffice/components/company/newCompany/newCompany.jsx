@@ -143,13 +143,14 @@ const Company = ({ title }) => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
+        <div className="topnewCompany">
           <h1>Add New Company</h1>
         </div>
-        <div className="bottom">
+        <div className="bottomnewCompany">
           <div className="left">
             <div className="column">
-              {/* <img
+              {
+              /* <img
                 src={
                   file
                     ? URL.createObjectURL(file)
@@ -167,7 +168,8 @@ const Company = ({ title }) => {
                   onChange={(e) => setFile(e.target.files[0])}
                   style={{ display: "none" }}
                 />
-              </div> */}
+              </div> */
+              }
             </div>
           </div>
           <div className="right">

@@ -1,12 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
 
-
-const NavbarEntreprise = () => {
+const NavbarStaff = () => {
   const [idc, setIdc] = useState("");
   const [twofa, settwofa] = useState("");
   useEffect(() => {
@@ -176,12 +174,10 @@ const NavbarEntreprise = () => {
     navigate("/signin");
   };
 
-
   const handleEnable2FA = () => {
     // Redirect to the 2FA setup page for the specific user
     navigate(`/Entreprise/twoFA/${idc}`);
   };
-
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -206,22 +202,7 @@ const NavbarEntreprise = () => {
             </li>
 
             <li>
-              <Link
-                className="nav-link scrollto text-black"
-                href="#services"
-                to={`/Entreprise/addOffer`}
-              >
-                Ajouter Offer
-              </Link>
-            </li>
-
-            <li>
-              <Link
-                className="nav-link scrollto text-black"
-                to={`/Entreprise/offers`}
-              >
-                Mes Offer
-              </Link>
+              <Link className="nav-link scrollto text-black">All Students</Link>
             </li>
 
             <li className="dropdown">
@@ -249,14 +230,12 @@ const NavbarEntreprise = () => {
                 </li>
 
                 <li>
-
                   <button
                     onClick={handleLogout}
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <ExitToAppIcon style={{ marginRight: "5px" }} /> logOut
                   </button>
-
                 </li>
               </ul>
             </li>
@@ -268,4 +247,4 @@ const NavbarEntreprise = () => {
   );
 };
 
-export default NavbarEntreprise;
+export default NavbarStaff;

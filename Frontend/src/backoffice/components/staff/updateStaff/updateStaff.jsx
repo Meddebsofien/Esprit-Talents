@@ -34,12 +34,13 @@ const UpdateStaff = () => {
     setFormData(prevState => ({
       ...prevState,
       [name]: value
-    }));
-  };
+    }
+    )
+    );
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validation des données (vous pouvez implémenter les fonctions de validation ici)
 
     try {
       const response = await fetch(`http://localhost:3700/users/updateUtilisateur/${userId}`, {
@@ -51,10 +52,8 @@ const UpdateStaff = () => {
       });
 
       if (response.status === 200) {
-        // User created successfully, navigate to the  page
         navigate('/admin/users/StaffList');
       } else {
-        // Handle other response statuses or errors
         console.error('Failed to update Staff User');
       }
     } catch (error) {
@@ -67,10 +66,10 @@ const UpdateStaff = () => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
+        <div className="topStaff">
           <h1>Update Staff Information</h1>
         </div>
-        <div className="bottom">
+        <div className="bottomStaff">
           <div className="right">
             <form onSubmit={handleSubmit} className="form">
               <div className="column">
@@ -107,15 +106,7 @@ const UpdateStaff = () => {
 
               </div>
 
-              
-                
-
-               
-
-               
-
-              
-            </form>
+           </form>
           </div>
         </div>
       </div>

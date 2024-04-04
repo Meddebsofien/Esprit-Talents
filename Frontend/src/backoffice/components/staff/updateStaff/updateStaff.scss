@@ -7,14 +7,15 @@
     flex: 6;
     justify-content: center;
   
-    .top,
-    .bottom {
+    .topStaff,
+    .bottomStaff {
       box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
       padding: 20px;
       margin-top: 30px;
       margin-left: 20px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       
   
       h1 {
@@ -42,9 +43,9 @@
           .formInput {
             flex: 1;
             max-width: 500px;
-            margin: 15%;
+            
             width: 300px;
-            padding-left: 10%;
+            
 
   
             label {
@@ -53,7 +54,7 @@
             }
   
             input {
-              width: 100%;
+              
               padding: 10px;
               border: 1px solid #ccc;
               border-radius: 5px;
@@ -71,12 +72,7 @@
             }
           }
   
-          .centered {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-          }
+          
   
           button {
             width: 150px;
@@ -88,6 +84,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin: 8%;
   
             &:hover {
               background-color: #008080;

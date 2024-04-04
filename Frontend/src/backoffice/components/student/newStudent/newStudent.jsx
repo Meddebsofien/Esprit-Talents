@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../sidebar/Sidebar';
 import Navbar from '../../navbar/Navbar';
 import { Input, Select, MenuItem } from '@mui/base';
-
+import './newStudent.scss';
 
 const NewStudent = () => {
   const navigate = useNavigate();
@@ -116,10 +116,10 @@ const NewStudent = () => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
+        <div className="topStudent">
           <h1>Add New Student</h1>
         </div>
-        <div className="bottom">
+        <div className="bottomStudent">
           <div className="right">
             <form onSubmit={handleSubmit} className="form centeredButton">
               <div className="column">
@@ -181,7 +181,7 @@ const NewStudent = () => {
                 </div>
 
                
-                <button type="submit">Send</button>
+                <button type="submit" style={{marginTop:'10%',marginLeft:'24%'}}>Send</button>
               </div>
             </form>
           </div>
