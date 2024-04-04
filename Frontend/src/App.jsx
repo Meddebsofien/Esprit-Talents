@@ -70,13 +70,21 @@ function App() {
                 element={<NewStudent title="Add New Student" />}
               />
 
-              <Route path="CompanyList" element={<List />} />
-              <Route path="StaffList" element={<ListStaff />} />
-              <Route path="StudentList" element={<ListStudent />} />
 
-              <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
-              <Route path="updateStaff/:userId" element={<UpdateStaff />} />
-              <Route path="updateStudent/:userId" element={<UpdateStudent />} />
+
+     
+              
+              <Route path ="CompanyList"  element={<List />} />
+              <Route path ="StaffList"  element={<ListStaff />} />
+              <Route path ="StudentList"  element={<ListStudent />} />
+
+              
+            
+
+              <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
+              <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
+              <Route path ="updateStudent/:userId" element ={<UpdateStudent/>} />
+
 
               <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
               <Route path="updateStaff/:userId" element={<UpdateStaff />} />

@@ -126,47 +126,51 @@ const ListOffers = () => {
                   createdBy,
                   experience,
                   _id,
-                }) => (
-                  <TableRow key={_id}>
-                    <TableCell className="tableCell">{title}</TableCell>
-                    <TableCell className="tableCell">{company}</TableCell>
-                    <TableCell className="tableCell">{location}</TableCell>
-                    <TableCell className="tableCell">{type}</TableCell>
-                    <TableCell className="tableCell">
-                      {experience} ans
-                    </TableCell>
-                    <TableCell className="tableCell">
-                      <button
-                        className="viewButton"
-                        onClick={() => OnView(_id)}
-                      >
-                        View
-                      </button>{" "}
-                      &nbsp;
-                      <button
-                        className="deleteButton"
-                        onClick={() => Ondelete(_id)}
-                      >
-                        delete
-                      </button>{" "}
-                      &nbsp;
-                      <button
-                        className="editerButton"
-                        onClick={() => OnUpdate(_id)}
-                      >
-                        Update
-                      </button>
-                      &nbsp; &nbsp; &nbsp;
-                      <Button
-                        variant="outlined"
-                        onClick={() => onViewCandidatures(_id)}
-                        size="small"
-                      >
-                        Candidatures
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )
+
+
+                }) =>
+                  createdBy === IdActuel && (
+                    <TableRow key={_id}>
+                      <TableCell className="tableCell">{title}</TableCell>
+                      <TableCell className="tableCell">{company}</TableCell>
+                      <TableCell className="tableCell">{location}</TableCell>
+                      <TableCell className="tableCell">{type}</TableCell>
+                      <TableCell className="tableCell">
+                        {experience} ans
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        <button
+                          className="viewButton"
+                          onClick={() => OnView(_id)}
+                        >
+                          View
+                        </button>{" "}
+                        &nbsp;
+                        <button
+                          className="deleteButton"
+                          onClick={() => Ondelete(_id)}
+                        >
+                          delete
+                        </button>{" "}
+                        &nbsp;
+                        <button
+                          className="editerButton"
+                          onClick={() => OnUpdate(_id)}
+                        >
+                          Update
+                        </button>
+                        &nbsp; &nbsp; &nbsp;
+                        <Button
+                          variant="outlined"
+                          onClick={() => onViewCandidatures(_id)}
+                          size="small"
+                        >
+                          Candidatures
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+
               )}
             </TableBody>
           </Table>
