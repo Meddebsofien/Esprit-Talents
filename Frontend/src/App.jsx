@@ -34,6 +34,7 @@ import NewStudent from './backoffice/components/student/newStudent/newStudent'
 import UpdateStudent from './backoffice/components/student/updateStudent/updateStudent' ;
 import Staff from './backoffice/components/staff/newStaff/Staff'
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
+import Loginpage from "./frontoffice/layout/entretien/Loginpage";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -101,6 +102,7 @@ function App() {
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
           </Route>
           <Route path='/entretien' element={<Entretien/>}/>
+          <Route path='/calendar' element={<Loginpage/>}/>
           <Route path='/admin/BEntretien' element={<DetailsEntretien/>}/>
           <Route path="/admin/UpdateEntretien/:entretienId" element={<Updatepage />} />
           <Route path="*" element={<Signin />} />
