@@ -84,7 +84,7 @@ const registerUser = async (req, res) => {
           from: 'talentsesprit@gmail.com',
           to: user.mail,
           subject: 'Confirm Account',
-          text: `Please here is the link where you can reset your password  ${url}`
+          text: `Please Confirm you authentification  ${url}`
       };
       
       transporter.sendMail(mailOptions, function (error, info) {

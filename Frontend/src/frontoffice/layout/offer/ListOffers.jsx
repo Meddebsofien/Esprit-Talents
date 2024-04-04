@@ -129,7 +129,7 @@ const ListOffers = () => {
 
 
                 }) =>
-                  createdBy === IdActuel && (
+                  createdBy === idc && (
                     <TableRow key={_id}>
                       <TableCell className="tableCell">{title}</TableCell>
                       <TableCell className="tableCell">{company}</TableCell>

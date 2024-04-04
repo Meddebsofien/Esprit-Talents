@@ -216,7 +216,7 @@ const CandidaturesList = () => {
                 </StyledTableCell>
 
                 <StyledTableCell>
-                  <b> Email</b>
+                  <b> mail</b>
                 </StyledTableCell>
                 <StyledTableCell>
                   <b> Date </b>

@@ -332,6 +332,7 @@ function Signup() {
                         onBlur={validateCompanyName}
                         error={Boolean(companyNameError)}
                         helperText={companyNameError}
+                        
                       />
                       <TextField
                         fullWidth
@@ -345,6 +346,7 @@ function Signup() {
                         onBlur={validateAdresse}
                         error={Boolean(adresseError)}
                         helperText={adresseError}
+                        style={{ marginTop:'7%'}}
                       />
                     </div>
                   )}
@@ -393,6 +395,8 @@ function Signup() {
                     onBlur={validateName}
                     error={Boolean(nameError)}
                     helperText={nameError}
+                    
+                    
                   />
                   <TextField
                     fullWidth
@@ -407,6 +411,8 @@ function Signup() {
                     onBlur={validatePrenom}
                     error={Boolean(prenomError)}
                     helperText={prenomError}
+                    style={{ marginTop:'7%'}}
+
                   />{" "}
                   <TextField
                     fullWidth
@@ -421,6 +427,8 @@ function Signup() {
                     onChange={handleChange}
                     required
                     className="mb-6"
+                    style={{ marginTop:'7%'}}
+
                   />
                   <TextField
                     fullWidth
@@ -435,6 +443,8 @@ function Signup() {
                     helperText={passwordError}
                     required
                     className="mb-4"
+                    style={{ marginTop:'7%'}}
+
                   />
                   <TextField
                     fullWidth
@@ -459,12 +469,14 @@ function Signup() {
                         type="submit"
                         className="custom-button"
                         onClick={handleSignUp}
+                        style={{ marginTop:'7%'}}
+
                       >
                         Sign up
                       </Button>
 
                       <br />
-                      <div style={{ paddingTop: "10px" }}>
+                      <div style={{ paddingTop: "30px"  }}>
                         <Link to={`/Signin`}>Sign in</Link>
                       </div>
                     </div>
@@ -475,8 +487,12 @@ function Signup() {
           </Grid>
           {/* <div className="vertical-line" /> */}
         </Grid>
-        <LoginWith>OR Signup WITH</LoginWith>
-        <IconsContainer>
+        <LoginWith style={{}}>OR Signup WITH</LoginWith>
+        <IconsContainer style={
+          {
+            paddingTop: "20px"
+          }
+        }>
           <button
             className="styled-button"
             color={InstagramBackground}
