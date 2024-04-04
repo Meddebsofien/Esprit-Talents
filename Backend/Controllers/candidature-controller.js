@@ -1,8 +1,10 @@
 const Candidature = require("../Models/candidature");
 const User = require("../Models/user");
-
+const nodemailer = require('nodemailer');
+const crypto = require("crypto");
 const Mail_Sender = require("../middleware/MailSneder");
 const router = require("../routes/candidature-route");
+const Offer = require("../Models/offer");
 // var uploads = require('../multerConfig');
 // var multer = require('multer');
 
@@ -89,7 +91,7 @@ const rejectCandidatureById = async (req, res) => {
   const { id } = req.params;
   try {
     const candidature = await Candidature.findOne({ _id: id });
-
+    const offer = await Offer.findOne({ _id: candidature.idOffer });
     if (!candidature) {
       return res
         .status(404)
@@ -98,14 +100,30 @@ const rejectCandidatureById = async (req, res) => {
 
     await Candidature.updateOne({ _id: id }, { status: "rejected" });
     const user = await User.findOne({ _id: candidature.idUser });
-    let subject = "Updates";
-    let content = `
-            <div>
-            <h2>Hello ${user.nom} ${user.prenom},</h2>
-            <p>we have updates for you </p>
-            <p>your are rejected  </p>
-            </div>`;
-    await Mail_Sender(user.mail, content, subject);
+    
+            var transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: 'talentsesprit@gmail.com',
+                  pass: 'wldp tydr nckz skjh'
+              }
+          });
+          
+          var mailOptions = {
+              from: 'talentsesprit@gmail.com',
+              to: user.mail,
+              subject: 'we have updates for you ',
+              text: `your are rejected for the post de ${offer.title}  `
+          };
+          
+          transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                  console.error(error);
+                  return res.status(500).send({ Status: "Error sending email" });
+              } else {
+                  return res.send({ Status: "Success" });
+              }
+          });
     res.json({ message: "Candidature rejected" });
   } catch (error) {
     console.error("Error rejecting candidature:", error);
@@ -119,14 +137,38 @@ const acceptCandidatureById = async (req, res) => {
     console.log("test");
     const candidature = await Candidature.findOne({ _id: id });
     const user = await User.findOne({ _id: candidature.idUser });
-    let subject = "Updates";
-    let content = `
-            <div>
-            <h2>Hello ${user.nom} ${user.prenom},</h2>
-            <p>we have updates for you </p>
-            <p>your are accepted  </p>
-            </div>`;
-    await Mail_Sender(user.mail, content, subject);
+    const offer = await Offer.findOne({ _id: candidature.idOffer });
+
+
+            var transporter = nodemailer.createTransport({
+              service: 'gmail',
+              auth: {
+                user: 'talentsesprit@gmail.com',
+                  pass: 'wldp tydr nckz skjh'
+              }
+          });
+          
+          var mailOptions = {
+              from: 'talentsesprit@gmail.com',
+              to: user.mail,
+              subject: 'we have updates for you ',
+              text: `your are accepted  for an interview you receive the date later . `
+          };
+          
+          transporter.sendMail(mailOptions, function (error, info) {
+              if (error) {
+                  console.error(error);
+                  return res.status(500).send({ Status: "Error sending email" });
+              } else {
+                  return res.send({ Status: "Success" });
+              }
+          });
+
+
+
+
+
+    
     if (!candidature) {
       return res
         .status(404)
