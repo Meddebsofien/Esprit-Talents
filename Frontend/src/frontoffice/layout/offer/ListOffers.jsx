@@ -16,6 +16,7 @@ import Paper from "@mui/material/Paper";
 import "../../../backoffice/components/Table/table.scss";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const ListOffers = () => {
   const [offer, setOffer] = useState([]);
@@ -54,6 +55,9 @@ const ListOffers = () => {
   };
   const OnView = (id) => {
     navigate(`/Entreprise/detailsentr/${id}`);
+  };
+  const onViewCandidatures = (id) => {
+    navigate(`/Entreprise/listeCandidature/${id}`);
   };
 
   /* find all offers */
@@ -133,6 +137,14 @@ const ListOffers = () => {
                         >
                           Update
                         </button>
+                        &nbsp; &nbsp; &nbsp;
+                        <Button
+                          variant="outlined"
+                          onClick={() => onViewCandidatures(_id)}
+                          size="small"
+                        >
+                          Candidatures
+                        </Button>
                       </TableCell>
                     </TableRow>
                   )

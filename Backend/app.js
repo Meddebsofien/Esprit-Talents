@@ -3,6 +3,7 @@ const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var createError = require("http-errors");
+const bodyParser = require("body-parser");
 
 var logger = require('morgan');
 // var multer = require("multer");
@@ -35,6 +36,16 @@ var app = express();
 //       cb(null, file.fieldname + '-' + Date.now()); // Filename
 //     }
 //   });
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+
 const corsOptions = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow both origins
   credentials: true, // enable set cookie

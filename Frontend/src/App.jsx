@@ -13,7 +13,7 @@ import AjouterOffer from "./frontoffice/layout/offer/AjouterOffer";
 import Signupggle from "./components/signup_withggle/Signupggle";
 import ResetPassword from "./components/forgetpassword/reset-password";
 import ForgetPasswordForm from "./components/forgetpassword/forget-password";
-import ListeCandidature from './frontoffice/layout/candidature/listeCandidatures'
+import ListeCandidature from "./frontoffice/layout/candidature/listeCandidatures";
 
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
@@ -23,13 +23,13 @@ import DetailsOffer from "./frontoffice/layout/offer/detailOffer/detailsOffer";
 import DetailsofferEnt from "./frontoffice/layout/offer/detailOffer/detailsofferEnt";
 import DetailsofferStudent from "./frontoffice/layout/offer/detailOffer/detailsofferStudent";
 import EmailVerify from "./components/signup/VerifyEmail";
-import ListStaff from './backoffice/pages/list/ListStaff'
-import ListStudent from './backoffice/pages/list/ListStudent'
+import ListStaff from "./backoffice/pages/list/ListStaff";
+import ListStudent from "./backoffice/pages/list/ListStudent";
 import Company from "./backoffice/components/company/newCompany/newCompany";
-import UpdateStaff from './backoffice/components/staff/updateStaff/updateStaff'
-import NewStudent from './backoffice/components/student/newStudent/newStudent'
-import UpdateStudent from './backoffice/components/student/updateStudent/updateStudent' ;
-import Staff from './backoffice/components/staff/newStaff/Staff'
+import UpdateStaff from "./backoffice/components/staff/updateStaff/updateStaff";
+import NewStudent from "./backoffice/components/student/newStudent/newStudent";
+import UpdateStudent from "./backoffice/components/student/updateStudent/updateStudent";
+import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
 
 function App() {
@@ -49,29 +49,32 @@ function App() {
             <Route path="users">
               <Route index element={<List />} />
               <Route path=":userId" element={<Single />} />
-              <Route path="NewCompany" element={<Company  title="Add New Company" />}/>  
-              <Route path="newStaff" element={<Staff  title="Add New Staff" />}/>   
-              <Route path="newStudent" element={<NewStudent  title="Add New Student" />}/>   
+              <Route
+                path="NewCompany"
+                element={<Company title="Add New Company" />}
+              />
+              <Route
+                path="newStaff"
+                element={<Staff title="Add New Staff" />}
+              />
+              <Route
+                path="newStudent"
+                element={<NewStudent title="Add New Student" />}
+              />
 
-     
-              
-              <Route path ="CompanyList"  element={<List />} />
-              <Route path ="StaffList"  element={<ListStaff />} />
-              <Route path ="StudentList"  element={<ListStudent />} />
+              <Route path="CompanyList" element={<List />} />
+              <Route path="StaffList" element={<ListStaff />} />
+              <Route path="StudentList" element={<ListStudent />} />
 
-              
-
-
-              <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
-              <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
-              <Route path ="updateStudent/:userId" element ={<UpdateStudent/>} />
-
+              <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
+              <Route path="updateStaff/:userId" element={<UpdateStaff />} />
+              <Route path="updateStudent/:userId" element={<UpdateStudent />} />
             </Route>
             <Route path="offers" element={<ListOfferBack />} />
           </Route>
           <Route path="/Entreprise">
             <Route index element={<HeroEntreprise />} />
-            <Route path="listeCandidature" element={<ListeCandidature/>} />
+            <Route path="listeCandidature/:id" element={<ListeCandidature />} />
 
             <Route
               path="addOffer"
