@@ -8,8 +8,10 @@ var {
   getCandidatureById,
   rejectCandidatureById,
   acceptCandidatureById,
+  getCandidatureByStudentId,
 } = require("../Controllers/candidature-controller");
 const uploadFileToCloudinary = require("../middleware/fileMiddleWare");
+const { verifyToken } = require("../middleware/authJWT");
 
 //Ajouter une candidature
 router.post("/addCandidature", uploadFileToCloudinary, AjouterCandidature);
@@ -31,5 +33,5 @@ router.put("/rejectCandidatureById/:id", rejectCandidatureById);
 
 // Accept Candidature par id
 router.put("/acceptCandidatureById/:id", acceptCandidatureById);
-
+router.get("/getAllCandidatureStudent", verifyToken, getCandidatureByStudentId);
 module.exports = router;

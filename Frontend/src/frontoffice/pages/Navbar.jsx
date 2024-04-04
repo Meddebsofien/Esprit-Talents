@@ -224,7 +224,10 @@ function Navbar() {
             </li>
 
             <li>
-              <Link className="nav-link scrollto text-black" to={``}>
+              <Link
+                className="nav-link scrollto text-black"
+                to={`/Student/application`}
+              >
                 Mes Application
               </Link>
             </li>

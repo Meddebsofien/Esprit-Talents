@@ -39,6 +39,7 @@ import NewStudent from "./backoffice/components/student/newStudent/newStudent";
 import UpdateStudent from "./backoffice/components/student/updateStudent/updateStudent";
 import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
+import ListeCandidatureStudent from "./frontoffice/layout/candidature/listeCandidatureStudent";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -70,21 +71,13 @@ function App() {
                 element={<NewStudent title="Add New Student" />}
               />
 
+              <Route path="CompanyList" element={<List />} />
+              <Route path="StaffList" element={<ListStaff />} />
+              <Route path="StudentList" element={<ListStudent />} />
 
-
-     
-              
-              <Route path ="CompanyList"  element={<List />} />
-              <Route path ="StaffList"  element={<ListStaff />} />
-              <Route path ="StudentList"  element={<ListStudent />} />
-
-              
-            
-
-              <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
-              <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
-              <Route path ="updateStudent/:userId" element ={<UpdateStudent/>} />
-
+              <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
+              <Route path="updateStaff/:userId" element={<UpdateStaff />} />
+              <Route path="updateStudent/:userId" element={<UpdateStudent />} />
 
               <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
               <Route path="updateStaff/:userId" element={<UpdateStaff />} />
@@ -128,6 +121,7 @@ function App() {
             <Route path="twoFA/:id" element={<Twofa />} />
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
             <Route path="updateprofile/:userId" element={<UpdateUser />} />
+            <Route path="application" element={<ListeCandidatureStudent />} />
           </Route>
 
           <Route path="/Staff">

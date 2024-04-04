@@ -113,7 +113,7 @@ const rejectCandidatureById = async (req, res) => {
               from: 'talentsesprit@gmail.com',
               to: user.mail,
               subject: 'we have updates for you ',
-              text: `your are rejected for the post de ${offer.title}  `
+              text: `your are rejected for the post  ${offer.title} . `
           };
           
           transporter.sendMail(mailOptions, function (error, info) {
@@ -152,7 +152,7 @@ const acceptCandidatureById = async (req, res) => {
               from: 'talentsesprit@gmail.com',
               to: user.mail,
               subject: 'we have updates for you ',
-              text: `your are accepted  for an interview you receive the date later . `
+              text: `You have been accepted for the position of ${offer.title}. You will receive the interview date at a later time. `
           };
           
           transporter.sendMail(mailOptions, function (error, info) {
@@ -184,7 +184,20 @@ const acceptCandidatureById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+const getCandidatureByStudentId = async (req, res) => {
+  try {
+    console.log("55555");
 
+    console.log(req.userId);
+    const data = await Candidature.find({ idUser: req.userId })
+      .populate("idUser")
+      .populate("idOffer");
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   AjouterCandidature,
   ModifierCandidature,
@@ -193,4 +206,5 @@ module.exports = {
   getCandidatureById,
   rejectCandidatureById,
   acceptCandidatureById,
+  getCandidatureByStudentId,
 };
