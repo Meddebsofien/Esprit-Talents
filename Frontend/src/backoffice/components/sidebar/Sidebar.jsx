@@ -59,7 +59,7 @@ const Sidebar = () => {
               <span>Staff</span>
             </li>
           </Link>
-          
+
           <Link to={"/admin/offers"}>
             <li>
               <CreditCardIcon className="icon" />

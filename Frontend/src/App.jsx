@@ -4,7 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Hero from "./frontoffice/pages/hero";
 import Signup from "./components/signup/sign-up";
 import Signin from "./components/signin/signin";
+
 import  UpdateUser  from "./components/ProfileUser/UpdateUser";
+
 import { formOffer, userInputs } from "./backoffice/formSource";
 import List from "./backoffice/pages/list/List";
 import Home from "./backoffice/pages/home/Home";
@@ -23,6 +25,10 @@ import DetailsOffer from "./frontoffice/layout/offer/detailOffer/detailsOffer";
 import DetailsofferEnt from "./frontoffice/layout/offer/detailOffer/detailsofferEnt";
 import DetailsofferStudent from "./frontoffice/layout/offer/detailOffer/detailsofferStudent";
 import EmailVerify from "./components/signup/VerifyEmail";
+import Twofa from "./components/twofa";
+import TwoFALogin from "./components/TwoFALogin";
+import HeroStaf from "./frontoffice/pages/HeroStaf";
+
 import ListStaff from './backoffice/pages/list/ListStaff'
 import ListStudent from './backoffice/pages/list/ListStudent'
 import Company from "./backoffice/components/company/newCompany/newCompany";
@@ -78,6 +84,8 @@ function App() {
             <Route path="offers" element={<Listofferscomponent />} />
             <Route path="update/:id" element={<UpdateOffer />} />
             <Route path="detailsentr/:id" element={<DetailsofferEnt />} />
+            <Route path="twoFA/:id" element={<Twofa />} />
+
           </Route>
           <Route path="/">
             <Route index element={<Signin />} />
@@ -90,14 +98,22 @@ function App() {
             ></Route>
             <Route path="forgetpass" element={<ForgetPasswordForm />} />
             <Route path="Signin" element={<Signin />} />
-            <Route path ="update/:userId" element ={<UpdateUser/>} />
             <Route path="/users/:id/verify/:token" element={<EmailVerify />} />
+            <Route path="twoFALogin" element={<TwoFALogin />} />
           </Route>
           <Route path="/Student">
             <Route index element={<Hero />} />
+            <Route path="twoFA/:id" element={<Twofa />} />
+
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
           </Route>
+          <Route path="/Staff">
+            <Route index element={<HeroStaf />} />
 
+            <Route path ="update/:userId" element ={<UpdateUser/>} />
+          </Route>
+         
+         
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>
