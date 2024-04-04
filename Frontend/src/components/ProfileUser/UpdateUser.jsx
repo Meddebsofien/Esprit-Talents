@@ -2,23 +2,34 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
+import Navbar from "../../frontoffice/pages/Navbar";
+import Footer from "../../frontoffice/pages/footer";
+
+
+
+
+import { TextField, Button, Grid, Paper, Typography ,Snackbar} from "@mui/material";
+
 
 const UpdateProfile = () => {
-  const { userId } = useParams(); // Récupère l'ID utilisateur de l'URL
+  const { userId } = useParams();
+  const [successOpen, setSuccessOpen] = useState(false);
   const [profileData, setProfileData] = useState({
     nom: "",
     prenom: "",
     mail: "",
     specialite: "",
-    photo: "",
     password: "",
     companyName: "",
     domaine: "",
     numeroTel: "",
     photo: null,
+    role: "", // Ajoutez le champ "role" dans le state initial
   });
-  const [photoURL, setPhotoURL] = useState(null);
+
+  const [photo, setPhoto] = useState(null);
+ 
+
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
@@ -33,14 +44,20 @@ const UpdateProfile = () => {
           );
           setProfileData({
             nom: response.data.nom || "",
+            prenom: response.data.prenom || "",
+            mail: response.data.mail || "",
             numeroTel: response.data.numeroTel || "",
             specialite: response.data.specialite || "",
+
+            role: getUserRole(), 
+
             mail: response.data.mail || "",
             photo: response.data.photo || "",
             password: response.data.password || "",
             companyName: response.data.companyName || "",
 
             domaine: response.data.domaine || "",
+
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -51,6 +68,20 @@ const UpdateProfile = () => {
     }
   }, [userId]);
 
+  const getUserRole = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Divisez le jeton en ses trois parties : en-tête, charge utile (payload) et signature
+      const [, payload] = token.split(".");
+      // Décodage de la charge utile (payload) depuis le format base64
+      const decodedPayload = JSON.parse(atob(payload));
+      // Extrayez le rôle de la charge utile (payload) décodée
+      return decodedPayload.role;
+    }
+    return "";
+  };
+  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({
@@ -58,6 +89,7 @@ const UpdateProfile = () => {
       [name]: value,
     }));
   };
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     setProfileData((prevData) => ({
@@ -67,20 +99,29 @@ const UpdateProfile = () => {
 
     const reader = new FileReader();
     reader.onload = () => {
-      setPhotoURL(reader.result); // Set photoURL state with the data URL
+      setPhoto(reader.result);
     };
     reader.readAsDataURL(file);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (userId) {
-        const response = await axios.put(
-          `http://localhost:3700/users/updateUtilisateur/${userId}`,
-          profileData
-        );
+
+        const formData = new FormData();
+        Object.entries(profileData).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+
+        const response = await axios.put(`http://localhost:3700/users/updateUtilisateur/${userId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
         console.log("Profile updated successfully:", response.data);
-        // Mettre à jour l'état de l'utilisateur si nécessaire
+        setSuccessOpen(true);
       } else {
         console.error("User ID not defined.");
       }
@@ -90,104 +131,98 @@ const UpdateProfile = () => {
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{ height: "100vh" }}
-    >
-      <Grid item xs={10} sm={8} md={6} lg={4}>
-        <Paper elevation={3} style={{ padding: "2rem" }}>
+
+    <>
+      <Navbar />
+      <div style={{ padding: "2rem", minHeight: "calc(100vh - 64px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <form style={{ maxWidth: "500px", width: "100%" }} onSubmit={handleSubmit}>
           <Typography variant="h5" align="center" gutterBottom>
-            Update Profile
+            Update Profile for {profileData.nom}
           </Typography>
-          {photoURL && (
-            <img
-              src={photoURL}
-              alt="Uploaded"
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "50%",
-                marginBottom: "1rem",
-              }}
-            />
-          )}
-          <form onSubmit={handleSubmit}>
+          {photo && <img src={photo} alt="Uploaded" style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "1rem" }} />}
+          <TextField
+            fullWidth
+            label="Nom"
+            name="nom"
+            value={profileData.nom}
+            onChange={handleChange}
+            margin="normal"
+            variant="outlined"
+          />
+          {profileData.role === "Student" && (
+
             <TextField
               fullWidth
-              label="Nom"
-              name="nom"
-              value={profileData.nom}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              label="Mail"
-              name="mail"
-              value={profileData.mail}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              label="Spécialité"
-              name="specialite"
-              value={profileData.specialite}
+              label="Prénom"
+              name="prenom"
+              value={profileData.prenom}
               onChange={handleChange}
               margin="normal"
               variant="outlined"
             />
 
-            {profileData.role === "student" && (
+          )}
+          <TextField
+            fullWidth
+            label="Mail"
+            name="mail"
+            value={profileData.mail}
+            onChange={handleChange}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            fullWidth
+            label="Spécialité"
+            name="specialite"
+            value={profileData.specialite}
+            onChange={handleChange}
+            margin="normal"
+            variant="outlined"
+          />
+          {["Company", "Staff"].includes(profileData.role) && (
+            <>
+
               <TextField
                 fullWidth
-                label="Prénom"
-                name="prenom"
-                value={profileData.prenom}
+                label="Nom de l'entreprise"
+                name="companyName"
+                value={profileData.companyName}
                 onChange={handleChange}
                 margin="normal"
                 variant="outlined"
               />
-            )}
-            {["entreprise", "staff"].includes(profileData.role) && (
-              <>
-                <TextField
-                  fullWidth
-                  label="Nom de l'entreprise"
-                  name="nomEntreprise"
-                  value={profileData.companyName}
-                  onChange={handleChange}
-                  margin="normal"
-                  variant="outlined"
-                />
-                <TextField
-                  fullWidth
-                  label="Domaine"
-                  name="domaine"
-                  value={profileData.domaine}
-                  onChange={handleChange}
-                  margin="normal"
-                  variant="outlined"
-                />
-              </>
-            )}
-            <input
-              type="file"
-              accept="image/jpeg, image/jpg,image/png"
-              onChange={handlePhotoChange}
-            />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Mettre à jour
-            </Button>
-          </form>
-        </Paper>
-      </Grid>
-    </Grid>
+
+              <TextField
+                fullWidth
+                label="Domaine"
+                name="domaine"
+                value={profileData.domaine}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+              />
+            </>
+          )}
+          <input type="file" accept="image/jpeg, image/jpg, image/png" onChange={handlePhotoChange} />
+          <Button type="submit" variant="contained" color="primary" className="custom-button" fullWidth>
+            Mettre à jour
+          </Button>
+        </form>
+      </div>
+      <Snackbar
+        open={successOpen}
+        autoHideDuration={6000}
+        onClose={() => setSuccessOpen(false)}
+        message="Profil mis à jour avec succès!"
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
+      <Footer />
+    </>
+
   );
 };
+  
+
 
 export default UpdateProfile;

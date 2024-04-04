@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Stack from "@mui/material/Stack";
@@ -55,42 +55,77 @@ function Signup() {
   const [adresseError, setAdresseError] = useState("");
   const [numeroTelError, setNumeroTelError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      setUser(codeResponse);
-      console.log(codeResponse);
-      navigate("/");
-    },
-    onError: (error) => console.log("signup Failed:", error),
-  });
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState([]);
+  
+  
+  
+  
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: 'application/json'
+          }
+        })
+        .then((res) => {
+          const { name, email } = res.data; 
+         
+         
+          setProfile({ name, email }); 
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+ 
 
   const handleGoogleSignUp = async () => {
     try {
-      const googleUser = await login(); // Appel de la fonction de connexion Google
-      const userData = {
-        nom: googleUser.name,
-        prenom: googleUser.firstName,
-        mail: googleUser.email,
-        role: selectedRole, // Assurez-vous que le rôle est sélectionné correctement
+      // Créez un objet contenant uniquement le rôle et les informations récupérées du profil Google
+      const dataToSend = {
+        role: selectedRole,
+        nom: profile.name,
+        mail: profile.email,
       };
-
-      // Enregistrez l'utilisateur avec ces données dans votre backend
-      const response = await axios.post(
-        "http://localhost:3700/users/register",
-        userData
-      );
+  
+      console.log('Data to be sent to the backend:', dataToSend); // Ajoutez ce log pour vérifier les données à envoyer
+  
+      const response = await fetch('http://localhost:3700/users/googleregister', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+  
+      console.log('Response:', response); // Ajoutez ce log pour vérifier la réponse du serveur
+  
       if (response.ok) {
-        // Enregistrement réussi, redirigez l'utilisateur vers une page de confirmation ou une autre page pertinente
-        navigate("/");
+        const data = await response.json();
+        console.log('Data:', data); // Ajoutez ce log pour vérifier les données renvoyées par le serveur
+        // Traitez les données renvoyées par le serveur, telles que la gestion de l'authentification, la redirection, etc.
       } else {
-        console.error(
-          "Erreur lors de l'enregistrement de l'utilisateur avec Google."
-        );
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        if (errorData.error === 'User already registered!') {
+          setEmailExistsError('Email already exists');
+        }
       }
     } catch (error) {
-      console.error("Erreur lors de la connexion avec Google :", error);
+      console.error('Fetch Error:', error);
     }
   };
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      handleGoogleSignUp(codeResponse); // Appel de la fonction handleSignUp avec le codeResponse
+      setUser(codeResponse);
+      console.log(codeResponse);
+      
+    },
+    onError: (error) => console.log('Login Failed:', error)
+  });
   const GoogleBackground =
     "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
   const InstagramBackground =
@@ -98,6 +133,10 @@ function Signup() {
   const TwitterBackground =
     "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
 
+   
+
+
+    // validator
   const validateCompanyName = () => {
     if (formData.companyName.length < 4) {
       setCompanyNameError("Company Name must be at least 4 characters long");
@@ -496,7 +535,7 @@ function Signup() {
           <button
             className="styled-button"
             color={InstagramBackground}
-            onClick={handleGoogleSignUp}
+            onClick={login}
           >
             <FaGoogle />
           </button>
