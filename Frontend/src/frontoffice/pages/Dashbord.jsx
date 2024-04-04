@@ -12,7 +12,6 @@ function Dashboard() {
   const [filterExp, setFilterExp] = useState([]);
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedItemsexp, setCheckedItemsexp] = useState({});
-
   const handleCheckboxChange = (e) => {
     const value = e.target.value;
     const isChecked = e.target.checked;
@@ -48,6 +47,12 @@ function Dashboard() {
     }
     setCheckedItemsexp({ ...checkedItemsexp, [value2]: ischeck });
   };
+
+  useEffect(() => {
+    const filter = async () => {};
+
+    filter();
+  }, [checkedItems, checkedItemsexp]);
 
   const jobTypes = ["Emploi", "Stage"];
   const experience = [

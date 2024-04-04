@@ -25,20 +25,6 @@ const ListOffers = () => {
   const navigate = useNavigate();
 
   const [idc, setIdc] = useState("");
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-      const r = decodedPayload.role;
-      if (r === "admin") {
-        setIdc(decodedPayload.id);
-      }
-    } else {
-      console.log("Token non trouvé dans localStorage");
-    }
-  }, []);
 
   /* on delete */
 
@@ -75,21 +61,37 @@ const ListOffers = () => {
   /* find all offers */
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3700/offers/getAllOffers"
-        );
-        setOffer(response.data);
-      } catch (error) {
-        console.error(
-          "Une erreur s'est produite lors de la récupération des offres :",
-          error
-        );
+      const token = localStorage.getItem("token");
+      if (token) {
+        const [header, payload, signature] = token.split(".");
+        const decodedPayload = JSON.parse(atob(payload));
+        const idcc = decodedPayload.id;
+        const role = decodedPayload.role;
+        setrole(role);
+        try {
+          const response = await axios.get(
+            "http://localhost:3700/offers/getAllOffers"
+          );
+          console.log("idsof" + idcc);
+          if (role === "admin") {
+            setOffer(response.data);
+          } else {
+            const currentOffer = response.data.filter(
+              (el) => el.createdBy === idcc
+            );
+            setOffer(currentOffer);
+          }
+        } catch (error) {
+          console.error(
+            "Une erreur s'est produite lors de la récupération des offres :",
+            error
+          );
+        }
       }
     };
 
     fetchData();
-  }, []); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
+  });
   return (
     <>
       <div className="ccc">
@@ -129,7 +131,7 @@ const ListOffers = () => {
                       <button
                         className="viewButton"
                         onClick={() => OnView(_id)}
-                        hidden={role === "admin" ? false : true}
+                        hidden={role === "admin" ? true : false}
                       >
                         View
                       </button>{" "}
@@ -144,7 +146,7 @@ const ListOffers = () => {
                       <button
                         className="editerButton"
                         onClick={() => OnUpdate(_id)}
-                        hidden={role === "admin" ? false : true}
+                        hidden={role === "admin" ? true : false}
                       >
                         Update
                       </button>
