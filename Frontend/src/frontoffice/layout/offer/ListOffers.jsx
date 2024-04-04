@@ -16,6 +16,7 @@ import Paper from "@mui/material/Paper";
 import "../../../backoffice/components/Table/table.scss";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 const ListOffers = () => {
   const [offer, setOffer] = useState([]);
@@ -58,6 +59,9 @@ const ListOffers = () => {
   };
   const OnView = (id) => {
     navigate(`/Entreprise/detailsentr/${id}`);
+  };
+  const onViewCandidatures = (id) => {
+    navigate(`/Entreprise/listeCandidature/${id}`);
   };
 
   /* find all offers */
@@ -126,39 +130,50 @@ const ListOffers = () => {
                   createdBy,
                   experience,
                   _id,
-                }) => (
-                  <TableRow key={_id}>
-                    <TableCell className="tableCell">{title}</TableCell>
-                    <TableCell className="tableCell">{company}</TableCell>
-                    <TableCell className="tableCell">{location}</TableCell>
-                    <TableCell className="tableCell">{type}</TableCell>
-                    <TableCell className="tableCell">{experience}</TableCell>
-                    <TableCell className="tableCell">
-                      <button
-                        className="viewButton"
-                        onClick={() => OnView(_id)}
-                        hidden={role === "admin" ? true : false}
-                      >
-                        View
-                      </button>{" "}
-                      &nbsp;
-                      <button
-                        className="deleteButton"
-                        onClick={() => Ondelete(_id)}
-                      >
-                        delete
-                      </button>{" "}
-                      &nbsp;
-                      <button
-                        className="editerButton"
-                        onClick={() => OnUpdate(_id)}
-                        hidden={role === "admin" ? true : false}
-                      >
-                        Update
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                )
+
+                }) =>
+                  createdBy === IdActuel && (
+                    <TableRow key={_id}>
+                      <TableCell className="tableCell">{title}</TableCell>
+                      <TableCell className="tableCell">{company}</TableCell>
+                      <TableCell className="tableCell">{location}</TableCell>
+                      <TableCell className="tableCell">{type}</TableCell>
+                      <TableCell className="tableCell">
+                        {experience} ans
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        <button
+                          className="viewButton"
+                          onClick={() => OnView(_id)}
+                        >
+                          View
+                        </button>{" "}
+                        &nbsp;
+                        <button
+                          className="deleteButton"
+                          onClick={() => Ondelete(_id)}
+                        >
+                          delete
+                        </button>{" "}
+                        &nbsp;
+                        <button
+                          className="editerButton"
+                          onClick={() => OnUpdate(_id)}
+                        >
+                          Update
+                        </button>
+                        &nbsp; &nbsp; &nbsp;
+                        <Button
+                          variant="outlined"
+                          onClick={() => onViewCandidatures(_id)}
+                          size="small"
+                        >
+                          Candidatures
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  )
+
               )}
             </TableBody>
           </Table>

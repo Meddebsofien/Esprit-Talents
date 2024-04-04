@@ -2,8 +2,13 @@ var express = require('express');
 const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var createError = require("http-errors");
+const bodyParser = require("body-parser");
 
+var logger = require('morgan');
+// var multer = require("multer");
+var candidaturesRouter = require("./routes/candidature-route");
+// var uploads = multer({ dest: 'uploads/' });
 const User = require('./Models/user');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -30,6 +35,25 @@ mongoose.connect(process.env.MONGO_URI)
 .catch(err=>console.error("Could not connect to MongoDB..."));
 
 var app = express();
+// Configure multer
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, './uploads'); // Destination folder
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.fieldname + '-' + Date.now()); // Filename
+//     }
+//   });
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+
 const corsOptions = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Allow both origins
   credentials: true, // enable set cookie
@@ -260,4 +284,6 @@ app.get("/set2FA/:id", async (req, res) => {
 //app.use('/users', usersRouter);
 
 app.use('/offers', offerRouter);
+app.use("/candidatures", candidaturesRouter);
+// app.use('/uploads', express.static('uploads'));
 module.exports = app;
