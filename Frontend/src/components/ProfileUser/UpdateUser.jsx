@@ -4,8 +4,6 @@ import { useParams } from "react-router-dom";
 
 import { TextField, Button, Grid, Paper, Typography } from "@mui/material";
 
-
-
 const UpdateProfile = () => {
   const { userId } = useParams(); // Récupère l'ID utilisateur de l'URL
   const [profileData, setProfileData] = useState({
@@ -20,20 +18,29 @@ const UpdateProfile = () => {
     numeroTel: "",
     photo: null,
   });
-  const [photoURL, setPhotoURL] = useState(null); 
+  const [photoURL, setPhotoURL] = useState(null);
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`http://localhost:3700/users/getutilisateur/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+          const response = await axios.get(
+            `http://localhost:3700/users/getutilisateur/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
           setProfileData({
             nom: response.data.nom || "",
             numeroTel: response.data.numeroTel || "",
             specialite: response.data.specialite || "",
+            mail: response.data.mail || "",
+            photo: response.data.photo || "",
+            password: response.data.password || "",
+            companyName: response.data.companyName || "",
+
+            domaine: response.data.domaine || "",
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -68,11 +75,10 @@ const UpdateProfile = () => {
     e.preventDefault();
     try {
       if (userId) {
-        const response = await axios.put(`http://localhost:3700/users/updateUtilisateur/${userId}`, profileData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.put(
+          `http://localhost:3700/users/updateUtilisateur/${userId}`,
+          profileData
+        );
         console.log("Profile updated successfully:", response.data);
         // Mettre à jour l'état de l'utilisateur si nécessaire
       } else {
@@ -84,13 +90,29 @@ const UpdateProfile = () => {
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" style={{ height: "100vh" }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ height: "100vh" }}
+    >
       <Grid item xs={10} sm={8} md={6} lg={4}>
         <Paper elevation={3} style={{ padding: "2rem" }}>
-        <Typography variant="h5" align="center" gutterBottom>
+          <Typography variant="h5" align="center" gutterBottom>
             Update Profile
           </Typography>
-          {photoURL && <img src={photoURL} alt="Uploaded" style={{ width: "100px", height: "100px", borderRadius: "50%", marginBottom: "1rem" }} />}
+          {photoURL && (
+            <img
+              src={photoURL}
+              alt="Uploaded"
+              style={{
+                width: "100px",
+                height: "100px",
+                borderRadius: "50%",
+                marginBottom: "1rem",
+              }}
+            />
+          )}
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
@@ -119,17 +141,7 @@ const UpdateProfile = () => {
               margin="normal"
               variant="outlined"
             />
-            
-            <TextField
-              fullWidth
-              label="Mot de passe"
-              type="password"
-              name="password"
-              value={profileData.password}
-              onChange={handleChange}
-              margin="normal"
-              variant="outlined"
-            />
+
             {profileData.role === "student" && (
               <TextField
                 fullWidth
@@ -163,7 +175,11 @@ const UpdateProfile = () => {
                 />
               </>
             )}
-            <input type="file" accept="image/jpeg, image/jpg,image/png" onChange={handlePhotoChange} />
+            <input
+              type="file"
+              accept="image/jpeg, image/jpg,image/png"
+              onChange={handlePhotoChange}
+            />
             <Button type="submit" variant="contained" color="primary" fullWidth>
               Mettre à jour
             </Button>

@@ -5,7 +5,7 @@ import Hero from "./frontoffice/pages/hero";
 import Signup from "./components/signup/sign-up";
 import Signin from "./components/signin/signin";
 
-import  UpdateUser  from "./components/ProfileUser/UpdateUser";
+import UpdateUser from "./components/ProfileUser/UpdateUser";
 
 import { formOffer, userInputs } from "./backoffice/formSource";
 import List from "./backoffice/pages/list/List";
@@ -31,8 +31,8 @@ import Twofa from "./components/twofa";
 import TwoFALogin from "./components/TwoFALogin";
 import HeroStaf from "./frontoffice/pages/HeroStaf";
 
-import ListStaff from './backoffice/pages/list/ListStaff'
-import ListStudent from './backoffice/pages/list/ListStudent'
+import ListStaff from "./backoffice/pages/list/ListStaff";
+import ListStudent from "./backoffice/pages/list/ListStudent";
 import Company from "./backoffice/components/company/newCompany/newCompany";
 import UpdateStaff from "./backoffice/components/staff/updateStaff/updateStaff";
 import NewStudent from "./backoffice/components/student/newStudent/newStudent";
@@ -71,6 +71,7 @@ function App() {
               />
 
 
+
      
               
               <Route path ="CompanyList"  element={<List />} />
@@ -91,6 +92,7 @@ function App() {
             </Route>
             <Route path="offers" element={<ListOfferBack />} />
           </Route>
+
           <Route path="/Entreprise">
             <Route index element={<HeroEntreprise />} />
             <Route path="listeCandidature/:id" element={<ListeCandidature />} />
@@ -103,7 +105,7 @@ function App() {
             <Route path="update/:id" element={<UpdateOffer />} />
             <Route path="detailsentr/:id" element={<DetailsofferEnt />} />
             <Route path="twoFA/:id" element={<Twofa />} />
-
+            <Route path="updateprofile/:userId" element={<UpdateUser />} />
           </Route>
           <Route path="/">
             <Route index element={<Signin />} />
@@ -114,24 +116,26 @@ function App() {
               path="/resetpass/:id/:token"
               element={<ResetPassword />}
             ></Route>
+
             <Route path="forgetpass" element={<ForgetPasswordForm />} />
             <Route path="Signin" element={<Signin />} />
             <Route path="/users/:id/verify/:token" element={<EmailVerify />} />
             <Route path="twoFALogin" element={<TwoFALogin />} />
           </Route>
+
           <Route path="/Student">
             <Route index element={<Hero />} />
             <Route path="twoFA/:id" element={<Twofa />} />
-
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
+            <Route path="updateprofile/:userId" element={<UpdateUser />} />
           </Route>
+
           <Route path="/Staff">
             <Route index element={<HeroStaf />} />
 
-            <Route path ="update/:userId" element ={<UpdateUser/>} />
+            <Route path="updateprofile/:userId" element={<UpdateUser />} />
           </Route>
-         
-         
+
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>

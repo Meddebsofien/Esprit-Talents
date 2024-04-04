@@ -28,7 +28,6 @@ const ListOffers = () => {
 
   const [idc, setIdc] = useState("");
 
-
   /* on delete */
 
   const Ondelete = (id) => {
@@ -67,7 +66,6 @@ const ListOffers = () => {
   /* find all offers */
   useEffect(() => {
     const fetchData = async () => {
-
       const token = localStorage.getItem("token");
       if (token) {
         const [header, payload, signature] = token.split(".");
@@ -94,12 +92,10 @@ const ListOffers = () => {
             error
           );
         }
-
       }
     };
-  
-    fetchData();
 
+    fetchData();
   });
 
   return (
@@ -130,6 +126,7 @@ const ListOffers = () => {
                   createdBy,
                   experience,
                   _id,
+
 
                 }) =>
                   createdBy === IdActuel && (
