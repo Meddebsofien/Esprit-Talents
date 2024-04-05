@@ -150,13 +150,13 @@ app.post('/users/register', (req, res) => {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'amnafelfel@gmail.com',
-                    pass: 'irko dlvf pcgy luma'
+                    user: 'talentsesprit@gmail.com',
+                    pass: 'wldp tydr nckz skjh'
                 }
             });
 
             var mailOptions = {
-                from: 'amnafelfel@gmail.com',
+                from: 'talentsesprit@gmail.com',
                 to: mail,
                 subject: 'Reset Password Link',
                 text: `Please here is the link where you can reset your password  http://localhost:5173/resetpass/${user._id}/${token}`
