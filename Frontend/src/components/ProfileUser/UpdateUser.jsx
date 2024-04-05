@@ -7,7 +7,9 @@ import Footer from "../../frontoffice/pages/footer";
 
 
 
+
 import { TextField, Button, Grid, Paper, Typography ,Snackbar} from "@mui/material";
+
 
 const UpdateProfile = () => {
   const { userId } = useParams();
@@ -24,24 +26,38 @@ const UpdateProfile = () => {
     photo: null,
     role: "", // Ajoutez le champ "role" dans le state initial
   });
+
   const [photo, setPhoto] = useState(null);
  
+
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`http://localhost:3700/users/getutilisateur/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
+          const response = await axios.get(
+            `http://localhost:3700/users/getutilisateur/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
           setProfileData({
             nom: response.data.nom || "",
             prenom: response.data.prenom || "",
             mail: response.data.mail || "",
             numeroTel: response.data.numeroTel || "",
             specialite: response.data.specialite || "",
+
             role: getUserRole(), 
+
+            mail: response.data.mail || "",
+            photo: response.data.photo || "",
+            password: response.data.password || "",
+            companyName: response.data.companyName || "",
+
+            domaine: response.data.domaine || "",
+
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -92,6 +108,7 @@ const UpdateProfile = () => {
     e.preventDefault();
     try {
       if (userId) {
+
         const formData = new FormData();
         Object.entries(profileData).forEach(([key, value]) => {
           formData.append(key, value);
@@ -102,6 +119,7 @@ const UpdateProfile = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
+
         console.log("Profile updated successfully:", response.data);
         setSuccessOpen(true);
       } else {
@@ -113,6 +131,7 @@ const UpdateProfile = () => {
   };
 
   return (
+
     <>
       <Navbar />
       <div style={{ padding: "2rem", minHeight: "calc(100vh - 64px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -131,6 +150,7 @@ const UpdateProfile = () => {
             variant="outlined"
           />
           {profileData.role === "Student" && (
+
             <TextField
               fullWidth
               label="Prénom"
@@ -140,6 +160,7 @@ const UpdateProfile = () => {
               margin="normal"
               variant="outlined"
             />
+
           )}
           <TextField
             fullWidth
@@ -161,6 +182,7 @@ const UpdateProfile = () => {
           />
           {["Company", "Staff"].includes(profileData.role) && (
             <>
+
               <TextField
                 fullWidth
                 label="Nom de l'entreprise"
@@ -170,6 +192,7 @@ const UpdateProfile = () => {
                 margin="normal"
                 variant="outlined"
               />
+
               <TextField
                 fullWidth
                 label="Domaine"
@@ -196,6 +219,7 @@ const UpdateProfile = () => {
       />
       <Footer />
     </>
+
   );
 };
   

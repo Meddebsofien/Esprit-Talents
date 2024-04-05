@@ -1,4 +1,6 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+
 import "./details.css";
 import Navbar from "../../pages/Navbar";
 import Footer from "../../pages/footer";
@@ -9,14 +11,30 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const AjouterOffer = ({ inputs, title }) => {
+  const [idc, setIdc] = useState("");
+  const [companyN, setCompanyN] = useState("");
+  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const [header, payload, signature] = token.split(".");
+      const decodedPayload = JSON.parse(atob(payload));
+      setIdc(decodedPayload.id);
+      setCompanyN(decodedPayload.companyName);
+    } else {
+      console.log("Token non trouvé dans localStorage");
+    }
+  }, []);
+
   const navigate = useNavigate();
   const [form, setForm] = useState({});
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
     // Remplir le champ createdBy  static pour le moment
-    const formData = { ...form, createdBy: "65d8e9e5006ea987c7fdead8" };
-
+    const formData = { ...form, createdBy: idc, company: companyN };
+    console.log(formData);
     axios
       .post("http://localhost:3700/offers/addoffer", formData)
       .then((res) => {
@@ -31,7 +49,10 @@ const AjouterOffer = ({ inputs, title }) => {
         setForm({});
         navigate("/Entreprise/offers");
       })
-      .catch((err) => console.log(err.response.data));
+      .catch((err) => {
+        setErrors(err.response.data);
+        console.log(err.response.data);
+      });
   };
 
   // Fonction pour gérer les changements dans le formulaire
@@ -51,20 +72,12 @@ const AjouterOffer = ({ inputs, title }) => {
             <div className="right">
               <form onSubmit={onSubmitHandler}>
                 <div className="right">
-                  <div className="w-1/2">
+                  <div>
                     <InputGroup
                       label="title"
                       type="text"
                       name="title"
-                      onChangeHandler={onChangeHandler}
-                    />
-                  </div>
-
-                  <div className="w-1/2">
-                    <InputGroup
-                      label="company"
-                      type="text"
-                      name="company"
+                      errors={errors.title}
                       onChangeHandler={onChangeHandler}
                     />
                   </div>
@@ -76,18 +89,17 @@ const AjouterOffer = ({ inputs, title }) => {
                       type="text"
                       name="location"
                       onChangeHandler={onChangeHandler}
+                      errors={errors.location}
                     />
                   </div>
 
                   <div className="flex flex-col">
-                    <label className="text-gray-600 text-l mb-1">
-                      Job Description
-                    </label>
                     <InputGroup
                       label="description"
                       type="textarea"
                       name="description"
                       onChangeHandler={onChangeHandler}
+                      errors={errors.description}
                     />
                   </div>
                 </div>
@@ -95,30 +107,41 @@ const AjouterOffer = ({ inputs, title }) => {
                 <div className="left">
                   <InputGroup
                     label="requirements"
-                    type="text"
+                    type="textarea"
                     name="requirements"
-                    value={form.requirements}
                     onChangeHandler={onChangeHandler}
+                    errors={errors.requirements}
                   />
                   <InputGroup
                     label="startDate"
                     type="Date"
                     name="startDate"
                     onChangeHandler={onChangeHandler}
+                    errors={errors.startDate}
                   />
                   <InputGroup
                     label="type"
                     type="select"
                     name="type"
                     onChangeHandler={onChangeHandler}
+                    errors={errors.type}
                   />
-                  <InputGroup
+                  {/* <InputGroup
                     label="Experience (ans)"
                     type="number"
                     name="experience"
                     onChangeHandler={onChangeHandler}
+                   
+                  />*/}
+                  &nbsp;
+                  <input
+                    type="number"
+                    name="experience"
+                    className="form-control"
+                    placeholder="Experience (ans)"
+                    onChange={onChangeHandler}
+                    hidden={form.type === "Emploi" ? false : true}
                   />
-
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <button type="submit">Ajouter</button>
                   </div>
