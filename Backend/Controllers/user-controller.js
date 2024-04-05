@@ -334,24 +334,32 @@ exports.getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
+    // Remplacer les backslashes par des slashs dans le chemin de la photo
+    user.photo = `http://localhost:3700/${user.photo.replace(/\\/g, "/")}`;
+    console.log("URL de la photo:", user.photo); 
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
+
 exports.updateUser = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.userId,
-      req.body,
-      { new: true }
-    );
+    const userId = req.params.userId;
+    const updatedData = req.body;
+    // Mettre à jour l'utilisateur avec les données fournies
+    // Assurez-vous d'inclure la mise à jour de l'URL de la photo si nécessaire
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Error updating user" });
   }
 };
+
+
+
 
 // Supprimer un utilisateur par son ID
 exports.deleteUser = async (req, res) => {

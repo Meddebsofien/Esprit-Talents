@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var createError = require("http-errors");
 const bodyParser = require("body-parser");
 
+
 var logger = require('morgan');
 // var multer = require("multer");
 var candidaturesRouter = require("./routes/candidature-route");
@@ -44,6 +45,7 @@ var app = express();
 //       cb(null, file.fieldname + '-' + Date.now()); // Filename
 //     }
 //   });
+app.use('/uploads', express.static('uploads'));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(

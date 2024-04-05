@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   specialite :{type:String , enum: ['Information technology(IT)', 'Business', 'Civil Engineering' , 'Mechanical']},
   verified:{type:Boolean, default:false},
   doamine:{type:String},
-  photo:{type:String},
+  photo:{type:String ,default: ''},
 
   twofaEnabled: {
     type: Boolean,
