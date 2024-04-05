@@ -55,6 +55,9 @@ const ResetPassword = () => {
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+
+            style={{color:'black'}}
+
           />
           <SubmitButton type="submit" className="btn btn-success" style={{backgroundColor:'rgba(31, 38, 135)' ,border:'none'}}>
             Update

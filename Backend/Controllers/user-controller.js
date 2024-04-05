@@ -8,6 +8,8 @@ const crypto = require("crypto");
 const VerifTokeen=require('../Models/verif');
 
 // Liste des rôles autorisés
+//const allowedRoles = ['Company', 'Student'];
+
 const allowedRoles = ['Company', 'Student','Staff'];
 //signup user
 const registerUser = async (req, res) => {
@@ -82,7 +84,7 @@ const registerUser = async (req, res) => {
           from: 'talentsesprit@gmail.com',
           to: user.mail,
           subject: 'Confirm Account',
-          text: `Please here is the link where you can reset your password  ${url}`
+          text: `Please Confirm you authentification  ${url}`
       };
       
       transporter.sendMail(mailOptions, function (error, info) {
@@ -124,7 +126,8 @@ exports.signin = (req, res) => {
         }
 
         // Si le mot de passe est valide, générer le token JWT
-        const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
+        const token = jwt.sign({ id: user.id ,role: user.role, verified:user.verified, companyName: user.companyName, specialite: user.specialite,twofaEnabled: user.twofaEnabled},
+      //  const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
                                 config.secret,
                                 {
                                   algorithm: 'HS256',
@@ -142,14 +145,129 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+function generateRandomPassword(length) {
+  // Définir les caractères autorisés pour le mot de passe
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    // Sélectionner un caractère aléatoire dans la chaîne de caractères autorisés
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
 
+  return password;
+}
+//google-register
+exports.registerWithGoogle = async (req, res) => {
+  try {
+    const { nom, prenom, mail, role } = req.body;
+
+    // Vérifiez si l'utilisateur existe déjà dans la base de données
+    let user = await User.findOne({ mail });
+
+    if (user) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    // Générez un mot de passe aléatoire pour l'utilisateur
+    const password = generateRandomPassword();
+
+    // Créez un nouvel utilisateur avec les données fournies et le mot de passe généré
+    user = new User({
+      nom,
+      prenom,
+      mail,
+      role,
+      password,
+    });
+
+    // Enregistrez le nouvel utilisateur dans la base de données
+    await user.save();
+
+    // Générez un token JWT pour l'utilisateur
+    const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
+      config.secret,
+      {
+        algorithm: 'HS256',
+        allowInsecureKeySizes: true,
+        expiresIn: 86400, // 24 hours
+      });
+
+    // Répondez avec le token JWT généré
+    res.json({ token });
+  } catch (error) {
+    console.error('Error during Google registration:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+//login with google api 
+exports.checkEmail = async (req, res) => {
+ 
+    const { mail, accessToken } = req.body;
+  
+    try {
+      // Vérifier si l'utilisateur existe dans la base de données avec cet e-mail
+      const user = await User.findOne({ mail });
+  
+      if (!user) {
+        // Si l'utilisateur n'existe pas, renvoyer une erreur
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // L'utilisateur existe, renvoyer son rôle
+      res.status(200).json({ role: user.role });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  
+};
+
+exports.apigoogle = async (req, res) => {
+  try {
+    // Récupérer le token d'accès envoyé depuis le frontend
+    const { accessToken } = req.body;
+
+    // Appeler l'API Google avec le token d'accès
+    const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    // Extraire les données pertinentes de la réponse de l'API Google
+    const { name, email } = response.data;
+
+    // Vous pouvez effectuer d'autres traitements avec les données si nécessaire
+
+    // Créer un token JWT pour l'utilisateur
+    const token = jwt.sign(
+      { email }, // Utilisez les données pertinentes pour le payload du token
+      config.secret, // Utilisez la clé secrète de votre configuration
+      {
+        algorithm: 'HS256',
+        expiresIn: 86400, // 24 heures
+      }
+    );
+
+    // Envoyer les données récupérées en réponse, y compris le token JWT
+    res.status(200).json({ accessToken: token });
+  } catch (error) {
+    console.error('Error calling Google API:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });
 
 exports.createUser = async (req, res) => {
   try {
+   // const { nom, prenom, role, mail, password,confirmPassword, companyName,  adresse,specialite } = req.body;
+
+   // if (!password || !role || !mail ||!confirmPassword) {
+
     const { nom, prenom, role, mail, password, companyName, adresse, numeroTel,specialite } = req.body;
 
     if (!password || !role || !mail ) {
@@ -175,6 +293,7 @@ exports.createUser = async (req, res) => {
       mail,
       password: hashedPassword,
       companyName,
+
       numeroTel,
       specialite,
       adresse,
@@ -188,6 +307,10 @@ exports.createUser = async (req, res) => {
       res.status(400);
       throw new Error("User data is not valid");
     }
+
+
+
+
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ error: error.message });
@@ -211,24 +334,32 @@ exports.getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Utilisateur non trouvé' });
     }
+    // Remplacer les backslashes par des slashs dans le chemin de la photo
+    user.photo = `http://localhost:3700/${user.photo.replace(/\\/g, "/")}`;
+    console.log("URL de la photo:", user.photo); 
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
+
 exports.updateUser = async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.userId,
-      req.body,
-      { new: true }
-    );
+    const userId = req.params.userId;
+    const updatedData = req.body;
+    // Mettre à jour l'utilisateur avec les données fournies
+    // Assurez-vous d'inclure la mise à jour de l'URL de la photo si nécessaire
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, { new: true });
     res.status(200).json(updatedUser);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Error updating user" });
   }
 };
+
+
+
 
 // Supprimer un utilisateur par son ID
 exports.deleteUser = async (req, res) => {

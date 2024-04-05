@@ -4,13 +4,14 @@ import Navbar from '../../pages/Navbar';
 import Footer from '../../pages/footer';
 import InputGroup from './inputGroup';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function Entretien() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Extracting the id from URL parameters
 
   const [formData, setFormData] = useState({
-    id_candidature: '',
+    id_candidature: id, // Setting id_candidature to the extracted id
     date_debut: '',
     date_fin: '',
     type: 'en présentiel' // Default value
@@ -67,7 +68,7 @@ function Entretien() {
       const response = await axios.post('http://localhost:3700/entretiens/createEntretien', isoFormData);
       console.log(response.data);
       setFormData({
-        id_candidature: '',
+        id_candidature: id, // Setting id_candidature to the extracted id again
         date_debut: '',
         date_fin: '',
         type: 'en présentiel'
@@ -104,16 +105,11 @@ function Entretien() {
           <div className="bottom">
             <div className="right">
               <form onSubmit={onSubmitHandler}>
-                <div className="right">
-                  <div className="w-1/2">
-                    <InputGroup
-                      label="ID Candidature"
-                      type="text"
-                      name="id_candidature"
-                      onChangeHandler={onChangeHandler}
-                      value={formData.id_candidature}
-                    />
-                  </div>
+              <div className="right">
+              <div className="w-1/2">
+                <label>ID Candidature:</label>
+                <p>{formData.id_candidature}</p>
+              </div>
 
                   <div className="w-1/2">
                     <InputGroup
