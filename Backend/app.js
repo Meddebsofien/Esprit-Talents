@@ -32,6 +32,9 @@ const corsOptions = {
   allowedHeaders: 'Authorization,Content-Type',
 };
 
+
+
+
 app.use(cors(corsOptions));
 
 app.use(logger('dev'));

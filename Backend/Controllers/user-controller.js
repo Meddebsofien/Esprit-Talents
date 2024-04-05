@@ -142,8 +142,119 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
+function generateRandomPassword(length) {
+  // Définir les caractères autorisés pour le mot de passe
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    // Sélectionner un caractère aléatoire dans la chaîne de caractères autorisés
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
 
+  return password;
+}
+//google-register
+exports.registerWithGoogle = async (req, res) => {
+  try {
+    const { nom, prenom, mail, role } = req.body;
+
+    // Vérifiez si l'utilisateur existe déjà dans la base de données
+    let user = await User.findOne({ mail });
+
+    if (user) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    // Générez un mot de passe aléatoire pour l'utilisateur
+    const password = generateRandomPassword();
+
+    // Créez un nouvel utilisateur avec les données fournies et le mot de passe généré
+    user = new User({
+      nom,
+      prenom,
+      mail,
+      role,
+      password,
+    });
+
+    // Enregistrez le nouvel utilisateur dans la base de données
+    await user.save();
+
+    // Générez un token JWT pour l'utilisateur
+    const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
+      config.secret,
+      {
+        algorithm: 'HS256',
+        allowInsecureKeySizes: true,
+        expiresIn: 86400, // 24 hours
+      });
+
+    // Répondez avec le token JWT généré
+    res.json({ token });
+  } catch (error) {
+    console.error('Error during Google registration:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+//login with google api 
+exports.checkEmail = async (req, res) => {
+ 
+    const { mail, accessToken } = req.body;
+  
+    try {
+      // Vérifier si l'utilisateur existe dans la base de données avec cet e-mail
+      const user = await User.findOne({ mail });
+  
+      if (!user) {
+        // Si l'utilisateur n'existe pas, renvoyer une erreur
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // L'utilisateur existe, renvoyer son rôle
+      res.status(200).json({ role: user.role });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  
+};
+
+exports.apigoogle = async (req, res) => {
+  try {
+    // Récupérer le token d'accès envoyé depuis le frontend
+    const { accessToken } = req.body;
+
+    // Appeler l'API Google avec le token d'accès
+    const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    // Extraire les données pertinentes de la réponse de l'API Google
+    const { name, email } = response.data;
+
+    // Vous pouvez effectuer d'autres traitements avec les données si nécessaire
+
+    // Créer un token JWT pour l'utilisateur
+    const token = jwt.sign(
+      { email }, // Utilisez les données pertinentes pour le payload du token
+      config.secret, // Utilisez la clé secrète de votre configuration
+      {
+        algorithm: 'HS256',
+        expiresIn: 86400, // 24 heures
+      }
+    );
+
+    // Envoyer les données récupérées en réponse, y compris le token JWT
+    res.status(200).json({ accessToken: token });
+  } catch (error) {
+    console.error('Error calling Google API:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });

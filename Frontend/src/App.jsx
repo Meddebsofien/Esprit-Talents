@@ -82,7 +82,7 @@ function App() {
           <Route path="/">
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
-
+            
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
