@@ -27,12 +27,14 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from 'react-router-dom';
+
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
 import { deepOrange, deepPurple } from "@mui/material/colors";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import Footer from "../../pages/footer";
 import Entretien from "../entretien/Entretien";
+
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -327,6 +329,7 @@ const CandidaturesList = () => {
                       >
                        google calendar 
                       </Button>
+
                       </>
                     )}
                   </TableCell>

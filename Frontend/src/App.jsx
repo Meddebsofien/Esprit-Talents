@@ -21,6 +21,7 @@ import Entretien from "./frontoffice/layout/entretien/Entretien";
 import DetailsEntretien from "./backoffice/layout/entretien/DetailsEntretien";
 import Updatepage from "./backoffice/layout/entretien/updatepage";
 import Loginpage from "./frontoffice/layout/entretien/Loginpage";
+
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
 import ListOfferBack from "./backoffice/layout/offer/listOfferBack";
@@ -29,6 +30,7 @@ import DetailsOffer from "./frontoffice/layout/offer/detailOffer/detailsOffer";
 import DetailsofferEnt from "./frontoffice/layout/offer/detailOffer/detailsofferEnt";
 import DetailsofferStudent from "./frontoffice/layout/offer/detailOffer/detailsofferStudent";
 import EmailVerify from "./components/signup/VerifyEmail";
+
 
 import Twofa from "./components/twofa";
 import TwoFALogin from "./components/TwoFALogin";
@@ -144,6 +146,14 @@ function App() {
           <Route path='/admin/BEntretien' element={<DetailsEntretien/>}/>
           <Route path="/admin/UpdateEntretien/:entretienId" element={<Updatepage />} />
           <Route path="*" element={<Signin />} />
+
+
+          <Route path="/Staff">
+            <Route index element={<HeroStaf />} />
+
+            <Route path="updateprofile/:userId" element={<UpdateUser />} />
+          </Route>
+
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>
