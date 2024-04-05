@@ -212,14 +212,31 @@ const NavbarStaff = () => {
             <li>
               <Link
                 className="nav-link scrollto active text-black"
-                to={`/Entreprise`}
+                to={`/staff`}
               >
                 Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="nav-link scrollto text-black"
+                href="#services"
+                to={`/Staff/addOffer`}
+              >
+                Ajouter Offer
               </Link>
             </li>
 
             <li>
               <Link className="nav-link scrollto text-black">All Students</Link>
+            </li>
+            <li>
+              <Link
+                className="nav-link scrollto text-black"
+                to={`/staff/offers`}
+              >
+                Mes Offer
+              </Link>
             </li>
 
             <li className="dropdown">

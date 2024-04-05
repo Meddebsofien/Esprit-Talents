@@ -39,6 +39,8 @@ import NewStudent from "./backoffice/components/student/newStudent/newStudent";
 import UpdateStudent from "./backoffice/components/student/updateStudent/updateStudent";
 import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
+import AjouterOfferStaff from "./frontoffice/layout/offer/ajouterOfferStaff";
+import DetailsofferStaff from "./frontoffice/layout/offer/detailOffer/detailsstaff";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -70,21 +72,13 @@ function App() {
                 element={<NewStudent title="Add New Student" />}
               />
 
+              <Route path="CompanyList" element={<List />} />
+              <Route path="StaffList" element={<ListStaff />} />
+              <Route path="StudentList" element={<ListStudent />} />
 
-
-     
-              
-              <Route path ="CompanyList"  element={<List />} />
-              <Route path ="StaffList"  element={<ListStaff />} />
-              <Route path ="StudentList"  element={<ListStudent />} />
-
-              
-            
-
-              <Route path ="updateCompany/:userId" element ={<CompanyUpdate/>} />
-              <Route path ="updateStaff/:userId" element ={<UpdateStaff/>} />
-              <Route path ="updateStudent/:userId" element ={<UpdateStudent/>} />
-
+              <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
+              <Route path="updateStaff/:userId" element={<UpdateStaff />} />
+              <Route path="updateStudent/:userId" element={<UpdateStudent />} />
 
               <Route path="updateCompany/:userId" element={<CompanyUpdate />} />
               <Route path="updateStaff/:userId" element={<UpdateStaff />} />
@@ -101,16 +95,17 @@ function App() {
               path="addOffer"
               element={<AjouterOffer inputs={formOffer} />}
             />
+            <Route path="updateprofile/:userId" element={<UpdateUser />} />
+
             <Route path="offers" element={<Listofferscomponent />} />
             <Route path="update/:id" element={<UpdateOffer />} />
             <Route path="detailsentr/:id" element={<DetailsofferEnt />} />
             <Route path="twoFA/:id" element={<Twofa />} />
-            <Route path="updateprofile/:userId" element={<UpdateUser />} />
           </Route>
           <Route path="/">
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
-            
+
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
@@ -134,6 +129,13 @@ function App() {
             <Route index element={<HeroStaf />} />
 
             <Route path="updateprofile/:userId" element={<UpdateUser />} />
+            <Route path="offers" element={<Listofferscomponent />} />
+            <Route path="detailstaff/:id" element={<DetailsofferStaff />} />
+
+            <Route
+              path="addOffer"
+              element={<AjouterOfferStaff inputs={formOffer} />}
+            />
           </Route>
 
           <Route path="*" element={<Signin />} />

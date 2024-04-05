@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Stack from "@mui/material/Stack";
@@ -57,29 +57,27 @@ function Signup() {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState([]);
-  
-  
-  
-  
+
   useEffect(() => {
     if (user) {
       axios
-        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            Accept: 'application/json'
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
           }
-        })
+        )
         .then((res) => {
-          const { name, email } = res.data; 
-         
-         
-          setProfile({ name, email }); 
+          const { name, email } = res.data;
+
+          setProfile({ name, email });
         })
         .catch((err) => console.log(err));
     }
   }, [user]);
- 
 
   const handleGoogleSignUp = async () => {
     try {
@@ -89,32 +87,35 @@ function Signup() {
         nom: profile.name,
         mail: profile.email,
       };
-  
-      console.log('Data to be sent to the backend:', dataToSend); // Ajoutez ce log pour vérifier les données à envoyer
-  
-      const response = await fetch('http://localhost:3700/users/googleregister', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-  
-      console.log('Response:', response); // Ajoutez ce log pour vérifier la réponse du serveur
-  
+
+      console.log("Data to be sent to the backend:", dataToSend); // Ajoutez ce log pour vérifier les données à envoyer
+
+      const response = await fetch(
+        "http://localhost:3700/users/googleregister",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
+
+      console.log("Response:", response); // Ajoutez ce log pour vérifier la réponse du serveur
+
       if (response.ok) {
         const data = await response.json();
-        console.log('Data:', data); // Ajoutez ce log pour vérifier les données renvoyées par le serveur
+        console.log("Data:", data); // Ajoutez ce log pour vérifier les données renvoyées par le serveur
         // Traitez les données renvoyées par le serveur, telles que la gestion de l'authentification, la redirection, etc.
       } else {
         const errorData = await response.json();
-        console.error('Error:', errorData);
-        if (errorData.error === 'User already registered!') {
-          setEmailExistsError('Email already exists');
+        console.error("Error:", errorData);
+        if (errorData.error === "User already registered!") {
+          setEmailExistsError("Email already exists");
         }
       }
     } catch (error) {
-      console.error('Fetch Error:', error);
+      console.error("Fetch Error:", error);
     }
   };
   const login = useGoogleLogin({
@@ -122,9 +123,8 @@ function Signup() {
       handleGoogleSignUp(codeResponse); // Appel de la fonction handleSignUp avec le codeResponse
       setUser(codeResponse);
       console.log(codeResponse);
-      
     },
-    onError: (error) => console.log('Login Failed:', error)
+    onError: (error) => console.log("Login Failed:", error),
   });
   const GoogleBackground =
     "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
@@ -133,10 +133,7 @@ function Signup() {
   const TwitterBackground =
     "linear-gradient(to right, #56C1E1 0%, #35A9CE 50%)";
 
-   
-
-
-    // validator
+  // validator
   const validateCompanyName = () => {
     if (formData.companyName.length < 4) {
       setCompanyNameError("Company Name must be at least 4 characters long");
@@ -371,7 +368,6 @@ function Signup() {
                         onBlur={validateCompanyName}
                         error={Boolean(companyNameError)}
                         helperText={companyNameError}
-                        
                       />
                       <TextField
                         fullWidth
@@ -385,7 +381,7 @@ function Signup() {
                         onBlur={validateAdresse}
                         error={Boolean(adresseError)}
                         helperText={adresseError}
-                        style={{ marginTop:'7%'}}
+                        style={{ marginTop: "7%" }}
                       />
                     </div>
                   )}
@@ -434,8 +430,7 @@ function Signup() {
                     onBlur={validateName}
                     error={Boolean(nameError)}
                     helperText={nameError}
-                    
-                    
+                    style={{ marginTop: "7%" }}
                   />
                   <TextField
                     fullWidth
@@ -450,8 +445,7 @@ function Signup() {
                     onBlur={validatePrenom}
                     error={Boolean(prenomError)}
                     helperText={prenomError}
-                    style={{ marginTop:'7%'}}
-
+                    style={{ marginTop: "7%" }}
                   />{" "}
                   <TextField
                     fullWidth
@@ -466,8 +460,7 @@ function Signup() {
                     onChange={handleChange}
                     required
                     className="mb-6"
-                    style={{ marginTop:'7%'}}
-
+                    style={{ marginTop: "7%" }}
                   />
                   <TextField
                     fullWidth
@@ -482,8 +475,7 @@ function Signup() {
                     helperText={passwordError}
                     required
                     className="mb-4"
-                    style={{ marginTop:'7%'}}
-
+                    style={{ marginTop: "7%" }}
                   />
                   <TextField
                     fullWidth
@@ -508,14 +500,13 @@ function Signup() {
                         type="submit"
                         className="custom-button"
                         onClick={handleSignUp}
-                        style={{ marginTop:'7%'}}
-
+                        style={{ marginTop: "7%" }}
                       >
                         Sign up
                       </Button>
 
                       <br />
-                      <div style={{ paddingTop: "30px"  }}>
+                      <div style={{ paddingTop: "30px" }}>
                         <Link to={`/Signin`}>Sign in</Link>
                       </div>
                     </div>
@@ -527,11 +518,11 @@ function Signup() {
           {/* <div className="vertical-line" /> */}
         </Grid>
         <LoginWith style={{}}>OR Signup WITH</LoginWith>
-        <IconsContainer style={
-          {
-            paddingTop: "20px"
-          }
-        }>
+        <IconsContainer
+          style={{
+            paddingTop: "20px",
+          }}
+        >
           <button
             className="styled-button"
             color={InstagramBackground}
