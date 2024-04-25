@@ -27,7 +27,14 @@ export default function Login() {
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
 
- 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      setUser(codeResponse);
+      console.log(codeResponse);
+      navigate("/");
+    },
+    onError: (error) => console.log("Login Failed:", error),
+  });
 
   const handleGoogleLogin = () => {
     login(); // Appel de la fonction de connexion Google
@@ -48,13 +55,6 @@ export default function Login() {
       setEmailError("");
     }
   };
-  useEffect(() => {
-    window.gapi.load("auth2", () => {
-      window.gapi.auth2.init({
-        client_id: "280840526560-0pd6rcgu4euqjndirbqh3oo0opcfu0gv.apps.googleusercontent.com",
-      });
-    });
-  }, [])
 
   // Fonction pour l'authentification
   const signIn = async () => {
@@ -81,21 +81,12 @@ export default function Login() {
           const [header, payload, signature] = token.split(".");
           const decodedPayload = JSON.parse(atob(payload));
           const role = decodedPayload.role;
-
-          const enabletwoFactor = decodedPayload.twofaEnabled;
           console.log(role);
-          console.log(enabletwoFactor);
-
           setIsLoading(true);
-          if (enabletwoFactor) {
-            navigate("/twofalogin");
+          if (role === "Company") {
+            navigate("/Entreprise");
           } else {
-            if (role === "Company") {
-              navigate("/Entreprise");
-            } else {
-              navigate("/" + role);
-            }
-
+            navigate("/" + role);
           }
         } else {
           console.log("Token non trouvé dans localStorage");
@@ -155,46 +146,25 @@ export default function Login() {
     );
   };
 
- // Fonction de connexion avec Google
-
- const login = async () => {
-  try {
-    console.log("Tentative de connexion avec Google...");
-
-    // Demander à l'utilisateur de se connecter avec Google et obtenir le token d'accès
-    const googleResponse = await window.gapi.auth2.getAuthInstance().signIn();
-
-    console.log("Réponse Google obtenue:", googleResponse);
-
-    // Récupérer les informations de profil de l'utilisateur depuis Google
-    const profile = googleResponse.getBasicProfile();
-    const email = profile.getEmail();
-
-    console.log("Email récupéré depuis le profil Google:", email);
-
-    // Appeler votre API backend pour vérifier l'e-mail et obtenir le token d'accès
-    const response = await axios.post("http://localhost:3700/users/api", {
-      accessToken: googleResponse.getAuthResponse().id_token
-    });
-
-    console.log("Réponse de l'API backend:", response);
-
-    // Stocker le token dans le local storage
-    localStorage.setItem("token", response.data.accessToken);
-
-    console.log("Token JWT stocké dans le localStorage.");
-
-    // Rediriger vers la page d'accueil ou une autre page
-    navigate("/home");
-  } catch (error) {
-    console.error("Error during login with Google:", error);
-    setErrorMessage("An error occurred during login with Google.");
-  }
-};
-
-
-
-
+  //loginwith google
+  useEffect(() => {
+    if (user) {
+      axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          setProfile(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
   // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
     googleLogout();

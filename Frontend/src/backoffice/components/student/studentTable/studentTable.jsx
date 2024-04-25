@@ -46,7 +46,7 @@ const StudentTable = () => {
     { field: 'nom', headerName: 'Last Name', flex: 1 },
     { field: 'prenom', headerName: 'First Name', flex: 1 },
     { field: 'mail', headerName: 'Email', flex: 1 },
-    { field: 'specialite', headerName: 'Speciality', flex: 1 },
+    { field: 'specialite', headerName: 'Specialite', flex: 1 },
 
     {
       field: 'actions',
@@ -82,7 +82,7 @@ const StudentTable = () => {
           color="success"
           style={{ marginLeft: 'auto', marginRight: '2%' }}
         >
-          Add Student
+          Ajouter
         </Button>
       </div>
       <div style={{ height: 600, width: '100%' }}>

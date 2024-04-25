@@ -95,7 +95,7 @@ const UpdateOffer = () => {
     <>
       <NavbarEntreprise />
       <div className="new">
-        <div className="newContainer ">
+        <div className="newContainer">
           <div className="bottom">
             <div className="right">
               <form onSubmit={onUpdate}>
@@ -107,7 +107,20 @@ const UpdateOffer = () => {
                     value={form.title}
                     onChangeHandler={onChangeHandler}
                   />
-
+                  <InputGroup
+                    label="description"
+                    type="text"
+                    name="description"
+                    value={form.description}
+                    onChangeHandler={onChangeHandler}
+                  />
+                  <InputGroup
+                    label="company"
+                    type="text"
+                    name="company"
+                    value={form.company}
+                    onChangeHandler={onChangeHandler}
+                  />
                   <InputGroup
                     label="location"
                     type="text"
@@ -115,19 +128,11 @@ const UpdateOffer = () => {
                     value={form.location}
                     onChangeHandler={onChangeHandler}
                   />
-
-                  <InputGroup
-                    label="description"
-                    type="textarea"
-                    name="description"
-                    value={form.description}
-                    onChangeHandler={onChangeHandler}
-                  />
                 </div>
                 <div className="left">
                   <InputGroup
                     label="requirements"
-                    type="textarea"
+                    type="text"
                     name="requirements"
                     value={form.requirements}
                     onChangeHandler={onChangeHandler}
@@ -146,14 +151,12 @@ const UpdateOffer = () => {
                     value={form.type}
                     onChangeHandler={onChangeHandler}
                   />
-                  &nbsp;
-                  <input
+                  <InputGroup
+                    label="Experience (ans)"
                     type="number"
                     name="experience"
-                    className="form-control"
-                    placeholder="Experience (ans)"
-                    onChange={onChangeHandler}
-                    hidden={form.type === "Emploi" ? false : true}
+                    value={form.experience}
+                    onChangeHandler={onChangeHandler}
                   />
                   <div className="col-lg-4 col-md-6 footer-newsletter">
                     <button type="submit">Modifier</button>

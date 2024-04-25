@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import EditIcon from "@mui/icons-material/Edit";
 
 function Navbar() {
-  const [idc, setIdc] = useState("");
-  const [twofa, settwofa] = useState("");
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-      setIdc(decodedPayload.id);
-      settwofa(decodedPayload.twofaEnabled);
-      console.log("idc", decodedPayload.id);
-      console.log("twofa", decodedPayload.twofaEnabled);
-    } else {
-      console.log("Token non trouvé dans localStorage");
-    }
-  }, []);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/signin");
   };
+
+  
+
   const handleProfileClick = () => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -33,7 +20,7 @@ function Navbar() {
       const decodedPayload = JSON.parse(atob(payload));
       const userId = decodedPayload.id; // Supposons que l'ID utilisateur est stocké dans le token
       if (userId) {
-        navigate(`/Student/updateprofile/${userId}`); // Redirection vers la page de mise à jour du profil avec l'ID utilisateur
+        navigate(`/update/${userId}`); // Redirection vers la page de mise à jour du profil avec l'ID utilisateur
       } else {
         console.log("ID utilisateur non trouvé dans le token");
       }
@@ -43,7 +30,6 @@ function Navbar() {
       navigate("/login");
     }
   };
-
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -192,11 +178,6 @@ function Navbar() {
     };
   }, []);
 
-  const handleEnable2FA = () => {
-    // Redirect to the 2FA setup page for the specific user
-    navigate(`/Student/twoFA/${idc}`);
-  };
-
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -237,20 +218,10 @@ function Navbar() {
               <ul>
                 <li>
                   <button
-                    //onClick={handleEditProfile}
-                    style={{ display: "flex", alignItems: "center" }}
                     onClick={handleProfileClick}
+                    style={{ display: "flex", alignItems: "center" }}
                   >
                     <EditIcon style={{ marginRight: "5px" }} /> Edit profil
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={handleEnable2FA}
-                    style={{ display: "flex", alignItems: "center" }}
-                    disabled={twofa}
-                  >
-                    <EditIcon style={{ marginRight: "5px" }} /> Enable 2FA
                   </button>
                 </li>
 

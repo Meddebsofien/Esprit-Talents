@@ -1,14 +1,9 @@
 const Offer = require ('../Models/offer')
-const ValidateUser = require ('../validation/offer_validation')
+
 const AjouterOffer = async (req,res)=>{
-    const {errors, isValid} = ValidateUser(req.body)
    try {
-     if (!isValid){
-         return res.status(400).json(errors)
-     }else{
-        await Offer.create(req.body)
+     await Offer.create(req.body)
      res.status(201).json({message: "offer ajouter avec success"})
-     }
    } catch (error)  {
     console.log(error.message)  
    }

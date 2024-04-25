@@ -1,26 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import EditIcon from "@mui/icons-material/Edit";
-
 const NavbarEntreprise = () => {
-  const [idc, setIdc] = useState("");
-  const [twofa, settwofa] = useState("");
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      const [header, payload, signature] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-      setIdc(decodedPayload.id);
-      settwofa(decodedPayload.twofaEnabled);
-      console.log("idc", decodedPayload.id);
-      console.log("twofa", decodedPayload.twofaEnabled);
-    } else {
-      console.log("Token non trouvé dans localStorage");
-    }
-  }, []);
   useEffect(() => {
     const select = (el, all = false) => {
       el = el.trim();
@@ -173,29 +153,6 @@ const NavbarEntreprise = () => {
     localStorage.removeItem("token");
     navigate("/signin");
   };
-
-  const handleEnable2FA = () => {
-    // Redirect to the 2FA setup page for the specific user
-    navigate(`/Entreprise/twoFA/${idc}`);
-  };
-  const handleProfileClick = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const [, payload] = token.split(".");
-      const decodedPayload = JSON.parse(atob(payload));
-      const userId = decodedPayload.id; // Supposons que l'ID utilisateur est stocké dans le token
-      if (userId) {
-        navigate(`/Entreprise/updateprofile/${userId}`); // Redirection vers la page de mise à jour du profil avec l'ID utilisateur
-      } else {
-        console.log("ID utilisateur non trouvé dans le token");
-      }
-    } else {
-      console.log("Token non trouvé dans localStorage");
-      // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-      navigate("/login");
-    }
-  };
-
   return (
     <header id="header" className="fixed-top bg-white">
       <div className="container d-flex  align-items-center justify-content-between">
@@ -245,31 +202,11 @@ const NavbarEntreprise = () => {
               </Link>
               <ul>
                 <li>
-                  <button
-                    //onClick={handleEditProfile}
-                    style={{ display: "flex", alignItems: "center" }}
-                    onClick={handleProfileClick}
-                  >
-                    <EditIcon style={{ marginRight: "5px" }} /> Edit profil
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={handleEnable2FA}
-                    style={{ display: "flex", alignItems: "center" }}
-                    disabled={twofa}
-                  >
-                    <EditIcon style={{ marginRight: "5px" }} /> Enable 2FA
-                  </button>
+                  <Link href="#">Edit profil</Link>
                 </li>
 
                 <li>
-                  <button
-                    onClick={handleLogout}
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <ExitToAppIcon style={{ marginRight: "5px" }} /> logOut
-                  </button>
+                  <button onClick={handleLogout}>logOut</button>
                 </li>
               </ul>
             </li>

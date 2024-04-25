@@ -1,8 +1,7 @@
 import React from "react";
 import { AiOutlineSearch, AiOutlineCloseCircle } from "react-icons/ai";
 import { CiLocationOn } from "react-icons/ci";
-import "./details.css";
-import CustomButton from "./CustomButton";
+import './details.css'
 
 const SearchInput = ({ placeholder, icon, value, setValue, styles }) => {
   const handleChange = (e) => {
@@ -18,13 +17,13 @@ const SearchInput = ({ placeholder, icon, value, setValue, styles }) => {
       <input
         value={value}
         onChange={(e) => handleChange(e)}
-        type="text"
-        className="w-full md:w-64 p-2 outline-none bg-transparent text-base"
+        type='text'
+        className='w-full md:w-64 p-2 outline-none bg-transparent text-base'
         placeholder={placeholder}
       />
 
       <AiOutlineCloseCircle
-        className="hidden md:flex text-gray-600 text-xl cursor-pointer"
+        className='hidden md:flex text-gray-600 text-xl cursor-pointer'
         onClick={clearInput}
       />
     </div>
@@ -40,66 +39,42 @@ const Search = ({
   location,
   setLocation,
 }) => {
-  const popularSearch = [
-    "Software Engineer",
-    "Developer",
-    "Full-Stack Developer",
-    "Data Scientist",
-    "Remote",
-    "Full-Time",
-    "Sales",
-    "Office Assistant",
-  ];
   return (
-    <div className="bg-[#f7fdfd]  -mt-8 -pt-8">
+    <div className='bg-[#f7fdfd]'>
       <div
         className={`container mx-auto px-5 ${
           type ? "h-[500px]" : "h-[350px]"
         } flex items-center relative`}
       >
-        <div className="w-full z-10">
-          <div className="mb-8">
-            <p className="text-slate-700 font-bold text-4xl">{title}</p>
+        <div className='w-full z-10'>
+          <div className='mb-8'>
+            <p className='text-slate-700 font-bold text-4xl'>{title}</p>
           </div>
 
-          <div className="w-full flex items-center justify-around bg-white px-2 md:px-5 py-2.5 md:py-6 shadow-2xl rounded-full">
+          <div className='w-full flex items-center justify-around bg-white px-2 md:px-5 py-2.5 md:py-6 shadow-2xl rounded-full'>
             <SearchInput
-              placeholder="Job Title or Keywords"
-              icon={<AiOutlineSearch className="text-gray-600 text-xl" />}
+              placeholder='Job Title or Keywords'
+              icon={<AiOutlineSearch className='text-gray-600 text-xl' />}
               value={searchQuery}
               setValue={setSearchQuery}
             />
             <SearchInput
-              placeholder="Add Country or City"
-              icon={<CiLocationOn className="text-gray-600 text-xl" />}
+              placeholder='Add Country or City'
+              icon={<CiLocationOn className='text-gray-600 text-xl' />}
               value={location}
               setValue={setLocation}
               styles={"hidden md:flex"}
             />
 
             <div>
-              <CustomButton
-                onClick={handleClick}
-                title="Search"
-                containerStyles={
-                  "text-white py-2 md:py3 px-3 md:px-10  bg-black-600 rounded-full md:rounded-md text-sm md:text-base"
-                }
-              />
+              <button>search</button>
             </div>
           </div>
-          {type && (
-            <div className="w-full lg:1/2  flex flex-wrap gap-3 md:gap-6 py-10 md:py-14">
-              {popularSearch.map((search, index) => (
-                <span
-                  key={index}
-                  className="bg-[#1d4fd826] text-[#e24f71] py-1 px-2 rounded-full text-sm md:text-base"
-                >
-                  {search}
-                </span>
-              ))}
-            </div>
-          )}
+
+        
         </div>
+
+       
       </div>
     </div>
   );
