@@ -14,7 +14,6 @@
     "@emotion/styled": "^11.11.0",
     "@iconscout/react-unicons": "^2.0.2",
     "@mui/icons-material": "^5.15.10",
-
     "@mui/material": "^5.15.14",
     "@mui/x-data-grid": "^6.19.4",
     "@react-oauth/google": "^0.12.1",
@@ -39,9 +38,7 @@
     "react-spinners": "^0.13.8",
     "recharts": "^2.12.0",
     "styled-components": "^6.1.8",
-
-    "sweetalert2": "^11.10.6"
-
+    "sweetalert2": "^11.6.13"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

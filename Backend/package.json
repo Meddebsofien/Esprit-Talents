@@ -29,7 +29,10 @@
     "nodemailer": "^6.9.11",
     "otplib": "^12.0.1",
     "passport": "^0.7.0",
+
     "path": "^0.12.7",
+    "pdf-parse": "^1.1.1",
+
     "qrcode": "^1.5.3",
     "snappy": "^7.2.2",
     "speakeasy": "^2.0.0",
