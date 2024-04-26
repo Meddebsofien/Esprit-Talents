@@ -10,6 +10,7 @@ var {
   getCandidatureById,
   rejectCandidatureById,
   acceptCandidatureById,
+  getCandidatureByStudentId,
 } = require("../Controllers/candidature-controller");
 var {
   extractTextAndContactInfoFromPDF,
@@ -19,6 +20,7 @@ var {
 const upload = multer();
 
 const uploadFileToCloudinary = require("../middleware/fileMiddleWare");
+const { verifyToken } = require("../middleware/authJWT");
 
 //Ajouter une candidature
 router.post("/addCandidature", uploadFileToCloudinary, AjouterCandidature);
