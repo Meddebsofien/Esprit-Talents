@@ -31,6 +31,12 @@ import Twofa from "./components/twofa";
 import TwoFALogin from "./components/TwoFALogin";
 import HeroStaf from "./frontoffice/pages/HeroStaf";
 
+import Loginpage from "./frontoffice/layout/entretien/Loginpage";
+import Entretien from "./frontoffice/layout/entretien/Entretien";
+import DetailsEntretien from "./backoffice/layout/entretien/DetailsEntretien";
+import UpdateEntretien from "./backoffice/components/Entretien/UpdateEntretien";
+import Updatepage from "./backoffice/layout/entretien/updatepage";
+
 import ListStaff from "./backoffice/pages/list/ListStaff";
 import ListStudent from "./backoffice/pages/list/ListStudent";
 import Company from "./backoffice/components/company/newCompany/newCompany";
@@ -137,7 +143,10 @@ function App() {
               element={<AjouterOfferStaff inputs={formOffer} />}
             />
           </Route>
-
+          <Route path='/entretien' element={<Entretien/>}/>
+          <Route path='/calendar' element={<Loginpage/>}/>
+          <Route path='/admin/BEntretien' element={<DetailsEntretien/>}/>
+          <Route path="/admin/UpdateEntretien/:entretienId" element={<Updatepage />} />
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>

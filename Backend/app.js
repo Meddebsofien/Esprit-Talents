@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 
 var logger = require('morgan');
 // var multer = require("multer");
+var entretienRouter = require('./routes/entretien-route');
 var candidaturesRouter = require("./routes/candidature-route");
 // var uploads = multer({ dest: 'uploads/' });
 const User = require('./Models/user');
@@ -290,5 +291,6 @@ app.get("/set2FA/:id", async (req, res) => {
 
 app.use('/offers', offerRouter);
 app.use("/candidatures", candidaturesRouter);
+app.use('/entretiens', entretienRouter);
 // app.use('/uploads', express.static('uploads'));
 module.exports = app;
