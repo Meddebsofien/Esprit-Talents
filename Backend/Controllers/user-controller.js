@@ -11,6 +11,66 @@ const VerifTokeen=require('../Models/verif');
 //const allowedRoles = ['Company', 'Student'];
 
 const allowedRoles = ['Company', 'Student','Staff'];
+// Fonction pour enregistrer un nouvel utilisateur avec cv 
+const registerUserpswd = async (req, res) => {
+  try {
+    const { prenom, nom, mail, role, password } = req.body;
+
+    if (!prenom || !nom || !mail || !role || !password) {
+      return res.status(400).json({ message: "Please provide all necessary information." });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      prenom,
+      nom,
+      mail,
+      role,
+      password: hashedPassword
+    });
+
+    await newUser.save();
+
+    // Create token for email verification
+    const token = await VerifTokeen.create({
+      userId: newUser.id,
+      tokenverif: crypto.randomBytes(32).toString("hex"),
+    });
+
+    // Construct verification URL
+    const url = `${process.env.CLIENT_URL}users/${newUser.id}/verify/${token.tokenverif}`;
+
+    // Send verification email
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'talentsesprit@gmail.com',
+        pass: 'wldp tydr nckz skjh'
+      }
+    });
+
+    var mailOptions = {
+      from: 'talentsesprit@gmail.com',
+      to: newUser.mail,
+      subject: 'Confirm Account',
+      text: `Please Confirm your authentication: ${url}`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ Status: "Error sending email" });
+      } else {
+        return res.status(201).json({ message: "User registered successfully. Email verification sent." });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while registering the user." });
+  }
+};
+
 //signup user
 const registerUser = async (req, res) => {
   try {
@@ -414,4 +474,5 @@ res.status(200).json({message:"User verified successfully"});
 
 
 module.exports.registerUser = registerUser;
+module.exports.registerUserpswd=registerUserpswd
 module.exports.currentUser = currentUser;

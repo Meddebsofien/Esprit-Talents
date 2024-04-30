@@ -17,7 +17,7 @@ import Signupggle from "./components/signup_withggle/Signupggle";
 import ResetPassword from "./components/forgetpassword/reset-password";
 import ForgetPasswordForm from "./components/forgetpassword/forget-password";
 import ListeCandidature from "./frontoffice/layout/candidature/listeCandidatures";
-
+import CvUpload from "./components/signup/signupcv";
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
 import ListOfferBack from "./backoffice/layout/offer/listOfferBack";
@@ -47,7 +47,7 @@ import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
 import AjouterOfferStaff from "./frontoffice/layout/offer/ajouterOfferStaff";
 import DetailsofferStaff from "./frontoffice/layout/offer/detailOffer/detailsstaff";
-
+import ConfirmPassword from "./components/signup/ConfirmerPswd";
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
   const user = localStorage.getItem("token");
@@ -111,7 +111,8 @@ function App() {
           <Route path="/">
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
-
+            <Route path="cvUpload" element={<CvUpload />} />
+            <Route path="confirmerpswd" element={<ConfirmPassword />} />
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"

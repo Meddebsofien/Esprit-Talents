@@ -1,4 +1,4 @@
-const { registerUser, currentUser } = require("../Controllers/user-controller");
+const { registerUser, currentUser ,registerUserpswd} = require("../Controllers/user-controller");
 const multer = require('multer');
 const validateToken = require("../middleware/validateTokenHandler");
 const path = require('path');
@@ -14,6 +14,7 @@ router.get('/api', (req, res)=> {
 const userController = require('../Controllers/user-controller');
 
 router.post("/register", registerUser);
+router.post('/registercv',registerUserpswd);
 
 router.get("/current", validateToken, currentUser);
 
@@ -45,9 +46,6 @@ router.post('/googleregister',userController.registerWithGoogle)
 router.post('/checkEmail',userController.checkEmail)
 //route apigoogle login 
 router.post('/api',userController.apigoogle)
-
-
-
 
 
 const storage = multer.diskStorage({
@@ -84,6 +82,10 @@ router.post('/upload-photo', upload.single('photo'), (req, res) => {
     res.status(500).json({ error: "Error uploading photo" });
   }
 });
+
+
+
+
 
 
 

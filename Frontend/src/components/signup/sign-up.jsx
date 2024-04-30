@@ -7,7 +7,7 @@ import Icon from "../Icon";
 import axios from "axios";
 import "./sign-up.scss";
 import Swal from "sweetalert2";
-
+import CVUpload from "./signupcv";
 import Input from "../Input";
 import {
   Button,
@@ -300,7 +300,12 @@ function Signup() {
 
   return (
     <div className="signin-background">
+     <TopRightCorner>
+        <CVUpload /> 
+      </TopRightCorner>
+
       <MainContainer>
+      
         <Grid container justifyContent="center">
           <Grid item md={6} className="mb-5">
             <CardContent>
@@ -539,9 +544,15 @@ function Signup() {
           </Icon>
         </IconsContainer>
       </MainContainer>
+      
     </div>
   );
 }
+const TopRightCorner = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
 const MainContainer = styled.div`
   display: flex;
   align-items: center;
