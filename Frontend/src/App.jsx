@@ -144,7 +144,7 @@ function App() {
               element={<AjouterOfferStaff inputs={formOffer} />}
             />
           </Route>
-          <Route path='/entretien' element={<Entretien/>}/>
+          <Route path="/entretien/:candidatureId" element={<Entretien />} />
           <Route path='/calendar' element={<Loginpage/>}/>
           <Route path='/admin/BEntretien' element={<DetailsEntretien/>}/>
           <Route path="/admin/UpdateEntretien/:entretienId" element={<Updatepage />} />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   Typography,
   Container,
@@ -17,20 +17,17 @@ import {
   TextField,
   MenuItem,
   Box,
-  tableCellClasses,
-  TablePagination,
-  InputLabel,
-  FormControl,
-  OutlinedInput,
-  Tooltip,
   Chip,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  tableCellClasses,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import { deepPurple } from "@mui/material/colors";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import Footer from "../../pages/footer";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -51,6 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+
 const getColorVariant = (status) => {
   switch (status.toLowerCase()) {
     case "pending":
@@ -63,6 +61,7 @@ const getColorVariant = (status) => {
       return "default";
   }
 };
+
 const Filter = [
   {
     value: "status",
@@ -81,14 +80,13 @@ const Filter = [
     label: "Date ",
   },
 ];
+
 const CandidaturesList = () => {
   const param = useParams();
   const [searchText, setSearchText] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [candidatures, setCandidatures] = useState([]);
-  const handleFileClick = (fileLink) => {
-    window.open(fileLink, "_blank");
-  };
+
   useEffect(() => {
     const fetchCandidatures = async () => {
       try {
@@ -104,6 +102,10 @@ const CandidaturesList = () => {
 
     fetchCandidatures();
   }, []);
+
+  const handleFileClick = (fileLink) => {
+    window.open(fileLink, "_blank");
+  };
 
   const handleAccept = async (id) => {
     try {
@@ -158,6 +160,7 @@ const CandidaturesList = () => {
     }
     return true;
   });
+
   return (
     <>
       <NavbarEntreprise />
@@ -209,34 +212,30 @@ const CandidaturesList = () => {
             <TableHead>
               <TableRow>
                 <StyledTableCell>
-                  <b> #</b>
+                  <b>#</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b> FullName </b>
+                  <b>FullName</b>
                 </StyledTableCell>
 
                 <StyledTableCell>
-                  <b> mail</b>
+                  <b>Mail</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b> Date </b>
+                  <b>Date</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  {" "}
-                  <b> CV</b>{" "}
+                  <b>CV</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  {" "}
-                  <b> Motivation Letter</b>{" "}
+                  <b>Motivation Letter</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  {" "}
-                  <b> Status</b>{" "}
+                  <b>Status</b>
                 </StyledTableCell>
 
                 <StyledTableCell padding="none">
-                  {" "}
-                  <b> Actions </b>{" "}
+                  <b>Actions</b>
                 </StyledTableCell>
               </TableRow>
             </TableHead>
@@ -245,7 +244,6 @@ const CandidaturesList = () => {
               {filteredData.map((candidature, index) => (
                 <StyledTableRow key={index}>
                   <TableCell>
-                    {" "}
                     <Avatar
                       sx={{ width: 26, height: 26, bgcolor: deepPurple[500] }}
                     >
@@ -253,15 +251,13 @@ const CandidaturesList = () => {
                     </Avatar>
                   </TableCell>
                   <TableCell>
-                    {" "}
                     {candidature?.idUser?.nom +
                       " " +
                       candidature?.idUser?.prenom}
                   </TableCell>
-                  <TableCell> {candidature?.idUser?.mail}</TableCell>
+                  <TableCell>{candidature?.idUser?.mail}</TableCell>
                   <TableCell>{candidature.date}</TableCell>
                   <TableCell>
-                    {" "}
                     {candidature.cvUpload && (
                       <InsertDriveFileIcon
                         onClick={() => handleFileClick(candidature.cvUpload)}
@@ -278,7 +274,6 @@ const CandidaturesList = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    {" "}
                     <Chip
                       label={candidature?.status.toUpperCase()}
                       variant="contained"
@@ -288,26 +283,16 @@ const CandidaturesList = () => {
                   </TableCell>
 
                   <TableCell>
-                    {candidature.status === "pending" && (
-                      <>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleAccept(candidature?._id)}
-                        >
-                          Accept
-                        </Button>{" "}
-                        &nbsp; &nbsp;
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleReject(candidature?._id)}
-                        >
-                          Reject
-                        </Button>
-                      </>
+                    {candidature.status === "accepted" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        component={Link}
+                        to={`/entretien/${candidature._id}`}
+                      >
+                        Faire Entretien
+                      </Button>
                     )}
                   </TableCell>
                 </StyledTableRow>
