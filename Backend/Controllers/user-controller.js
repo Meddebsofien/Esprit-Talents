@@ -205,62 +205,7 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-function generateRandomPassword(length) {
-  // Définir les caractères autorisés pour le mot de passe
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    // Sélectionner un caractère aléatoire dans la chaîne de caractères autorisés
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    password += chars[randomIndex];
-  }
-
-  return password;
-}
-//google-register
-exports.registerWithGoogle = async (req, res) => {
-  try {
-    const { nom, prenom, mail, role } = req.body;
-
-    // Vérifiez si l'utilisateur existe déjà dans la base de données
-    let user = await User.findOne({ mail });
-
-    if (user) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    // Générez un mot de passe aléatoire pour l'utilisateur
-    const password = generateRandomPassword();
-
-    // Créez un nouvel utilisateur avec les données fournies et le mot de passe généré
-    user = new User({
-      nom,
-      prenom,
-      mail,
-      role,
-      password,
-    });
-
-    // Enregistrez le nouvel utilisateur dans la base de données
-    await user.save();
-
-    // Générez un token JWT pour l'utilisateur
-    const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
-      config.secret,
-      {
-        algorithm: 'HS256',
-        allowInsecureKeySizes: true,
-        expiresIn: 86400, // 24 hours
-      });
-
-    // Répondez avec le token JWT généré
-    res.json({ token });
-  } catch (error) {
-    console.error('Error during Google registration:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 //login with google api 
 exports.checkEmail = async (req, res) => {
  
@@ -289,8 +234,10 @@ exports.apigoogle = async (req, res) => {
     // Récupérer le token d'accès envoyé depuis le frontend
     const { accessToken } = req.body;
 
+    // Valider le token d'accès (à implémenter)
+
     // Appeler l'API Google avec le token d'accès
-    const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+    const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -298,8 +245,6 @@ exports.apigoogle = async (req, res) => {
 
     // Extraire les données pertinentes de la réponse de l'API Google
     const { name, email } = response.data;
-
-    // Vous pouvez effectuer d'autres traitements avec les données si nécessaire
 
     // Créer un token JWT pour l'utilisateur
     const token = jwt.sign(
@@ -318,6 +263,7 @@ exports.apigoogle = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });

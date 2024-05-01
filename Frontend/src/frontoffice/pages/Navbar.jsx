@@ -225,7 +225,7 @@ function Navbar() {
 
             <li>
               <Link className="nav-link scrollto text-black" to={``}>
-                Mes Application
+                My Applications
               </Link>
             </li>
 

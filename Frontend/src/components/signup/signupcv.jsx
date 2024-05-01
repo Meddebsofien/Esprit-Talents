@@ -77,7 +77,7 @@ const CVUpload = () => {
         <div>
             <form onSubmit={handleCVUpload}>
                 <label style={{ color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}>
-                    S'inscrire via CV
+                Sign up via CV
                     <input type="file" name="cv" accept=".pdf,.doc,.docx" style={{ display: 'none' }} onChange={handleFileInputChange} />
                 </label>
                 <button type="submit">Submit</button>

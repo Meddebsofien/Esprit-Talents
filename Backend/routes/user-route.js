@@ -41,7 +41,7 @@ router.post('/AddUser',userController.createUser)
 ///sofien verification
 router.get('/:id/verify/:token', userController.verifyUser);
 //route signup with google
-router.post('/googleregister',userController.registerWithGoogle)
+
 //route login with email google 
 router.post('/checkEmail',userController.checkEmail)
 //route apigoogle login 

@@ -161,36 +161,44 @@ export default function Login() {
   try {
     console.log("Tentative de connexion avec Google...");
 
-    // Demander à l'utilisateur de se connecter avec Google et obtenir le token d'accès
     const googleResponse = await window.gapi.auth2.getAuthInstance().signIn();
 
     console.log("Réponse Google obtenue:", googleResponse);
 
-    // Récupérer les informations de profil de l'utilisateur depuis Google
     const profile = googleResponse.getBasicProfile();
     const email = profile.getEmail();
 
     console.log("Email récupéré depuis le profil Google:", email);
 
-    // Appeler votre API backend pour vérifier l'e-mail et obtenir le token d'accès
     const response = await axios.post("http://localhost:3700/users/api", {
       accessToken: googleResponse.getAuthResponse().id_token
     });
 
     console.log("Réponse de l'API backend:", response);
 
-    // Stocker le token dans le local storage
     localStorage.setItem("token", response.data.accessToken);
 
     console.log("Token JWT stocké dans le localStorage.");
 
-    // Rediriger vers la page d'accueil ou une autre page
     navigate("/home");
   } catch (error) {
-    console.error("Error during login with Google:", error);
-    setErrorMessage("An error occurred during login with Google.");
+    if (error.message === "popup_closed_by_user") {
+      console.error("La fenêtre de connexion avec Google a été fermée par l'utilisateur.");
+      setErrorMessage("La connexion avec Google a été interrompue. Veuillez réessayer.");
+    } else if (error.response && error.response.status === 500) {
+      console.error("Erreur serveur lors de la connexion avec Google:", error);
+      setErrorMessage("Une erreur interne du serveur s'est produite. Veuillez réessayer plus tard.");
+    } else if (error.response && error.response.status === 401) {
+      console.error("Accès non autorisé lors de la connexion avec Google:", error);
+      setErrorMessage("Vous n'êtes pas autorisé à accéder à cette ressource. Veuillez vous connecter à nouveau.");
+    } else {
+      console.error("Erreur inattendue lors de la connexion avec Google:", error);
+      setErrorMessage("Une erreur inattendue s'est produite. Veuillez réessayer plus tard.");
+    }
   }
 };
+
+
 
 
 

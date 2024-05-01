@@ -79,53 +79,8 @@ function Signup() {
     }
   }, [user]);
 
-  const handleGoogleSignUp = async () => {
-    try {
-      // Créez un objet contenant uniquement le rôle et les informations récupérées du profil Google
-      const dataToSend = {
-        role: selectedRole,
-        nom: profile.name,
-        mail: profile.email,
-      };
-
-      console.log("Data to be sent to the backend:", dataToSend); // Ajoutez ce log pour vérifier les données à envoyer
-
-      const response = await fetch(
-        "http://localhost:3700/users/googleregister",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        }
-      );
-
-      console.log("Response:", response); // Ajoutez ce log pour vérifier la réponse du serveur
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Data:", data); // Ajoutez ce log pour vérifier les données renvoyées par le serveur
-        // Traitez les données renvoyées par le serveur, telles que la gestion de l'authentification, la redirection, etc.
-      } else {
-        const errorData = await response.json();
-        console.error("Error:", errorData);
-        if (errorData.error === "User already registered!") {
-          setEmailExistsError("Email already exists");
-        }
-      }
-    } catch (error) {
-      console.error("Fetch Error:", error);
-    }
-  };
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse) => {
-      handleGoogleSignUp(codeResponse); // Appel de la fonction handleSignUp avec le codeResponse
-      setUser(codeResponse);
-      console.log(codeResponse);
-    },
-    onError: (error) => console.log("Login Failed:", error),
-  });
+ 
+ 
   const GoogleBackground =
     "linear-gradient(to right, #0546A0 0%, #0546A0 40%, #663FB6 100%)";
   const InstagramBackground =
@@ -297,8 +252,152 @@ function Signup() {
     e.preventDefault();
     handleSignUp();
   };
+  const handleSubmitGoogle = (e) => {
+    e.preventDefault();
+    handleGoogleSignUp();
+  };
+  const [formDataa, setFormDataa] = useState({
+    role: '',
+    password: '',
+    confirmPassword: '',
+  });
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => { setUser(codeResponse), console.log(codeResponse) },
+    onError: (error) => console.log('Login Failed:', error)
+  });
+
+ //loginwith google 
+ useEffect(() => {
+    if (user) {
+      axios
+        .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            Accept: 'application/json'
+          }
+        })
+        .then((res) => {
+          const { name, email } = res.data; 
+          console.log('User name:', name);
+          console.log('User email:', email);
+          setProfile({ name, email }); 
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [user]);
+  
+  
+
+
+  const handleGoogleSignUp = async () => {
+    validatePassword();
+   
+    validateConfirmPassword();
+  
+    if (passwordError || formData.password !== formData.confirmPassword) {
+      return;
+    }
+    const dataToSend = {
+        ...formDataa,
+        nom: profile.name, // Récupérez le nom du compte Google
+        mail: profile.email, // Récupérez l'e-mail du compte Google
+      };
+    
+      console.log('Data to be sent to the backend:', dataToSend);
+    
+    console.log('Data to be sent to the backend:', formDataa);
+    try {
+      const response = await fetch('http://localhost:3700/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        
+        body: JSON.stringify(dataToSend),
+      });
+     
+      console.log('Response:', response);
+  
+      if (response.ok) {
+        Swal.fire("An email sent to your Account please verify");
+
+        navigate("/signin");
+        const data = await response.json();
+        console.log('Data:', data);
+      } else {
+        const errorData = await response.json();
+        console.error('Error:', errorData);
+        if (errorData.error === 'User already registered!') {
+          setEmailExistsError('Email already exists');
+        }
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error);
+    }
+  };
+
+
+  if (user) {
+    return (
+      <section id="hero">
+      <div className="hero-container">
+     
+        <MainContainer>
+          <WelcomeText>Welcome</WelcomeText>
+          <form onSubmit={handleSubmitGoogle}>
+            {/* Additional form fields for role and password */}
+            <div className="form-group">
+              
+              <select
+                id="role"
+                value={formDataa.role}
+                onChange={(e) => setFormDataa({ ...formDataa, role: e.target.value })}
+                required
+                className="form-control transparent-list" // Ajout de la classe transparent-list
+              >
+                <option value="" disabled>Select Role</option>
+                <option value="Student">Student</option>
+                <option value="Company">Company</option>
+                <option value="Staff">Staff</option>
+              </select>
+            </div>
+            <div className="text-center mt-6 mb-3">
+              <TextField
+                type="password"
+                placeholder="Password"
+                value={formDataa.password}
+                onChange={(e) => setFormDataa({ ...formDataa, password: e.target.value })}
+                required
+              />
+            </div>
+            <div className="text-center mt-6 mb-3">
+              <TextField
+                type="password"
+                placeholder="Confirm Password"
+                value={formDataa.confirmPassword}
+                onChange={(e) => setFormDataa({ ...formDataa, confirmPassword: e.target.value })}
+                required
+              />
+            </div>
+            <div className="text-center pt-1 mb-5 pb-1">
+              <div className="button-wrapper">
+              <div className="text-center pt-1 pb-1">
+            <button type="submit"   className="custom-button">Sign Up</button>
+            </div>
+            </div>
+            </div>
+          </form>
+        </MainContainer>
+     
+      </div>
+      </section>
+    );
+  }
+  
   return (
+    
+   
     <div className="signin-background">
      <TopRightCorner>
         <CVUpload /> 
@@ -546,6 +645,8 @@ function Signup() {
       </MainContainer>
       
     </div>
+  
+  
   );
 }
 const TopRightCorner = styled.div`
