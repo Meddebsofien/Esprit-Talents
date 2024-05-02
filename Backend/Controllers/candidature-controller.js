@@ -200,10 +200,9 @@ const acceptCandidatureById = async (req, res) => {
 };
 const getCandidatureByStudentId = async (req, res) => {
   try {
-    console.log("55555");
-
-    console.log(req.userId);
-    const data = await Candidacy.find({ idUser:req.userID})
+  
+    console.log(req.params.userid);
+    const data = await Candidacy.find({ userID: req.params.userid })
       .populate("userID")
       .populate("offerID");
     res.status(200).json(data);

@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import { Button, Chip } from "@mui/material";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
+import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 function ListeCandidatureStudent() {
   const getColorVariant = (status) => {
     switch (status.toLowerCase()) {
@@ -92,20 +93,45 @@ useEffect(() => {
 }, []);
 
 
+  const onDelete = async (id) => {
+    const token = localStorage.getItem("token");
 
+    const response = await axios.delete(
+      `http://localhost:3700/candidatures/delete/${id}`,
+      {
+        headers: {
+          "x-access-token": token,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      const newOffer = data.filter((item) => item._id !== id);
+      setData(newOffer);
+    }else{
+      console.log("error")
+    }
+    window.location.reload();
+  };
   return (
-    <div className="m-5">
+    <>
+    <NavbarEntreprise/>
+    <div style={{marginTop : 150,  border: "1px solid black"  }}>
+    <div className="m-5" >
+    
       {" "}
       <TableContainer component={Paper} className="table mt-5 ">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell className="tableCell"> Offre</TableCell>
-              <TableCell className="tableCell">company</TableCell>
-              <TableCell className="tableCell">Date d'application</TableCell>
-
+              <TableCell className="tableCell"> Offer</TableCell>
+              <TableCell className="tableCell">Company</TableCell>
               <TableCell className="tableCell">type</TableCell>
-              <TableCell className="tableCell">Status Candidature</TableCell>
+              <TableCell className="tableCell">Application Date</TableCell>
+
+              
+              <TableCell className="tableCell">Status </TableCell>
+              <TableCell className="tableCell">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -117,9 +143,9 @@ useEffect(() => {
                 <TableCell className="tableCell">
                   {item?.company}{" "}
                 </TableCell>{" "}
-                <TableCell className="tableCell">{item?.dateOffer}</TableCell>
+                <TableCell className="tableCell">{item?.type}</TableCell>
                 <TableCell className="tableCell">
-                  {item?.type}
+                  {item?.dateOffer}
                 </TableCell>
                 <TableCell className="tableCell">
                   {" "}
@@ -130,13 +156,26 @@ useEffect(() => {
                     color={getColorVariant(item?.status)}
                   />{" "}
                 </TableCell>
-                             </TableRow>
+                <TableCell className="tableCell">
+                  <Button
+                    variant="outlined"
+                    startIcon={<DeleteIcon />}
+                    onClick={() => {onDelete(item?.candidacyId) 
+                        console.log(item?.candidacyId)}}
+                  >
+                    Delete
+                  </Button>{" "}
+                </TableCell>
+              </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     </div>
+    </>
   );
+
 }
 
 export default ListeCandidatureStudent;

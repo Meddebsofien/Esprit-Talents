@@ -49,7 +49,7 @@ router.put("/rejectCandidatureById/:id", rejectCandidatureById);
 // Accept Candidature par id
 //router.put("/acceptCandidatureById/:id", acceptCandidatureById);
 
-router.get("/getAllCandidatureStudent", verifyToken, getCandidatureByStudentId)
+router.get("/getAllCandidatureStudent/:userid", getCandidatureByStudentId);
 router.post("/addCandidacy", extractTextAndContactInfoFromPDF);
 router.post("/upload",upload.single('pdf'), uplodCv);
 router.get("/top-candidacies/:limit",topCvAverage)
@@ -58,7 +58,7 @@ router.put("/candidacy/:candidacyid",updateCandidacyByID)
 router.put("/aceept-top-candidacies/:limit/:offerid",acceptTopCvAverage)
 router.get("/one/:offerid",getOneCandidacy)
 router.get("/getCandidatureById/:id", getCandidatureByIdOffer)
-router.delete("/delete",deleteCandidacyById)
+router.delete("/delete/:id",deleteCandidacyById)
 
 
 
