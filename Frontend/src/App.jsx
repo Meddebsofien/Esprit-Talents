@@ -26,7 +26,6 @@ import ListeCandidatureStudent from "./frontoffice/layout/candidature/listeCandi
 
 
 
-import CvUpload from "./components/signup/signupcv";
 
 
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
