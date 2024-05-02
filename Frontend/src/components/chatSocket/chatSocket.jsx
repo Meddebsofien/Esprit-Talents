@@ -11,6 +11,7 @@ import {
   MDBIcon,
   MDBTextArea,
 } from "mdb-react-ui-kit";
+import Navbar from "../../frontoffice/pages/Navbar";
 import io from "socket.io-client";
 
 export default function App() {
@@ -146,7 +147,9 @@ const handleSendMessage = async () => {
 
 
   return (
-    <MDBContainer fluid className="py-5" style={{ backgroundColor: "#eee" }}>
+    <><Navbar />
+    
+    <MDBContainer fluid className="py-5" style={{ backgroundColor: "#eee" ,marginTop:"5%" }}>
       <MDBRow>
         <MDBCol md="4">
           <h5 className="font-weight-bold mb-3 text-center text-lg-start">
@@ -164,15 +167,12 @@ const handleSendMessage = async () => {
                     <a href="#!" className="d-flex justify-content-between">
                       <div className="d-flex flex-row">
                         <img
-                          src={
-                            user.photo.startsWith("http")
-                              ? user.photo
-                              : `http://localhost:3700/${user.photo}`
-                          }
+                          src={user.photo.startsWith("http")
+                            ? user.photo
+                            : `http://localhost:3700/${user.photo}`}
                           alt="avatar"
                           className="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
-                          width="60"
-                        />
+                          width="60" />
                         <div className="pt-1">
                           <p className="fw-bold mb-0">{user.nom}</p>
                           <p className="small text-muted">{user.specialite}</p>
@@ -196,9 +196,7 @@ const handleSendMessage = async () => {
               {messages.map((message, index) => (
                 <li key={index}>
                   <MDBCard
-                    className={`mb-2 ${
-                      message.senderInfo ? "bg-info" : "bg-light"
-                    }`}
+                    className={`mb-2 ${message.senderInfo ? "bg-info" : "bg-light"}`}
                   >
                     <MDBCardBody>
                       <p className="fw-bold mb-0">
@@ -217,8 +215,7 @@ const handleSendMessage = async () => {
                 id="textAreaExample"
                 rows={4}
                 value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
-              />
+                onChange={(e) => setMessageInput(e.target.value)} />
             </li>
             <MDBBtn color="info" rounded className="float-end" onClick={handleSendMessage}>
               Send
@@ -226,6 +223,6 @@ const handleSendMessage = async () => {
           </MDBTypography>
         </MDBCol>
       </MDBRow>
-    </MDBContainer>
+    </MDBContainer></>
   );
 }

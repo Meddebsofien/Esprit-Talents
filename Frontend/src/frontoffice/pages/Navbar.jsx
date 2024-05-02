@@ -6,6 +6,8 @@ import EditIcon from "@mui/icons-material/Edit";
 function Navbar() {
   const [idc, setIdc] = useState("");
   const [twofa, settwofa] = useState("");
+  const [userId, setUserId] = useState(""); // Added userId state
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -14,6 +16,7 @@ function Navbar() {
       const decodedPayload = JSON.parse(atob(payload));
       setIdc(decodedPayload.id);
       settwofa(decodedPayload.twofaEnabled);
+      setUserId(decodedPayload.id); // Set userId from token payload
       console.log("idc", decodedPayload.id);
       console.log("twofa", decodedPayload.twofaEnabled);
     } else {
@@ -225,7 +228,15 @@ function Navbar() {
 
             <li>
               <Link className="nav-link scrollto text-black" to={``}>
-                My Applications
+                Mes Application
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="nav-link scrollto active text-black"
+                to={`chaat/${userId}`} // Updated link to use userId
+              >
+                Group Chat
               </Link>
             </li>
 
@@ -237,7 +248,6 @@ function Navbar() {
               <ul>
                 <li>
                   <button
-                    //onClick={handleEditProfile}
                     style={{ display: "flex", alignItems: "center" }}
                     onClick={handleProfileClick}
                   >
@@ -253,7 +263,7 @@ function Navbar() {
                     <EditIcon style={{ marginRight: "5px" }} /> Enable 2FA
                   </button>
                 </li>
-
+                
                 <li>
                   <button
                     onClick={handleLogout}
