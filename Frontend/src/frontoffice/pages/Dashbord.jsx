@@ -1,17 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import Offer from "../layout/offer/Offer";
 import axios from "axios";
 import Search from "../layout/offer/searche";
 import { BiBriefcaseAlt2 } from "react-icons/bi";
 import { BsStars } from "react-icons/bs";
+import ChatBot from 'react-simple-chatbot';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { FaComments } from "react-icons/fa";
+
 function Dashboard() {
+  const [conversationStarted, setConversationStarted] = useState(false);
+
   const [offer, setOffer] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [jobLocation, setJobLocation] = useState("");
   const [filterExp, setFilterExp] = useState([]);
   const [checkedItems, setCheckedItems] = useState({});
   const [checkedItemsexp, setCheckedItemsexp] = useState({});
+  const [showChat, setShowChat] = useState(true); // State to manage chat visibility
+  const chatRef = useRef(null); // Référence pour le composant ChatBot
+
+
   const handleCheckboxChange = (e) => {
     const value = e.target.value;
     const isChecked = e.target.checked;
@@ -26,7 +35,9 @@ function Dashboard() {
     }
     setCheckedItems({ ...checkedItems, [value]: isChecked });
   };
-
+  const handleInputClick = (e) => {
+    e.stopPropagation(); // Empêche la propagation de l'événement de clic
+  };
   const handelexp = (e) => {
     const value2 = e.target.value;
     const ischeck = e.target.checked;
@@ -53,6 +64,18 @@ function Dashboard() {
 
     filter();
   }, [checkedItems, checkedItemsexp]);
+  useEffect(() => {
+    // Si le chat est visible, ajustez sa position en fonction de l'icône de discussion
+    if (showChat && chatRef.current) {
+      const chatIcon = document.querySelector(".chat-icon");
+      const chatIconRect = chatIcon.getBoundingClientRect();
+      const chatHeight = chatRef.current.offsetHeight;
+      const chatWidth = chatRef.current.offsetWidth;
+
+      chatRef.current.style.top = `${chatIconRect.top - chatHeight}px`;
+      chatRef.current.style.left = `${chatIconRect.left - chatWidth}px`;
+    }
+  }, [showChat]);
 
   const jobTypes = ["Emploi", "Stage"];
   const experience = [
@@ -88,9 +111,128 @@ function Dashboard() {
 
     fetchData();
   }, []); // Tableau de dépendances vide pour exécuter cet effet une seule fois après le montage initial
+  const steps = [
+    {
+      id: "Greet",
+      message: "Bonjour ! Je suis votre conseiller en ligne. Comment puis-je vous aider aujourd'hui ?",
+      trigger: "Options",
+    },
+    {
+      id: "Options",
+      options: [
+        { value: "recherche_emploi", label: "Recherche d'emploi", trigger: "RechercheEmploi" },
+        { value: "réseautage", label: "Réseautage", trigger: "Réseautage" },
+        { value: "aide_profil", label: "Aide au profil", trigger: "AideProfil" },
+        { value: "autre", label: "Autre demande", trigger: "AutreDemande" }
+      ]
+    },
+    {
+      id: "RechercheEmploi",
+      message: "Vous cherchez un nouvel emploi ? Super ! Comment puis-je vous aider dans votre recherche d'emploi ?",
+      trigger: "OptionsRechercheEmploi"
+    },
+    {
+      id: "OptionsRechercheEmploi",
+      options: [
+        { value: "recherche_offres", label: "Rechercher des offres d'emploi", trigger: "RechercheOffres" },
+        { value: "alertes_emploi", label: "Configurer des alertes emploi", trigger: "AlertesEmploi" },
+        { value: "conseils_cv", label: "Conseils pour CV", trigger: "ConseilsCV" },
+        { value: "retour", label: "Retour", trigger: "Options" }
+      ]
+    },
+    {
+      id: "RechercheOffres",
+      message: "Recherchons des offres d'emploi ! Quel type d'emploi recherchez-vous ?",
+      trigger: "AttenteSaisieUtilisateur"
+    },
+    // Ajoutez d'autres étapes pour gérer les détails spécifiques de la recherche d'emploi.
+    {
+      id: "AlertesEmploi",
+      message: "Vous avez configuré avec succès des alertes emploi. Vous recevrez des notifications pour les offres d'emploi pertinentes.",
+      trigger: "FinConversation"
+    },
+    {
+      id: "ConseilsCV",
+      message: "Voici quelques conseils pour améliorer votre CV : ...",
+      trigger: "FinConversation"
+    },
+    // Ajoutez d'autres étapes pour gérer le réseautage, l'aide au profil, etc.
+    {
+      id: "Réseautage",
+      message: "Le réseautage est important pour la croissance de carrière. Comment puis-je vous aider dans le réseautage ?",
+      trigger: "AttenteSaisieUtilisateur"
+    },
+    {
+      id: "AideProfil",
+      message: "Votre profil est votre identité professionnelle. De quoi avez-vous besoin d'aide dans votre profil ?",
+      trigger: "AttenteSaisieUtilisateur"
+    },
+    {
+      id: "AutreDemande",
+      message: "Je suis là pour vous aider avec toute autre demande que vous pourriez avoir. S'il vous plaît, dites-moi comment je peux vous aider.",
+      trigger: "AttenteSaisieUtilisateur"
+    },
+    {
+      id: "AttenteSaisieUtilisateur",
+      user: true,
+      trigger: "ConfirmationSaisieUtilisateur"
+    },
+    {
+      id: "ConfirmationSaisieUtilisateur",
+      message: "Merci pour votre demande. Je vais vous aider avec ça.",
+      trigger: "FinConversation"
+    },
+    {
+      id: "FinConversation",
+      message: "Si vous avez besoin d'une assistance supplémentaire, n'hésitez pas à demander. Bonne journée !",
+      end: true
+    }
+  ];
+  
+  
+  
+  
+  const toggleChat = () => {
+    setShowChat(!showChat);
+  };
+  const toggleConversation = () => {
+    setConversationStarted(!conversationStarted);
+    setShowChat(!showChat); // Inverse la visibilité du chat
+  };
+  
 
   return (
+
     <main id="main">
+
+<div className="chat-icon" onClick={toggleConversation}>
+        <FaComments size={24} />
+      </div>
+      
+      {/* ChatBot component */}
+      {showChat && (
+        <div
+          ref={chatRef}
+          className="custom-chatbot"
+          style={{
+            position: "fixed",
+            zIndex: 9999,
+            marginTop:'1%',
+            backgroundColor: "white",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+            padding: "10px",
+            borderRadius: "5px",
+          }}
+        >
+          <ChatBot
+            steps={steps}
+            handleInputClick={handleInputClick}
+            toggleChat={toggleConversation} // Fonction pour masquer le chat
+          />
+        </div>
+      )}
+
+
       {/* ======= Services Section ======= */}
       <section id="services" className="services">
         <Search
@@ -102,6 +244,7 @@ function Dashboard() {
           location={jobLocation}
           setLocation={setJobLocation}
         />
+        
         <div className="container mx-auto flex gap-6 2xl:gap-10 md:px-5 py-0 md:py-6 bg-[#f7fdfd]">
           <div className="hidden md:flex flex-col w-1/6 h-fit bg-white shadow-sm">
             <p className="text-lg font-semibold text-slate-600">
@@ -113,7 +256,7 @@ function Dashboard() {
                 <p className="flex items-center gap-2 font-semibold">
                   <BiBriefcaseAlt2 />
                   Job Type
-                </p>
+                </p> 
 
                 <button>
                   <MdOutlineKeyboardArrowDown />

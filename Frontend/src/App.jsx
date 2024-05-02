@@ -41,6 +41,9 @@ import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
 import AjouterOfferStaff from "./frontoffice/layout/offer/ajouterOfferStaff";
 import DetailsofferStaff from "./frontoffice/layout/offer/detailOffer/detailsstaff";
+import ChatComponent from "./components/chatSocket/chatSocket";
+import StatisticsPage from "./backoffice/components/stats/statistiqueUser";
+import Stat from "./backoffice/pages/list/stats";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -63,6 +66,8 @@ function App() {
                 path="NewCompany"
                 element={<Company title="Add New Company" />}
               />
+              <Route path="stats" element = {<Stat/>}></Route>
+
               <Route
                 path="newStaff"
                 element={<Staff title="Add New Staff" />}
@@ -106,6 +111,7 @@ function App() {
             <Route index element={<Signin />} />
             <Route path="Signup" element={<Signup />} />
 
+
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
@@ -123,6 +129,8 @@ function App() {
             <Route path="twoFA/:id" element={<Twofa />} />
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
             <Route path="updateprofile/:userId" element={<UpdateUser />} />
+            <Route path="chaat/:userId" element = {<ChatComponent/>}></Route>
+
           </Route>
 
           <Route path="/Staff">

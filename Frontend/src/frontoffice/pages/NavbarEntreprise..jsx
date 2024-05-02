@@ -237,7 +237,14 @@ const NavbarEntreprise = () => {
                 Mes Offer
               </Link>
             </li>
-
+            <li>
+              <Link
+                className="nav-link scrollto active text-black"
+                to={`/chaat`}
+              >
+                Group Chat
+              </Link>
+              </li>
             <li className="dropdown">
               <Link href="#">
                 <span className="text-black">Profil</span>{" "}
@@ -262,7 +269,7 @@ const NavbarEntreprise = () => {
                     <EditIcon style={{ marginRight: "5px" }} /> Enable 2FA
                   </button>
                 </li>
-
+                
                 <li>
                   <button
                     onClick={handleLogout}

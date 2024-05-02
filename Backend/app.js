@@ -4,6 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var createError = require("http-errors");
 const bodyParser = require("body-parser");
+const http = require('http');
+const { Server } = require("socket.io");
+const multer = require('multer');
+const messageRoute = require('./routes/message-route');
+
+
+
+
+
+
 
 
 var logger = require('morgan');
@@ -31,20 +41,12 @@ var mongoose = require('mongoose');
 require('dotenv').config();
 var  offerRouter = require('./routes/offer-route');
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI )
 .then(()=>console.log("Connected to MongoDB..."))
 .catch(err=>console.error("Could not connect to MongoDB..."));
 
 var app = express();
-// Configure multer
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//       cb(null, './uploads'); // Destination folder
-//     },
-//     filename: function (req, file, cb) {
-//       cb(null, file.fieldname + '-' + Date.now()); // Filename
-//     }
-//   });
+
 app.use('/uploads', express.static('uploads'));
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -86,6 +88,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
+// WebSocket handler
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('message', (data) => {
+    console.log('Message:', data);
+    io.emit('message', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
 
 
 
@@ -200,10 +223,6 @@ app.post('/reset-password/:id/:token', (req, res) => {
 })
 
 
-  
- 
-
-
 // 2Fa
 
 app.get("/users/qrImage/:id", async (req, res) => {
@@ -223,6 +242,50 @@ app.get("/users/qrImage/:id", async (req, res) => {
     return res.status(500).send({
       success: false,
     });
+  }
+});
+const upload = multer();
+
+const transporter = nodemailer.createTransport({
+  // Configuration SMTP (par exemple, SMTP Gmail)
+  service: 'Gmail',
+  auth: {
+    user: 'talentsesprit@gmail.com',
+    pass: 'wldp tydr nckz skjh'
+  }
+});
+
+app.post('/contact/companies', upload.single('image'), async (req, res) => {
+  // Récupérer le message à partir du corps de la requête
+  const message = req.body.message;
+  const subject = req.body.subject; // Ajout de la récupération de l'objet du mail
+
+  
+  // Récupérer l'image si elle a été téléchargée
+  const image = req.file;
+  
+  try {
+    // Récupérer toutes les entreprises de la base de données
+    const companies = await User.find({ role: 'Company' }, 'mail'); // Récupérer uniquement les adresses e-mail des entreprises
+    
+    // Envoyer le message et l'image à chaque entreprise
+    for (const company of companies) {
+      const mailOptions = {
+        from: 'talentsesprit@gmail.com',
+        to: company.mail,
+        subject: subject, // Utilisation de l'objet du mail récupéré depuis le corps de la requête
+        text: message,
+        attachments: image ? [{ filename: image.originalname, content: image.buffer }] : []
+      };
+      
+      await transporter.sendMail(mailOptions);
+      console.log('Message sent to company:', company.mail);
+    }
+    
+    res.status(200).send('Message sent to all companies successfully!');
+  } catch (error) {
+    console.error('Error sending message to companies:', error);
+    res.status(500).send('Failed to send message to companies.');
   }
 });
 
@@ -284,11 +347,19 @@ app.get("/set2FA/:id", async (req, res) => {
 
 // app.use(cros());
 
+const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT || 3001; // Use port 3001 for WebSocket server
 
+const initializeWebSocket = require('./routes/socket-handler');
 
+initializeWebSocket(server);
+io.listen(WEBSOCKET_PORT);
+console.log(`WebSocket server listening on port ${WEBSOCKET_PORT}`);
 //app.use('/users', usersRouter);
+app.use('/messages', messageRoute);
 
 app.use('/offers', offerRouter);
 app.use("/candidatures", candidaturesRouter);
 // app.use('/uploads', express.static('uploads'));
+
+
 module.exports = app;

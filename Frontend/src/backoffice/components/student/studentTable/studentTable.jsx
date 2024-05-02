@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
-
+import * as XLSX from 'xlsx'; // Importez la bibliothèque XLSX pour la génération de fichiers Excel
 
 const StudentTable = () => {
   const navigate = useNavigate();
@@ -39,7 +39,15 @@ const StudentTable = () => {
   };
 
   const handleUpdate = (userId) => {
-    navigate(`/admin/users/updateStudent/${userId}`); // Navigation vers la page de mise à jour avec l'ID de l'utilisateur
+    navigate(`/admin/users/updateStudent/${userId}`);
+  };
+
+  // Fonction pour gérer le téléchargement des données au format Excel
+  const handleDownload = () => {
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(studentUsers);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Student Users');
+    XLSX.writeFile(workbook, 'student_users.xlsx');
   };
 
   const columns = [
@@ -56,7 +64,7 @@ const StudentTable = () => {
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
-            onClick={() => handleUpdate(params.row._id)} // Appel de la fonction handleUpdate avec l'ID de l'utilisateur
+            onClick={() => handleUpdate(params.row._id)}
           >
             Update
           </Button>
@@ -66,6 +74,12 @@ const StudentTable = () => {
             onClick={() => handleDelete(params.row._id)}
           >
             Delete
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleDownload} // Appel de la fonction handleDownload lors du clic sur le bouton "Download"
+          >
+            Excel
           </Button>
         </Stack>
       ),
@@ -90,7 +104,7 @@ const StudentTable = () => {
           rows={studentUsers}
           columns={columns}
           pageSize={5}
-          getRowId={(row) => row._id} // Specify the ID field
+          getRowId={(row) => row._id}
         />
       </div>
     </div>

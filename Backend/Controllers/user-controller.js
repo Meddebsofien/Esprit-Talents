@@ -358,6 +358,23 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+exports. getUserStatisticsByRole = async (req, res) => {
+  try {
+    // Effectuer une requête pour obtenir les statistiques par rôle
+    const userStatistics = await User.aggregate([
+      {
+        $group: {
+          _id: "$role", // Grouper par le rôle de l'utilisateur
+          count: { $sum: 1 } // Compter le nombre d'utilisateurs pour chaque rôle
+        }
+      }
+    ]);
+
+    res.json(userStatistics); // Retourner les statistiques sous forme de JSON
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Gérer les erreurs
+  }
+};
 
 
 
@@ -388,6 +405,48 @@ exports.getUsersByRole = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+exports.getUserRegistrationsByDay = async (req, res) => {
+  try {
+    // Agréger les utilisateurs par jour d'inscription
+    const userRegistrations = await User.aggregate([
+      {
+        $group: {
+          _id: { $dayOfMonth: "$createdAt" }, // Grouper par jour d'inscription
+          count: { $sum: 1 }, // Compter le nombre d'utilisateurs dans chaque groupe
+        },
+      },
+      {
+        $sort: { "_id": 1 } // Trier les résultats par jour
+      }
+    ]);
+    
+    res.json(userRegistrations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+    
+exports.getUsersBySpecialty = async (req, res) => {
+  try {
+    // Agréger les utilisateurs par spécialité
+    const usersBySpecialty = await User.aggregate([
+      {
+        $group: {
+          _id: "$specialite", // Grouper par spécialité
+          count: { $sum: 1 }, // Compter le nombre d'utilisateurs dans chaque groupe
+        },
+      },
+    ]);
+
+    res.json(usersBySpecialty);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 
 //sofien

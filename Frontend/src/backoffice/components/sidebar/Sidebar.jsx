@@ -59,6 +59,12 @@ const Sidebar = () => {
               <span>Staff</span>
             </li>
           </Link>
+          <Link to="/admin/users/stats" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Statistique</span>
+            </li>
+          </Link>
 
           <Link to={"/admin/offers"}>
             <li>

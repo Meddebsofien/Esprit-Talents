@@ -14,6 +14,12 @@ router.get('/api', (req, res)=> {
 const userController = require('../Controllers/user-controller');
 
 router.post("/register", registerUser);
+router.get('/signup-statistics', userController.getUserRegistrationsByDay);
+router.get('/speciality-statistics', userController.getUsersBySpecialty);
+router.get('/role-statistics', userController.getUserStatisticsByRole);
+
+
+
 
 router.get("/current", validateToken, currentUser);
 

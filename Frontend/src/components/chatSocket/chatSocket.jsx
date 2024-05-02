@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import "./chatSocket.css";
 import {
   MDBContainer,
   MDBRow,
@@ -13,7 +13,7 @@ import {
 } from "mdb-react-ui-kit";
 import io from "socket.io-client";
 
-export default function ChatRoom() {
+export default function App() {
   const [studentUsers, setStudentUsers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
@@ -61,8 +61,12 @@ export default function ChatRoom() {
       if (response.ok) {
         const messages = await response.json();
         const messagesWithSenderInfo = await Promise.all(messages.map(async (message) => {
-          const senderInfo = await fetchSenderInfo(message.senderId._id);
-          return { ...message, senderInfo };
+          if (message.senderId) {
+            const senderInfo = await fetchSenderInfo(message.senderId._id);
+            return { ...message, senderInfo };
+          } else {
+            return message;
+          }
         }));
         setMessages(messagesWithSenderInfo);
       } else {
@@ -72,50 +76,73 @@ export default function ChatRoom() {
       console.error("Error fetching messages:", error);
     }
   };
+  
 
-  const initializeSocket = () => {
-    const newSocket = io("http://localhost:3001");
-    newSocket.on("connect", () => {
-      console.log("Connected to server");
-    });
-    newSocket.on("message", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
-    setSocket(newSocket);
-  };
-  const { userId } = useParams();
-
-  const handleSendMessage = async () => {
-    if (!socket || !messageInput.trim()) return;
-
-    const message = {
-      senderId: userId, // Use the userId obtained from the URL params
-      content: messageInput.trim(),
-      time: new Date().toLocaleTimeString(),
-    };
-
-    try {
-      const response = await fetch("http://localhost:3700/messages/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(message),
+ // Inside initializeSocket function
+const initializeSocket = () => {
+  const newSocket = io("http://localhost:3001");
+  newSocket.on("connect", () => {
+    console.log("Connected to server");
+  });
+  newSocket.on("message", (message) => {
+    console.log("Received message:", message); // Add this log
+    // Check if the sender info is available
+    if (message.senderId) {
+      // Fetch sender info and update messages state
+      fetchSenderInfo(message.senderId._id).then(senderInfo => {
+        if (senderInfo) {
+          setMessages(prevMessages => [...prevMessages, { ...message, senderInfo }]);
+        } else {
+          setMessages(prevMessages => [...prevMessages, message]);
+        }
       });
-
-      if (response.ok) {
-        console.log("Message sent successfully");
-        socket.emit("message", message);
-        setMessages((prevMessages) => [...prevMessages, message]);
-        setMessageInput("");
-      } else {
-        console.error("Failed to send message");
-      }
-    } catch (error) {
-      console.error("Error sending message:", error);
+    } else {
+      // If sender info is not available, simply update messages state
+      setMessages(prevMessages => [...prevMessages, message]);
     }
+  });
+  setSocket(newSocket);
+};
+
+const handleSendMessage = async () => {
+  if (!socket || !messageInput.trim()) return;
+
+  // Extract user ID from the URL path
+  const url = window.location.pathname;
+  const parts = url.split("/");
+  const userId = parts[parts.length - 1]; // Assuming user ID is the last part of the path
+
+  if (!userId) {
+    console.error("User ID not available");
+    return;
+  }
+
+  const message = {
+    senderId: userId,
+    content: messageInput.trim(),
+    time: new Date().toLocaleTimeString(),
   };
 
+  try {
+    const response = await fetch("http://localhost:3700/messages/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (response.ok) {
+      console.log("Message sent successfully");
+      socket.emit("message", message);
+      setMessageInput("");
+    } else {
+      console.error("Failed to send message");
+    }
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
+};
 
 
   return (

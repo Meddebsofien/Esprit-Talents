@@ -366,6 +366,14 @@ h6 {
   background-size: cover;
   position: relative;
 }
+.chat-icon {
+  position: absolute;
+  bottom: 20px; /* Ajustez cette valeur selon vos besoins */
+  right: 20px; /* Ajustez cette valeur selon vos besoins */
+  z-index: 1000; /* Assurez-vous que l'icône est au-dessus de l'image */
+  cursor: pointer;
+  color:white;
+}
 
 #hero:before {
   content: "";

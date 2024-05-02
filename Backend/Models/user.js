@@ -31,6 +31,21 @@ const userSchema = new mongoose.Schema({
 timestamps: true,
 }
 )
+userSchema.statics.getUserStatisticsByRole = async function () {
+  try {
+    const userStatistics = await this.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          totalUsers: { $sum: 1 }
+        }
+      }
+    ]);
+    return userStatistics;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
  
 
 const UserModel = mongoose.model('User', userSchema);
