@@ -225,7 +225,7 @@ const NavbarEntreprise = () => {
                 href="#services"
                 to={`/Entreprise/addOffer`}
               >
-                Ajouter Offer
+                Add Offer
               </Link>
             </li>
 
@@ -234,7 +234,7 @@ const NavbarEntreprise = () => {
                 className="nav-link scrollto text-black"
                 to={`/Entreprise/offers`}
               >
-                Mes Offer
+                My Offers
               </Link>
             </li>
             <li>

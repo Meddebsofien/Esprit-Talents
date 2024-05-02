@@ -11,6 +11,66 @@ const VerifTokeen=require('../Models/verif');
 //const allowedRoles = ['Company', 'Student'];
 
 const allowedRoles = ['Company', 'Student','Staff'];
+// Fonction pour enregistrer un nouvel utilisateur avec cv 
+const registerUserpswd = async (req, res) => {
+  try {
+    const { prenom, nom, mail, role, password } = req.body;
+
+    if (!prenom || !nom || !mail || !role || !password) {
+      return res.status(400).json({ message: "Please provide all necessary information." });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      prenom,
+      nom,
+      mail,
+      role,
+      password: hashedPassword
+    });
+
+    await newUser.save();
+
+    // Create token for email verification
+    const token = await VerifTokeen.create({
+      userId: newUser.id,
+      tokenverif: crypto.randomBytes(32).toString("hex"),
+    });
+
+    // Construct verification URL
+    const url = `${process.env.CLIENT_URL}users/${newUser.id}/verify/${token.tokenverif}`;
+
+    // Send verification email
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'talentsesprit@gmail.com',
+        pass: 'wldp tydr nckz skjh'
+      }
+    });
+
+    var mailOptions = {
+      from: 'talentsesprit@gmail.com',
+      to: newUser.mail,
+      subject: 'Confirm Account',
+      text: `Please Confirm your authentication: ${url}`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ Status: "Error sending email" });
+      } else {
+        return res.status(201).json({ message: "User registered successfully. Email verification sent." });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while registering the user." });
+  }
+};
+
 //signup user
 const registerUser = async (req, res) => {
   try {
@@ -145,62 +205,7 @@ exports.signin = (req, res) => {
       res.status(500).send({ message: err.message });
     });
 };
-function generateRandomPassword(length) {
-  // Définir les caractères autorisés pour le mot de passe
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
 
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    // Sélectionner un caractère aléatoire dans la chaîne de caractères autorisés
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    password += chars[randomIndex];
-  }
-
-  return password;
-}
-//google-register
-exports.registerWithGoogle = async (req, res) => {
-  try {
-    const { nom, prenom, mail, role } = req.body;
-
-    // Vérifiez si l'utilisateur existe déjà dans la base de données
-    let user = await User.findOne({ mail });
-
-    if (user) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    // Générez un mot de passe aléatoire pour l'utilisateur
-    const password = generateRandomPassword();
-
-    // Créez un nouvel utilisateur avec les données fournies et le mot de passe généré
-    user = new User({
-      nom,
-      prenom,
-      mail,
-      role,
-      password,
-    });
-
-    // Enregistrez le nouvel utilisateur dans la base de données
-    await user.save();
-
-    // Générez un token JWT pour l'utilisateur
-    const token = jwt.sign({ id: user._id ,role: user.role, verified:user.verified},
-      config.secret,
-      {
-        algorithm: 'HS256',
-        allowInsecureKeySizes: true,
-        expiresIn: 86400, // 24 hours
-      });
-
-    // Répondez avec le token JWT généré
-    res.json({ token });
-  } catch (error) {
-    console.error('Error during Google registration:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 //login with google api 
 exports.checkEmail = async (req, res) => {
  
@@ -229,8 +234,10 @@ exports.apigoogle = async (req, res) => {
     // Récupérer le token d'accès envoyé depuis le frontend
     const { accessToken } = req.body;
 
+    // Valider le token d'accès (à implémenter)
+
     // Appeler l'API Google avec le token d'accès
-    const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo', {
+    const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -238,8 +245,6 @@ exports.apigoogle = async (req, res) => {
 
     // Extraire les données pertinentes de la réponse de l'API Google
     const { name, email } = response.data;
-
-    // Vous pouvez effectuer d'autres traitements avec les données si nécessaire
 
     // Créer un token JWT pour l'utilisateur
     const token = jwt.sign(
@@ -258,6 +263,7 @@ exports.apigoogle = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
 });
@@ -473,4 +479,5 @@ res.status(200).json({message:"User verified successfully"});
 
 
 module.exports.registerUser = registerUser;
+module.exports.registerUserpswd=registerUserpswd
 module.exports.currentUser = currentUser;

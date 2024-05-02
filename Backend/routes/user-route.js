@@ -1,4 +1,4 @@
-const { registerUser, currentUser } = require("../Controllers/user-controller");
+const { registerUser, currentUser ,registerUserpswd} = require("../Controllers/user-controller");
 const multer = require('multer');
 const validateToken = require("../middleware/validateTokenHandler");
 const path = require('path');
@@ -14,11 +14,15 @@ router.get('/api', (req, res)=> {
 const userController = require('../Controllers/user-controller');
 
 router.post("/register", registerUser);
+
 router.get('/signup-statistics', userController.getUserRegistrationsByDay);
 router.get('/speciality-statistics', userController.getUsersBySpecialty);
 router.get('/role-statistics', userController.getUserStatisticsByRole);
 
 
+
+
+router.post('/registercv',registerUserpswd);
 
 
 router.get("/current", validateToken, currentUser);
@@ -46,14 +50,11 @@ router.post('/AddUser',userController.createUser)
 ///sofien verification
 router.get('/:id/verify/:token', userController.verifyUser);
 //route signup with google
-router.post('/googleregister',userController.registerWithGoogle)
+
 //route login with email google 
 router.post('/checkEmail',userController.checkEmail)
 //route apigoogle login 
 router.post('/api',userController.apigoogle)
-
-
-
 
 
 const storage = multer.diskStorage({
@@ -90,6 +91,10 @@ router.post('/upload-photo', upload.single('photo'), (req, res) => {
     res.status(500).json({ error: "Error uploading photo" });
   }
 });
+
+
+
+
 
 
 

@@ -154,7 +154,7 @@ const UpdateProfile = () => {
           encType="multipart/form-data"
         >
           <Typography variant="h5" align="center" gutterBottom>
-            Update Profile for {profileData.nom}
+            Update Profil for {profileData.nom}
           </Typography>
           {profileData.photo && (
             <img
@@ -171,7 +171,7 @@ const UpdateProfile = () => {
 
           <TextField
             fullWidth
-            label="Nom"
+            label="Name"
             name="nom"
             value={profileData.nom}
             onChange={handleChange}
@@ -181,7 +181,7 @@ const UpdateProfile = () => {
           {profileData.role === "Student" && (
             <TextField
               fullWidth
-              label="Prénom"
+              label="LastName"
               name="prenom"
               value={profileData.prenom}
               onChange={handleChange}
@@ -200,7 +200,7 @@ const UpdateProfile = () => {
           />
           <TextField
             fullWidth
-            label="Spécialité"
+            label="Specialite"
             name="specialite"
             value={profileData.specialite}
             onChange={handleChange}
@@ -211,7 +211,7 @@ const UpdateProfile = () => {
             <>
               <TextField
                 fullWidth
-                label="Nom de l'entreprise"
+                label="CompanyName"
                 name="companyName"
                 value={profileData.companyName}
                 onChange={handleChange}
@@ -220,7 +220,7 @@ const UpdateProfile = () => {
               />
               <TextField
                 fullWidth
-                label="Domaine"
+                label="Domain"
                 name="domaine"
                 value={profileData.domaine}
                 onChange={handleChange}
@@ -241,7 +241,7 @@ const UpdateProfile = () => {
             className="custom-button"
             fullWidth
           >
-            Mettre à jour
+            Update Profil
           </Button>
         </form>
       </div>
@@ -249,7 +249,7 @@ const UpdateProfile = () => {
         open={successOpen}
         autoHideDuration={6000}
         onClose={() => setSuccessOpen(false)}
-        message="Profil mis à jour avec succès!"
+        message="Profil Updated!"
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       />
       <Footer />

@@ -18,6 +18,7 @@ const messageRoute = require('./routes/message-route');
 
 var logger = require('morgan');
 // var multer = require("multer");
+var entretienRouter = require('./routes/entretien-route');
 var candidaturesRouter = require("./routes/candidature-route");
 // var uploads = multer({ dest: 'uploads/' });
 const User = require('./Models/user');
@@ -66,7 +67,7 @@ const corsOptions = {
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  allowedHeaders: 'Authorization,Content-Type',
+  allowedHeaders: "Authorization,Content-Type, X-Access-Token",
 
 };
 
@@ -359,6 +360,7 @@ app.use('/messages', messageRoute);
 
 app.use('/offers', offerRouter);
 app.use("/candidatures", candidaturesRouter);
+app.use('/entretiens', entretienRouter);
 // app.use('/uploads', express.static('uploads'));
 
 

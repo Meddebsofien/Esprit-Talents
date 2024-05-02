@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+const multer = require('multer');
+
 var {
   AjouterCandidature,
   ModifierCandidature,
@@ -8,8 +10,17 @@ var {
   getCandidatureById,
   rejectCandidatureById,
   acceptCandidatureById,
+  getCandidatureByStudentId,
 } = require("../Controllers/candidature-controller");
+var {
+  extractTextAndContactInfoFromPDF,
+  uplodCv,
+  topCvAverage,
+}= require("../Controllers/textExtractor")
+const upload = multer();
+
 const uploadFileToCloudinary = require("../middleware/fileMiddleWare");
+const { verifyToken } = require("../middleware/authJWT");
 
 //Ajouter une candidature
 router.post("/addCandidature", uploadFileToCloudinary, AjouterCandidature);
@@ -31,5 +42,12 @@ router.put("/rejectCandidatureById/:id", rejectCandidatureById);
 
 // Accept Candidature par id
 router.put("/acceptCandidatureById/:id", acceptCandidatureById);
+
+router.get("/getAllCandidatureStudent", verifyToken, getCandidatureByStudentId);
+
+router.post("/addCandidacy", extractTextAndContactInfoFromPDF);
+router.post("/upload",upload.single('pdf'), uplodCv);
+router.get("/top-candidacies/:limit",topCvAverage)
+
 
 module.exports = router;

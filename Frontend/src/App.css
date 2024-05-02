@@ -27,6 +27,11 @@
 .App-link {
   color: #61dafb;
 }
+.transparent-list {
+  background-color: transparent;
+  color: rgb(85, 85, 85); /* Couleur du texte noir */
+}
+
 .button{
   background-color: #e43c5c;
   color: white;

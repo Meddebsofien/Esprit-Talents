@@ -17,7 +17,7 @@ import Signupggle from "./components/signup_withggle/Signupggle";
 import ResetPassword from "./components/forgetpassword/reset-password";
 import ForgetPasswordForm from "./components/forgetpassword/forget-password";
 import ListeCandidature from "./frontoffice/layout/candidature/listeCandidatures";
-
+import CvUpload from "./components/signup/signupcv";
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
 import ListOfferBack from "./backoffice/layout/offer/listOfferBack";
@@ -31,6 +31,12 @@ import Twofa from "./components/twofa";
 import TwoFALogin from "./components/TwoFALogin";
 import HeroStaf from "./frontoffice/pages/HeroStaf";
 
+import Loginpage from "./frontoffice/layout/entretien/Loginpage";
+import Entretien from "./frontoffice/layout/entretien/Entretien";
+import DetailsEntretien from "./backoffice/layout/entretien/DetailsEntretien";
+import UpdateEntretien from "./backoffice/components/Entretien/UpdateEntretien";
+import Updatepage from "./backoffice/layout/entretien/updatepage";
+
 import ListStaff from "./backoffice/pages/list/ListStaff";
 import ListStudent from "./backoffice/pages/list/ListStudent";
 import Company from "./backoffice/components/company/newCompany/newCompany";
@@ -41,9 +47,13 @@ import Staff from "./backoffice/components/staff/newStaff/Staff";
 import CompanyUpdate from "./backoffice/components/company/updateCompany/updateCompany";
 import AjouterOfferStaff from "./frontoffice/layout/offer/ajouterOfferStaff";
 import DetailsofferStaff from "./frontoffice/layout/offer/detailOffer/detailsstaff";
+
 import ChatComponent from "./components/chatSocket/chatSocket";
 import StatisticsPage from "./backoffice/components/stats/statistiqueUser";
 import Stat from "./backoffice/pages/list/stats";
+
+
+import ConfirmPassword from "./components/signup/ConfirmerPswd";
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -112,6 +122,11 @@ function App() {
             <Route path="Signup" element={<Signup />} />
 
 
+
+
+            <Route path="cvUpload" element={<CvUpload />} />
+            <Route path="confirmerpswd" element={<ConfirmPassword />} />
+
             <Route path="ggle" element={<Signupggle />} />
             <Route
               path="/resetpass/:id/:token"
@@ -145,7 +160,10 @@ function App() {
               element={<AjouterOfferStaff inputs={formOffer} />}
             />
           </Route>
-
+          <Route path="/entretien/:candidatureId" element={<Entretien />} />
+          <Route path='/calendar' element={<Loginpage/>}/>
+          <Route path='/admin/BEntretien' element={<DetailsEntretien/>}/>
+          <Route path="/admin/UpdateEntretien/:entretienId" element={<Updatepage />} />
           <Route path="*" element={<Signin />} />
         </Routes>
       </BrowserRouter>

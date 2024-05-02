@@ -184,6 +184,20 @@ const acceptCandidatureById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+const getCandidatureByStudentId = async (req, res) => {
+  try {
+    console.log("55555");
+
+    console.log(req.userId);
+    const data = await Candidature.find({ idUser: req.userId })
+      .populate("idUser")
+      .populate("idOffer");
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 module.exports = {
   AjouterCandidature,
@@ -193,4 +207,6 @@ module.exports = {
   getCandidatureById,
   rejectCandidatureById,
   acceptCandidatureById,
+  getCandidatureByStudentId,
+
 };

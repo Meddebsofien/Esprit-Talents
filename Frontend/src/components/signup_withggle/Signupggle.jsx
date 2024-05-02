@@ -9,6 +9,7 @@ import Input from "../Input";
 import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import Swal from "sweetalert2";
 import {
   
     Container,
@@ -128,6 +129,9 @@ const validateConfirmPassword = (value) => {
       console.log('Response:', response);
   
       if (response.ok) {
+        Swal.fire("An email sent to your Account please verify");
+
+        navigate("/signin");
         const data = await response.json();
         console.log('Data:', data);
       } else {
@@ -149,38 +153,61 @@ const validateConfirmPassword = (value) => {
 
   if (user) {
     return (
-      <div className="signin-background">
+      <section id="hero">
+      <div className="hero-container">
+     
         <MainContainer>
           <WelcomeText>Welcome</WelcomeText>
           <form onSubmit={handleSubmit}>
             {/* Additional form fields for role and password */}
-            <  TextField
-              type="text"
-              placeholder="Role"
-              value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-              required
-            />
-            <  TextField
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
-            <  TextField
-              type="password"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              required
-            />
-            <button type="submit">Sign Up</button>
+            <div className="form-group">
+              
+              <select
+                id="role"
+                value={formData.role}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                required
+                className="form-control transparent-list" // Ajout de la classe transparent-list
+              >
+                <option value="" disabled>Select Role</option>
+                <option value="Student">Student</option>
+                <option value="Company">Company</option>
+                <option value="Staff">Staff</option>
+              </select>
+            </div>
+            <div className="text-center mt-6 mb-3">
+              <TextField
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+              />
+            </div>
+            <div className="text-center mt-6 mb-3">
+              <TextField
+                type="password"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                required
+              />
+            </div>
+            <div className="text-center pt-1 mb-5 pb-1">
+              <div className="button-wrapper">
+              <div className="text-center pt-1 pb-1">
+            <button type="submit"   className="custom-button">Sign Up</button>
+            </div>
+            </div>
+            </div>
           </form>
         </MainContainer>
+     
       </div>
+      </section>
     );
   }
+  
 
   return (
     <div className="signin-background">
