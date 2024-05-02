@@ -40,7 +40,7 @@ function UpdateEntretien() {
       const interval = (new Date(date_fin) - new Date(date_debut)) / (1000 * 60 * 60);
 
       if (interval > 5) {
-        throw new Error("L'intervalle entre la date de début et la date de fin ne peut pas dépasser 5 heures");
+        throw new Error("the interview can't be longer than 5 hours");
       }
 
       await axios.put(
@@ -78,7 +78,7 @@ function UpdateEntretien() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  label="Date début"
+                  label="start date"
                   name="date_debut"
                   type="datetime-local"
                   value={updatedEntretien.date_debut}
@@ -90,7 +90,7 @@ function UpdateEntretien() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="Date fin"
+                  label="End date"
                   name="date_fin"
                   type="datetime-local"
                   value={updatedEntretien.date_fin}
@@ -110,7 +110,7 @@ function UpdateEntretien() {
                     onChange={handleChange}
                   >
                     <MenuItem value="en ligne">En ligne</MenuItem>
-                    <MenuItem value="en présentiel">En présentiel</MenuItem>
+                    <MenuItem value="en présentiel">On Site</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -121,7 +121,7 @@ function UpdateEntretien() {
           </form>
         </Grid>
         <Grid item xs={12}>
-          <Link to="/admin/BEntretien">Back to Entretien List</Link>
+          <Link to="/admin/BEntretien">Back to Interview List</Link>
         </Grid>
       </Grid>
     </div>

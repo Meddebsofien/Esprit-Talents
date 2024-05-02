@@ -18,7 +18,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.4.4",
-    "express": "^4.19.1",
+    "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "google-auth-library": "^9.6.3",
     "googleapi": "^1.0.2",
@@ -38,6 +38,7 @@
     "snappy": "^7.2.2",
     "socket.io": "^4.7.5",
     "speakeasy": "^2.0.0",
+    "twilio": "^5.0.4",
     "validator": "^13.11.0"
   },
   "devDependencies": {

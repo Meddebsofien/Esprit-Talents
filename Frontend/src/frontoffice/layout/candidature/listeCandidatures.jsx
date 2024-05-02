@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import "./listeCandidatures.css";
 
 import {
@@ -148,6 +148,11 @@ const CandidaturesList = () => {
     }
   };
 
+  const handleAction = (id) => {
+    // Implement your action logic here
+    console.log("Action clicked for candidature id:", id);
+  };
+
   const filteredData = candidatures?.filter((item) => {
     if (filterValue === "") {
       return true;
@@ -282,6 +287,9 @@ const CandidaturesList = () => {
                   {" "}
                   <b> Status</b>{" "}
                 </StyledTableCell>
+                <StyledTableCell>
+                  <b> Actions</b>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -295,12 +303,11 @@ const CandidaturesList = () => {
                       {candidature?.idUser?.nom[0].toUpperCase()}
                     </Avatar>
                   </TableCell>
-                  <TableCell> {candidature.name} </TableCell>
-                  <TableCell> {candidature.email} </TableCell>
-                  <TableCell> {candidature.average_candidacy} </TableCell>
-                  <TableCell> {candidature.profile_candidate} </TableCell>
+                  <TableCell>{candidature.name}</TableCell>
+                  <TableCell>{candidature.email}</TableCell>
+                  <TableCell>{candidature.average_candidacy}</TableCell>
+                  <TableCell>{candidature.profile_candidate}</TableCell>
                   <TableCell>
-                    {" "}
                     {candidature.cv_url && (
                       <InsertDriveFileIcon
                         onClick={() => handleFileClick(candidature.cv_url)}
@@ -308,7 +315,6 @@ const CandidaturesList = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    {" "}
                     <Chip
                       label={candidature?.status.toUpperCase()}
                       variant="contained"
@@ -316,11 +322,22 @@ const CandidaturesList = () => {
                       color={getColorVariant(candidature?.status)}
                     />
                   </TableCell>
+                  <TableCell>
+  <Button
+    variant="contained"
+    color="primary"
+    size="small"
+    component={Link}
+    to={`/entretien/${candidature._id}`}
+  >
+    Action
+  </Button>
+                </TableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
           </Table>
-        </TableContainer>{" "}
+        </TableContainer>
       </Container>
     </>
   );
