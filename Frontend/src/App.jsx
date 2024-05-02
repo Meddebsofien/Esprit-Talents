@@ -11,18 +11,30 @@ import { formOffer, userInputs } from "./backoffice/formSource";
 import List from "./backoffice/pages/list/List";
 import Home from "./backoffice/pages/home/Home";
 import Single from "./backoffice/pages/single/Single";
-import New from "./backoffice/pages/new/New";
+//import New from "./backoffice/pages/new/New";
 import AjouterOffer from "./frontoffice/layout/offer/AjouterOffer";
 import Signupggle from "./components/signup_withggle/Signupggle";
 import ResetPassword from "./components/forgetpassword/reset-password";
 import ForgetPasswordForm from "./components/forgetpassword/forget-password";
 import ListeCandidature from "./frontoffice/layout/candidature/listeCandidatures";
+
 import CvUpload from "./components/signup/signupcv";
+
+
+import ListeCandidatureStudent from "./frontoffice/layout/candidature/listeCandidatureStudent";
+
+
+
+
+import CvUpload from "./components/signup/signupcv";
+
+
 import HeroEntreprise from "./frontoffice/pages/heroEntreprise";
 import Listofferscomponent from "./frontoffice/layout/offer/Listofferscomponent";
 import ListOfferBack from "./backoffice/layout/offer/listOfferBack";
 import UpdateOffer from "./frontoffice/layout/offer/updateOffer";
 import DetailsOffer from "./frontoffice/layout/offer/detailOffer/detailsOffer";
+
 import DetailsofferEnt from "./frontoffice/layout/offer/detailOffer/detailsofferEnt";
 import DetailsofferStudent from "./frontoffice/layout/offer/detailOffer/detailsofferStudent";
 import EmailVerify from "./components/signup/VerifyEmail";
@@ -105,12 +117,18 @@ function App() {
           <Route path="/Entreprise">
             <Route index element={<HeroEntreprise />} />
             <Route path="listeCandidature/:id" element={<ListeCandidature />} />
+            <Route path="listeCandidatureStudent" element={<ListeCandidature />} />
+            
+
+
+
 
             <Route
               path="addOffer"
               element={<AjouterOffer inputs={formOffer} />}
             />
             <Route path="updateprofile/:userId" element={<UpdateUser />} />
+
 
             <Route path="offers" element={<Listofferscomponent />} />
             <Route path="update/:id" element={<UpdateOffer />} />
@@ -143,8 +161,18 @@ function App() {
             <Route index element={<Hero />} />
             <Route path="twoFA/:id" element={<Twofa />} />
             <Route path="detailstudent/:id" element={<DetailsofferStudent />} />
+
             <Route path="updateprofile/:userId" element={<UpdateUser />} />
+
             <Route path="chaat/:userId" element = {<ChatComponent/>}></Route>
+
+
+
+            <Route path="application" element={<ListeCandidatureStudent />} />
+
+            <Route path="chaat/:userId" element = {<ChatComponent/>}></Route>
+
+
 
           </Route>
 

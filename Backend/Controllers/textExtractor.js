@@ -1,20 +1,116 @@
 const fs = require('fs');
 const PDFParser = require('pdf-parse');
+const User = require('../Models/user')
 const Candidacy = require('../Models/candidacy');
 const PDFContaint = require('../Models/PDFContaint');
 const Experience = require('../Models/experience');
 const Education = require('../Models/education');
 const {uploadPDF} = require('../middleware/upload_cv');
+const nodemailer = require('nodemailer');
 
 const topCvAverage = async (req, res) => {
   try {
-    const limit = parseInt(req.params.limit); // Parse the limit parameter from the URL
-    // Retrieve the top candidacies with the highest average_candidacy
+    const limit = parseInt(req.params.limit);
     const topCandidacies = await Candidacy.find().sort({ average_candidacy: -1 }).limit(limit);
-    res.json(topCandidacies); // Send the top candidacies as a JSON response
+    res.json(topCandidacies);
   } catch (error) {
     console.error('Error fetching top candidacies:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const getOneCandidacy = async (req, res) => {
+  try {
+    const offerID = req.params.offerid;
+    const oneCandidacy = await Candidacy.findOne({ offerID, status: "Pending"});
+    const exist = !!oneCandidacy; // Convert to boolean
+    res.json({ exist }); // Return boolean as JSON response
+  } catch (error) {
+    console.error('Error fetching candidacy:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const acceptTopCvAverage = async (req, res) => {
+  try {
+    const top = parseInt(req.params.limit);
+    const offerID = req.params.offerid
+    const topCandidacies = await Candidacy.find({ offerID, status: "Pending"}).sort({ average_candidacy: -1 }).limit(top);
+    for (let i = 0; i < topCandidacies.length; i++) {
+      const candidacy = topCandidacies[i];
+      const user = await User.findOne({ _id: candidacy.userID });
+      const updatedCandidacy = await Candidacy.findOneAndUpdate(
+          { _id: candidacy._id },
+          { status: "Accepted" },
+          { new: true }
+      );
+      console.log("Updated candidacy:", updatedCandidacy);
+   }
+
+    const lessCandidacies = await Candidacy.find({ offerID, status: "Pending" });
+    for (let i = 0; i < lessCandidacies.length; i++) {
+      const candidacy = lessCandidacies[i];
+      
+      const updatedCandidacy = await Candidacy.findOneAndUpdate(
+          { _id: candidacy._id },
+          { status: "Refused" },
+          { new: true }
+      );
+      console.log("Updated candidacy:", updatedCandidacy);
+      
+  }
+  res.status(201).json({ message: 'all best Candidacies accepted !!!' });
+  } catch (error) {
+    console.error('Error fetching top candidacies:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const getCandidacyByID = async (req, res) => {
+  try {
+    const candidacyID = req.params.candidacyid;
+    console.log("1 : ",candidacyID)
+    const candidacy = await Candidacy.findById(candidacyID);
+    console.log("2 : ",candidacy)
+    res.status(201).json({ message: 'Candidacy: ', candidacy });
+    return candidacy;
+  
+  } catch (error) {
+    console.error('Error fetching Candidacy candidacies:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const updateCandidacyByID = async (req, res) => {
+  try {
+    const candidacyID = req.params.candidacyid;
+    console.log("1 : ",candidacyID)
+    const statusUpdate = req.body.status;
+    const updatedCondidacy = await Candidacy.findByIdAndUpdate(candidacyID, { status: "Accepted" }, { new: true });
+    if (!updatedCondidacy) {
+      console.log('User not found');
+      return null;
+    }
+    
+    return updatedCondidacy;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
+  }
+}
+
+async function  updateUserProfileById(userID, profileUpdate){
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userID, { doamine: profileUpdate }, { new: true });
+    if (!updatedUser) {
+      console.log('User not found');
+      return null;
+    }
+    console.log('User profile updated successfully:', updatedUser);
+    return updatedUser;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
   }
 }
 
@@ -35,10 +131,7 @@ const uplodCv = async(req,res) =>{
 }
 const extractTextAndContactInfoFromPDF = async (req,res) => {
     try {
-      // const nameFile = req.body
-      // const pdfFilePath = path.join(__dirname, 'uploads', nameFile);
-      // console.log("pdfFilePath", pdfFilePath)
-      const pdfUrl = req.body.pdfUrl;
+      
       let candidacyObject;
       let profile_cadidate = "";
       let language_average = 0;
@@ -46,11 +139,15 @@ const extractTextAndContactInfoFromPDF = async (req,res) => {
       let experience_average = 0;
       let profileAverage = 0;
       let average_candidacy = 0;
-  
-      const pdfData = fs.readFileSync(pdfUrl);
-      const pdf = await PDFParser(pdfData);
-      const pdfText = pdf.text;
-  
+
+      const pdfFilePath = req.body.pdfUrl;
+      const userID = req.body.idAct;
+      const offerID = req.body.actuelOffer;
+
+      const data = await PDFParser(pdfFilePath);
+      console.log("test 1")
+      const pdfText = data.text;
+
       const { name, email, phoneNumber } = extractContactInfoFromText(pdfText);
       const skills_section = extractSkillsFromPDF(pdfText);
       const experience = extractExperienceSubsectionsFromPDF(pdfText);
@@ -93,12 +190,15 @@ const extractTextAndContactInfoFromPDF = async (req,res) => {
       const hasBackEnd = backEndTechnologies.length > 0;
       const hasDevOps = devOpsTechnologies.length > 0;
       const hasBlockchain = blockChainTechnologies.length > 0;
+
+      console.log("++++++++++++++++++++++++++",hasBlockchain)
+      console.log("++++++++++++++++++++++++++",blockChainTechnologies)
   
       if (hasFrontEnd && hasBackEnd && hasDevOps && hasBlockchain) {
         profile_cadidate = 'Full Stack DevOps Blockchain';
         profileAverage = 20;
       }
-      if (hasFrontEnd && hasBackEnd && hasDevOps) {
+     else if (hasFrontEnd && hasBackEnd && hasDevOps) {
         profile_cadidate = 'Full Stack DevOps';
         profileAverage = 18;
       } else if (hasFrontEnd && hasBackEnd) {
@@ -179,7 +279,12 @@ const extractTextAndContactInfoFromPDF = async (req,res) => {
       console.log("average_candidacy : ", average_candidacy);
       console.log("profile_cadidate : ", profile_cadidate);
       console.log("numberOfYears : ", numberOfYears);
-  
+      console.log("userID : ", userID);
+      console.log("offerID: ", offerID);
+      const status = "Pending";
+
+      updateUserProfileById(userID, profile_cadidate);
+
       try {
         const savedCandidacy = await Candidacy.create({
           name: name,
@@ -188,7 +293,11 @@ const extractTextAndContactInfoFromPDF = async (req,res) => {
           pdfContaint: pdfContaint,
           average_candidacy: average_candidacy,
           profile_candidate: profile_cadidate,
-          numberOfYears: numberOfYears
+          numberOfYears: numberOfYears,
+          userID: userID,
+          offerID: offerID,
+          cv_url: pdfFilePath,
+          status: status
         });
         candidacyObject = savedCandidacy;
         if (savedCandidacy){
@@ -373,4 +482,10 @@ function extractLanguagesFromPDF(pdfText) {
   return languagesArray;
 }
   
-module.exports = { extractTextAndContactInfoFromPDF,uplodCv,topCvAverage };
+module.exports = { extractTextAndContactInfoFromPDF,
+                   uplodCv,
+                   topCvAverage,
+                   getCandidacyByID,
+                   updateCandidacyByID,
+                   acceptTopCvAverage,
+                   getOneCandidacy };

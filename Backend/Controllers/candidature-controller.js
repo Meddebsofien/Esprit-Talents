@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const Mail_Sender = require("../middleware/MailSneder");
 const router = require("../routes/candidature-route");
 const Offer = require("../Models/offer");
+const Candidacy = require("../Models/candidacy");
 // var uploads = require('../multerConfig');
 // var multer = require('multer');
 
@@ -46,6 +47,19 @@ const AjouterCandidature = async (req, res) => {
   }
 };
 
+const getCandidatureByIdOffer = async (req, res) => {
+  try {
+ 
+    const data = await Candidacy.find({offerID: req.params.id})
+      .populate("userID")
+      .populate("offerID");
+    res.status(200).json(data);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 const ModifierCandidature = async (req, res) => {
   try {
     const data = await Candidature.findByIdAndUpdate(req.params.id, req.body, {
@@ -59,7 +73,7 @@ const ModifierCandidature = async (req, res) => {
 
 const SupprimerCandidature = async (req, res) => {
   try {
-    await Candidature.deleteOne({ _id: req.params.id });
+    await Candidacy.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: "candidature supprimée avec succée" });
   } catch (error) {
     console.log(error.message);
@@ -74,18 +88,18 @@ const getAllCandidature = async (req, res) => {
     console.log(error.message);
   }
 };
-const getCandidatureById = async (req, res) => {
-  try {
-    console.log(req.params.id);
-    const data = await Candidature.find({ idOffer: req.params.id })
-      .populate("idUser")
-      .populate("idOffer");
-    res.status(200).json(data);
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+// const getCandidatureById = async (req, res) => {
+//   try {
+//     console.log(req.params.id);
+//     const data = await Candidature.find({ idOffer: req.params.id })
+//       .populate("idUser")
+//       .populate("idOffer");
+//     res.status(200).json(data);
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
 const rejectCandidatureById = async (req, res) => {
   const { id } = req.params;
@@ -189,9 +203,9 @@ const getCandidatureByStudentId = async (req, res) => {
     console.log("55555");
 
     console.log(req.userId);
-    const data = await Candidature.find({ idUser: req.userId })
-      .populate("idUser")
-      .populate("idOffer");
+    const data = await Candidacy.find({ idUser:req.userID})
+      .populate("userID")
+      .populate("offerID");
     res.status(200).json(data);
   } catch (error) {
     console.log(error.message);
@@ -199,14 +213,49 @@ const getCandidatureByStudentId = async (req, res) => {
   }
 };
 
+const acceptTopCvAverage = async (req, res) => {
+  try {
+    const top = parseInt(req.params.limit);
+    const offerID = req.params.offerid
+    const topCandidacies = await Candidacy.find({ offerID, status: "Pending"}).sort({ average_candidacy: -1 }).limit(top);
+    for (let i = 0; i < topCandidacies.length; i++) {
+      const candidacy = topCandidacies[i];
+      
+      const updatedCandidacy = await Candidacy.findOneAndUpdate(
+          { _id: candidacy._id },
+          { status: "Accepted" },
+          { new: true }
+      );
+      console.log("Updated candidacy:", updatedCandidacy);
+   }
+
+    const lessCandidacies = await Candidacy.find({ offerID, status: "Pending" });
+    for (let i = 0; i < lessCandidacies.length; i++) {
+      const candidacy = lessCandidacies[i];
+      
+      const updatedCandidacy = await Candidacy.findOneAndUpdate(
+          { _id: candidacy._id },
+          { status: "Refused" },
+          { new: true }
+      );
+      console.log("Updated candidacy:", updatedCandidacy);
+      
+  }
+  res.status(201).json({ message: 'all best Candidacies accepted !!!' });
+  } catch (error) {
+    console.error('Error fetching top candidacies:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 module.exports = {
   AjouterCandidature,
   ModifierCandidature,
   SupprimerCandidature,
   getAllCandidature,
-  getCandidatureById,
   rejectCandidatureById,
-  acceptCandidatureById,
   getCandidatureByStudentId,
+  getCandidatureByIdOffer,
+  acceptTopCvAverage,
 
 };

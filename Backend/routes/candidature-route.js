@@ -7,15 +7,19 @@ var {
   ModifierCandidature,
   SupprimerCandidature,
   getAllCandidature,
-  getCandidatureById,
   rejectCandidatureById,
-  acceptCandidatureById,
+  acceptTopCvAverage,
   getCandidatureByStudentId,
+  getCandidatureByIdOffer
 } = require("../Controllers/candidature-controller");
 var {
   extractTextAndContactInfoFromPDF,
   uplodCv,
   topCvAverage,
+  getCandidacyByID,
+  updateCandidacyByID,
+  acceptTopCvAverage,
+  getOneCandidacy,
 }= require("../Controllers/textExtractor")
 const upload = multer();
 
@@ -35,19 +39,24 @@ router.delete("/deleteCandidature/:id", SupprimerCandidature);
 router.get("/getAllCandidature", getAllCandidature);
 
 // get candidatire by id
-router.get("/getCandidatureById/:id", getCandidatureById);
+//router.get("/getCandidatureById/:id", getCandidatureById);
 
 //reject Candidature par id
 router.put("/rejectCandidatureById/:id", rejectCandidatureById);
 
 // Accept Candidature par id
-router.put("/acceptCandidatureById/:id", acceptCandidatureById);
+//router.put("/acceptCandidatureById/:id", acceptCandidatureById);
 
-router.get("/getAllCandidatureStudent", verifyToken, getCandidatureByStudentId);
-
+router.get("/getAllCandidatureStudent", verifyToken, getCandidatureByStudentId)
 router.post("/addCandidacy", extractTextAndContactInfoFromPDF);
 router.post("/upload",upload.single('pdf'), uplodCv);
 router.get("/top-candidacies/:limit",topCvAverage)
+router.get("/candidacy/:candidacyid",getCandidacyByID)
+router.put("/candidacy/:candidacyid",updateCandidacyByID)
+router.put("/aceept-top-candidacies/:limit/:offerid",acceptTopCvAverage)
+router.get("/one/:offerid",getOneCandidacy)
+router.get("/getCandidatureById/:id", getCandidatureByIdOffer);
+
 
 
 module.exports = router;

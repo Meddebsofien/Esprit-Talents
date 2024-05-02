@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import "./listeCandidatures.css";
+
 import {
   Typography,
   Container,
@@ -17,17 +19,20 @@ import {
   TextField,
   MenuItem,
   Box,
-  Chip,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
   tableCellClasses,
+  InputLabel,
+  FormControl,
+  OutlinedInput,
+  Tooltip,
+  Chip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Avatar from "@mui/material/Avatar";
 import { styled } from "@mui/material/styles";
-import { deepPurple } from "@mui/material/colors";
+import { deepOrange, deepPurple } from "@mui/material/colors";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+
+import Footer from "../../pages/footer";
 import NavbarEntreprise from "../../pages/NavbarEntreprise.";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -86,6 +91,13 @@ const CandidaturesList = () => {
   const [searchText, setSearchText] = useState("");
   const [filterValue, setFilterValue] = useState("");
   const [candidatures, setCandidatures] = useState([]);
+  const [topToAccept, setTopToAccept] = useState(0);
+  const [display, setDisplay] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleFileClick = (fileLink) => {
+    window.open(fileLink, "_blank");
+  };
 
   useEffect(() => {
     const fetchCandidatures = async () => {
@@ -100,41 +112,50 @@ const CandidaturesList = () => {
       }
     };
 
+    const fetchOneCandidacy = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3700/candidatures/one/${param.id}`
+        );
+        setDisplay(response.data.exist);
+        console.log("display : ", display);
+      } catch (error) {
+        console.error("Error fetching one candidacy:", error);
+      }
+    };
+
     fetchCandidatures();
+    fetchOneCandidacy();
   }, []);
 
-  const handleFileClick = (fileLink) => {
-    window.open(fileLink, "_blank");
-  };
-
-  const handleAccept = async (id) => {
-    try {
-      await axios.put(
-        `http://localhost:3700/candidatures/acceptCandidatureById/${id}`
-      );
-
-      setCandidatures((prevCandidatures) =>
-        prevCandidatures.map((c) =>
-          c._id === id ? { ...c, status: "accepted" } : c
-        )
-      );
-    } catch (error) {
-      console.error("Error accepting candidature:", error);
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    if (!/^[a-zA-Z\s]*$/.test(value)) {
+      setError("Please enter only letters and spaces");
+    } else {
+      setError("");
+      setSearchText(value);
     }
   };
 
-  const handleReject = async (id) => {
-    try {
-      await axios.put(
-        `http://localhost:3700/candidatures/rejectCandidatureById/${id}`
-      );
-      setCandidatures((prevCandidatures) =>
-        prevCandidatures.map((c) =>
-          c._id === id ? { ...c, status: "rejected" } : c
-        )
-      );
-    } catch (error) {
-      console.error("Error rejecting candidature:", error);
+  const handleAcceptTopCandidacies = async () => {
+    console.log(topToAccept);
+    if (topToAccept > 0) {
+      try {
+        await axios.put(
+          `http://localhost:3700/candidatures/aceept-top-candidacies/${topToAccept}/${param.id}`
+        );
+
+        setCandidatures((prevCandidatures) =>
+          prevCandidatures.map((c) =>
+            c._id === id ? { ...c, status: "accepted" } : c
+          )
+        );
+        setDisplay(true);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error accepting candidature:", error);
+      }
     }
   };
 
@@ -176,124 +197,130 @@ const CandidaturesList = () => {
           </Typography>
         </Stack>
         <Stack direction="row" alignItems="center" mb={5}>
-          <Box>
-            <FormControl fullWidth sx={{ mr: 1, width: 250 }} size="small">
-              <InputLabel htmlFor="outlined-adornment-amount">
-                Rechercher
-              </InputLabel>
-              <OutlinedInput
-                startAdornment={<SearchIcon position="start">$</SearchIcon>}
-                label="Amount"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-              />
-            </FormControl>
-          </Box>
-          <Box>
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Filtre"
-              size="small"
-              sx={{ width: 150 }}
-              value={filterValue}
-              onChange={(e) => setFilterValue(e.target.value)}
-            >
-              {Filter.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Box>
+          <div className="topTableBar">
+            <div className="left">
+              <Box>
+                <FormControl fullWidth sx={{ mr: 1, width: 250 }} size="small">
+                  <InputLabel htmlFor="outlined-adornment-amount">
+                    Rechercher
+                  </InputLabel>
+                  <OutlinedInput
+                    startAdornment={<SearchIcon position="start">$</SearchIcon>}
+                    label="Amount"
+                    value={searchText}
+                    onChange={handleInputChange}
+                  />
+                  {error && <Typography color="error">{error}</Typography>}
+                </FormControl>
+              </Box>
+              <Box>
+                <TextField
+                  id="outlined-select-currency"
+                  select
+                  label="Filtre"
+                  size="small"
+                  sx={{ width: 150 }}
+                  value={filterValue}
+                  onChange={(e) => setFilterValue(e.target.value)}
+                >
+                  {Filter.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </div>
+            <div className="right">
+              <Box>
+                <TextField
+                  id="outlined-accepted-candidacies"
+                  label="Top accepted candidacies"
+                  size="small"
+                  sx={{ width: 200, marginLeft: "20px" }}
+                  required
+                  error={!!error}
+                  helperText={error}
+                  value={topToAccept}
+                  onChange={(e) => setTopToAccept(e.target.value)}
+                  inputProps={{ inputMode: "numeric" }}
+                />
+              </Box>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  sx={{ width: 200, marginLeft: "20px" }}
+                  type="submit"
+                  onClick={handleAcceptTopCandidacies}
+                >
+                  Accept top candidacies
+                </Button>
+              </Box>
+            </div>
+          </div>
         </Stack>
         <TableContainer component={Paper} sx={{ maxHeight: 840 }}>
           <Table sx={{ minWidth: 500 }} stickyHeader>
             <TableHead>
               <TableRow>
                 <StyledTableCell>
-                  <b>#</b>
+                  <b> #</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b>FullName</b>
-                </StyledTableCell>
-
-                <StyledTableCell>
-                  <b>Mail</b>
+                  <b> FullName </b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b>Date</b>
+                  <b> mail</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b>CV</b>
+                  <b> Candidacy Average</b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b>Motivation Letter</b>
+                  <b> Profile </b>
                 </StyledTableCell>
                 <StyledTableCell>
-                  <b>Status</b>
+                  {" "}
+                  <b> CV</b>{" "}
                 </StyledTableCell>
-
-                <StyledTableCell padding="none">
-                  <b>Actions</b>
+                <StyledTableCell>
+                  {" "}
+                  <b> Status</b>{" "}
                 </StyledTableCell>
               </TableRow>
             </TableHead>
-
             <TableBody>
               {filteredData.map((candidature, index) => (
                 <StyledTableRow key={index}>
                   <TableCell>
+                    {" "}
                     <Avatar
                       sx={{ width: 26, height: 26, bgcolor: deepPurple[500] }}
                     >
                       {candidature?.idUser?.nom[0].toUpperCase()}
                     </Avatar>
                   </TableCell>
+                  <TableCell> {candidature.name} </TableCell>
+                  <TableCell> {candidature.email} </TableCell>
+                  <TableCell> {candidature.average_candidacy} </TableCell>
+                  <TableCell> {candidature.profile_candidate} </TableCell>
                   <TableCell>
-                    {candidature?.idUser?.nom +
-                      " " +
-                      candidature?.idUser?.prenom}
-                  </TableCell>
-                  <TableCell>{candidature?.idUser?.mail}</TableCell>
-                  <TableCell>{candidature.date}</TableCell>
-                  <TableCell>
-                    {candidature.cvUpload && (
+                    {" "}
+                    {candidature.cv_url && (
                       <InsertDriveFileIcon
-                        onClick={() => handleFileClick(candidature.cvUpload)}
+                        onClick={() => handleFileClick(candidature.cv_url)}
                       />
                     )}
                   </TableCell>
                   <TableCell>
-                    {candidature.motivationLetterUpload && (
-                      <InsertDriveFileIcon
-                        onClick={() =>
-                          handleFileClick(candidature.motivationLetterUpload)
-                        }
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>
+                    {" "}
                     <Chip
                       label={candidature?.status.toUpperCase()}
                       variant="contained"
                       size="small"
                       color={getColorVariant(candidature?.status)}
                     />
-                  </TableCell>
-
-                  <TableCell>
-                    {candidature.status === "accepted" && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        component={Link}
-                        to={`/entretien/${candidature._id}`}
-                      >
-                        Faire Entretien
-                      </Button>
-                    )}
                   </TableCell>
                 </StyledTableRow>
               ))}

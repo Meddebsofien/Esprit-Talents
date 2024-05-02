@@ -32,7 +32,11 @@ const candidacySchema = new mongoose.Schema({
   pdfContaint: pdfContaintSchema,
   average_candidacy: Number,
   profile_candidate: String,
-  numberOfYears: Number
+  numberOfYears: Number,
+  userID: String,
+  offerID: String,
+  cv_url: String,
+  status: String
 }, { collection: 'candidacy' });
 
 // Create the Candidacy model

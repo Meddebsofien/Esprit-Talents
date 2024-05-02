@@ -11,33 +11,22 @@ import Modal from "react-bootstrap/Modal";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Swal from "sweetalert2";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DetailsOffer = () => {
+
+  const [pdfUrl,setPdfUrl] = useState(null);
+  const [file, setFile] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [actuelOffer, setActuelOffer] = useState("");
   const [errors, setErrors] = useState({});
   const [form, setFormEmploi] = useState({
-    levelStudy: "",
-    academicField: "",
-    experience: "",
     cvUpload: null,
     motivationLetterUpload: null,
-    telephoneNumber: "",
     typeCandidature: "Job",
-    idOffer: actuelOffer,
-    idUser: "",
-  });
-  const [formInternship, setFormInternship] = useState({
-    academicField: "",
-    telephoneNumber: "",
-    internshipType: "",
-    cvUpload: null,
-    motivationLetterUpload: null,
-
-    typeCandidature: "Intership",
-    internshipDuration: "",
     idOffer: actuelOffer,
     idUser: "",
   });
@@ -48,139 +37,146 @@ const DetailsOffer = () => {
     e.preventDefault();
 
     const errors = {};
-    if (!form.levelStudy) {
-      errors.levelStudy = "Level Study is required";
-    }
-    if (!form.academicField) {
-      errors.academicField = "Academic Field is required";
-    }
-    if (!form.experience) {
-      errors.experience = "Experience is required";
-    }
+   
     if (!form.cvUpload) {
       errors.cvUpload = "CV PDF is required";
     }
     if (!form.motivationLetterUpload) {
       errors.motivationLetterUpload = "Motivation Letter PDF is required";
     }
-    if (!form.telephoneNumber) {
-      errors.telephoneNumber = "Telephone Number is required";
-    } else if (form.telephoneNumber.length !== 8) {
-      errors.telephoneNumber = "Telephone Number must be  8 characters";
-    }
+    
     setErrors(errors);
     const formData = new FormData();
-    formData.append("levelStudy", form.levelStudy);
-    formData.append("academicField", form.academicField);
-    formData.append("experience", form.experience);
     formData.append("cv", form.cvUpload);
     formData.append("motivationLetter", form.motivationLetterUpload);
-    formData.append("telephoneNumber", form.telephoneNumber);
-    formData.append("typeCandidature", "Job");
     formData.append("idOffer", actuelOffer);
     formData.append("idUser", idAct);
     console.log(formData);
-    if (Object.keys(errors).length === 0) {
+
+    if (Object.keys(errors).length != 0) {
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'd7tvdr8o');
+      var fileUrl = '';
+  
       try {
+        const response = await axios.post(
+          'https://api.cloudinary.com/v1_1/ddbmnd09o/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+  
+        console.log('File uploaded:', response.data);
+        fileUrl = response.data.secure_url;
+        //setPdfUrl(fileUrl)
+        console.log('File URL:', fileUrl);
+        
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+     
+      try {
+        
         const response = await axios
-          .post("http://localhost:3700/candidatures/addCandidature", formData)
-          .then(() => {
+          .post("http://localhost:3700/candidatures/addCandidacy", {
+            pdfUrl: fileUrl,
+            actuelOffer: actuelOffer,
+            idAct: idAct,
+          })
+          .then(()=>{
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: "candidature Ajouter Avec success",
+              title: "Candidacy Added successfully",
               showConfirmButton: false,
               timer: 2000,
             });
           });
+        
         navigate("/Student");
       } catch (error) {
-        console.log(error);
+         console.log("error post : ",error);
       }
     }
+    console.log("pdfuRL : ",pdfUrl)
+  };
+
+  const handleFileInputChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile); 
   };
 
   const handleChange = (e) => {
     setFormEmploi({ ...form, [e.target.name]: e.target.value });
   };
-  const handleChangeIntern = (e) => {
-    setFormInternship({ ...formInternship, [e.target.name]: e.target.value });
-  };
-
-  const handleChangeDoc = (e) => {
-    setFormEmploi({
-      ...form,
-      [e.target.name]: e.target.files[0],
-    });
-  };
-  const handleChangeDocEmploi = (e) => {
-    setFormInternship({
-      ...formInternship,
-      [e.target.name]: e.target.files[0],
-    });
-  };
+  
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
 
-  const handleSubmitInternship = async (e) => {
-    e.preventDefault();
+  // const handleSubmitInternship = async (e) => {
+  //   e.preventDefault();
 
-    const errors = {};
+  //   const errors = {};
 
-    if (!formInternship.academicField) {
-      errors.academicField = "Academic Field is required";
-    }
-    if (!formInternship.internshipType) {
-      errors.internshipType = "Internship Type is required";
-    }
+  //   if (!formInternship.academicField) {
+  //     errors.academicField = "Academic Field is required";
+  //   }
+  //   if (!formInternship.internshipType) {
+  //     errors.internshipType = "Internship Type is required";
+  //   }
 
-    if (!formInternship.internshipDuration) {
-      errors.internshipDuration = "Internship Duration is required";
-    }
-    if (!formInternship.telephoneNumber) {
-      errors.telephoneNumber = "Telephone Number is required";
-    } else if (formInternship.telephoneNumber.length !== 8) {
-      errors.telephoneNumber = "Telephone Number must be  8 charcters";
-    }
-    if (!formInternship.cvUpload) {
-      errors.cvUpload = "CV PDF is required";
-    }
-    if (!formInternship.motivationLetterUpload) {
-      errors.motivationLetterUpload = "Motivation Letter PDF is required";
-    }
-    setErrors(errors);
-    const formDataIn = new FormData();
-    formDataIn.append("cv", formInternship.cvUpload);
-    formDataIn.append(
-      "motivationLetter",
-      formInternship.motivationLetterUpload
-    );
-    formDataIn.append("typeCandidature", "Intership");
-    formDataIn.append("idOffer", actuelOffer);
-    formDataIn.append("idUser", idAct);
-    formDataIn.append("academicField", formInternship.academicField);
-    formDataIn.append("internshipDuration", formInternship.internshipDuration);
-    formDataIn.append("telephoneNumber", formInternship.telephoneNumber);
+  //   if (!formInternship.internshipDuration) {
+  //     errors.internshipDuration = "Internship Duration is required";
+  //   }
+  //   if (!formInternship.telephoneNumber) {
+  //     errors.telephoneNumber = "Telephone Number is required";
+  //   } else if (formInternship.telephoneNumber.length !== 8) {
+  //     errors.telephoneNumber = "Telephone Number must be  8 charcters";
+  //   }
+  //   if (!formInternship.cvUpload) {
+  //     errors.cvUpload = "CV PDF is required";
+  //   }
+  //   if (!formInternship.motivationLetterUpload) {
+  //     errors.motivationLetterUpload = "Motivation Letter PDF is required";
+  //   }
+  //   setErrors(errors);
+  //   const formDataIn = new FormData();
+  //   formDataIn.append("cv", formInternship.cvUpload);
+  //   formDataIn.append(
+  //     "motivationLetter",
+  //     formInternship.motivationLetterUpload
+  //   );
+  //   formDataIn.append("typeCandidature", "Intership");
+  //   formDataIn.append("idOffer", actuelOffer);
+  //   formDataIn.append("idUser", idAct);
+  //   formDataIn.append("academicField", formInternship.academicField);
+  //   formDataIn.append("internshipDuration", formInternship.internshipDuration);
+  //   formDataIn.append("telephoneNumber", formInternship.telephoneNumber);
 
-    if (Object.keys(errors).length === 0) {
-      try {
-        const response = await axios
-          .post("http://localhost:3700/candidatures/addCandidature", formDataIn)
-          .then(() => {
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "candidature Ajouter Avec success",
-              showConfirmButton: false,
-              timer: 2000,
-            });
-            navigate("/Student");
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  //   if (Object.keys(errors).length === 0) {
+  //     try {
+  //       const response = await axios
+  //         .post("http://localhost:3700/candidatures/addCandidature", formDataIn)
+  //         .then(() => {
+  //           Swal.fire({
+  //             position: "top-end",
+  //             icon: "success",
+  //             title: "candidature Ajouter Avec success",
+  //             showConfirmButton: false,
+  //             timer: 2000,
+  //           });
+  //           navigate("/Student");
+  //         });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   const [data, setdata] = useState({});
 
@@ -322,7 +318,9 @@ const DetailsOffer = () => {
       <Modal show={showModal} onHide={handleModalClose}>
         <Form
           onSubmit={
-            data.type === "Emploi" ? handleSubmitJob : handleSubmitInternship
+            // data.type === "Emploi" ? handleSubmitJob : handleSubmitInternship
+            handleSubmitJob
+
           }
         >
           <Modal.Header closeButton>
@@ -338,78 +336,15 @@ const DetailsOffer = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {data.type === "Emploi" && (
+            
               <>
-                <Form.Group controlId="levelStudy">
-                  <Form.Label>Level Study</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="levelStudy"
-                    value={form.levelStudy}
-                    isInvalid={!!errors.levelStudy}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Level</option>
-                    <option value="Licence">Licence</option>
-                    <option value="Master">Master</option>
-                    <option value="engineering">Engineering</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.levelStudy}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group controlId="academicField">
-                  <Form.Label>Academic Field</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="academicField"
-                    value={form.academicField}
-                    onChange={handleChange}
-                    isInvalid={!!errors.academicField}
-                    required
-                  >
-                    <option value="">Select Field</option>
-                    <option value="Business">Business</option>
-                    <option value="Computer Science">Computer Science</option>
-                  </Form.Control>
-                  <Form.Control.Feedback
-                    type="invalid"
-                    style={{ color: "red" }}
-                  >
-                    {errors.academicField}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group controlId="experience">
-                  <Form.Label>Experience</Form.Label>
-                  <Form.Control
-                    as="select"
-                    name="experience"
-                    value={form.experience}
-                    onChange={handleChange}
-                    isInvalid={!!errors.experience}
-                    required
-                  >
-                    <option value="">Select Experience</option>
-                    <option value="Under year">Under year</option>
-                    <option value="1-2">1-2 years</option>
-                    <option value="2-6">2-6 years</option>
-                    <option value="Over 6">Over 6 years</option>
-                  </Form.Control>
-                  <Form.Control.Feedback type="invalid">
-                    {errors.experience}
-                  </Form.Control.Feedback>
-                </Form.Group>
-
                 <Form.Group controlId="cv">
                   <Form.Label>Upload your CV PDF</Form.Label>
                   <input
                     type="file"
                     name="cvUpload"
-                    onChange={handleChangeDoc}
-                    isInvalid={!!errors.cv}
+                    onChange={handleFileInputChange}
+                    // isInvalid={!!errors.cv}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -422,32 +357,17 @@ const DetailsOffer = () => {
                   <Form.Control
                     type="file"
                     name="motivationLetterUpload"
-                    onChange={handleChangeDoc}
-                    isInvalid={!!errors.motivationLetter}
-                    required
+                    // isInvalid={!!errors.motivationLetter}
+                    // required
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.motivationLetter}
                   </Form.Control.Feedback>
                 </Form.Group>
-
-                <Form.Group controlId="telephoneNumber">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="telephoneNumber"
-                    value={form.telephoneNumber}
-                    onChange={handleChange}
-                    isInvalid={!!errors.telephoneNumber}
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {errors.telephoneNumber}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                
               </>
-            )}
-            {data.type === "Stage" && (
+              <ToastContainer />
+            {/* {data.type === "Stage" && (
               <>
                 <Form.Group controlId="academicField">
                   <Form.Label>Academic Field</Form.Label>
@@ -550,20 +470,22 @@ const DetailsOffer = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
               </>
-            )}
+            )} */}
             {/* Add other form fields here */}
           </Modal.Body>
           <Modal.Footer>
             <Button
               variant="contained"
               onClick={
-                data.type === "Emploi"
-                  ? handleSubmitJob
-                  : handleSubmitInternship
+                // data.type === "Emploi"
+                  // ? handleSubmitJob
+                  // : handleSubmitInternship
+                  handleSubmitJob
               }
             >
               Submit
             </Button>{" "}
+            
             &nbsp;
             <Button variant="outlined" onClick={handleModalClose}>
               Close

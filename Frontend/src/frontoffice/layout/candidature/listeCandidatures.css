@@ -1,0 +1,15 @@
+.topTableBar {
+  display: flex; 
+  justify-content: space-between;
+  margin-top: 20px;
+  Width: 20000px
+}
+
+.left{
+  display: flex; 
+}
+
+.right{
+  display: flex; 
+  justify-content: space-evenly
+}
