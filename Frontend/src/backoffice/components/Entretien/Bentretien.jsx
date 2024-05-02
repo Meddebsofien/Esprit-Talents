@@ -59,8 +59,8 @@ const BEntretien = () => {
 
   const columns = [
     { field: 'id_candidature', headerName: 'ID Candidature', flex: 1 },
-    { field: 'date_debut', headerName: 'Date début', flex: 1, valueFormatter: ({ value }) => formatDate(value) },
-    { field: 'date_fin', headerName: 'Date fin', flex: 1, valueFormatter: ({ value }) => formatDate(value) },
+    { field: 'date_debut', headerName: 'Start date', flex: 1, valueFormatter: ({ value }) => formatDate(value) },
+    { field: 'date_fin', headerName: 'End date', flex: 1, valueFormatter: ({ value }) => formatDate(value) },
     { field: 'type', headerName: 'Type', flex: 1 },
     {
       field: 'actions',
@@ -97,7 +97,7 @@ const BEntretien = () => {
         <select value={filterType} onChange={handleFilterChange}>
           <option value="">All</option>
           <option value="en ligne">En ligne</option>
-          <option value="en présentiel">En présentiel</option>
+          <option value="en présentiel">On Site</option>
         </select>
       </div>
       <div style={{ height: 600, width: '100%' }}>

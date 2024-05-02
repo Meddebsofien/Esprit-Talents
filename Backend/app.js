@@ -8,9 +8,11 @@ const http = require('http');
 const { Server } = require("socket.io");
 const multer = require('multer');
 const messageRoute = require('./routes/message-route');
+const twilio = require('twilio');
 
-
-
+const accountSid='AC8428490632a897b2d45737bd00f95760';
+const authToken='d688b25e0383323550e7407273debcf8';
+const client1 = twilio(accountSid, authToken);
 
 
 
@@ -347,6 +349,19 @@ app.get("/set2FA/:id", async (req, res) => {
 });
 
 // app.use(cros());
+app.get('/send-text', (req, res) => {
+  res.send('Hello to the Twilio Server')
+
+  const { recipient, textmessage } = req.query;
+
+
+  client1.messages.create({
+    body: textmessage,
+    to: '+216' + recipient,  // Add '216' prefix to the recipient number
+    from: '+19073127212' // From a valid Twilio number
+}).then((message) => console.log(message.body))
+.catch((error) => console.error('Error sending message:', error));
+})
 
 const WEBSOCKET_PORT = process.env.WEBSOCKET_PORT || 3001; // Use port 3001 for WebSocket server
 

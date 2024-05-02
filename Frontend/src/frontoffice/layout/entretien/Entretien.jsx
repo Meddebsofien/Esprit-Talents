@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import axios from 'axios';
 import Navbar from '../../pages/Navbar';
 import Footer from '../../pages/footer';
 import InputGroup from './inputGroup';
 import Swal from 'sweetalert2';
-import { useNavigate , useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Entretien() {
+  const [text, setText] = useState({
+    recipient: '',
+    textmessage: ''
+  });
+
+  const sendText = () => {
+    // Pass variables within the query string
+    fetch(`http://localhost:3700/send-text?recipient=${text.recipient}&textmessage=${text.textmessage}`)
+      .catch(err => console.error(err))
+  }
+
   const navigate = useNavigate();
-  const { candidatureId } = useParams(); 
+  const { candidatureId } = useParams();
   const [formData, setFormData] = useState({
     date_debut: '',
     date_fin: '',
@@ -18,7 +29,7 @@ function Entretien() {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const confirmation = await Swal.fire({
-      title: 'Êtes-vous sûr de vouloir ajouter cet entretien ?',
+      title: 'are you sure you want to add this interview ?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Oui',
@@ -38,8 +49,8 @@ function Entretien() {
         // Show error message using Swal
         Swal.fire({
           icon: 'error',
-          title: 'Date invalide',
-          text: 'Veuillez sélectionner une date future pour Date début',
+          title: 'invalid Date',
+          text: 'please select a date in the future',
         });
         return; // Stop execution if the selected date is before the current date
       }
@@ -49,7 +60,7 @@ function Entretien() {
       const halfHourLater = new Date(dateDebut.getTime() + 30 * 60000); // 30 minutes later
 
       if (dateFin <= dateDebut || dateFin < halfHourLater) {
-        throw new Error('Date fin doit être au moins une demi-heure après Date début');
+        throw new Error('End date must be atleast after 30 mins of start date');
       }
 
       const interval = (dateFin - dateDebut) / (1000 * 60 * 60); // Difference in hours
@@ -92,10 +103,18 @@ function Entretien() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const spacer = {
+    margin: 8
+  };
+
+  const textAreaStyle = {
+    borderRadius: 4
+  };
+
   return (
     <div>
       <Navbar />
-      <div className="new">
+      <div className="new" style={spacer}>
         <div className="newContainer">
           <div className="top">
             <h1>Entretien</h1>
@@ -110,7 +129,7 @@ function Entretien() {
 
                   <div className="w-1/2">
                     <InputGroup
-                      label="Date début"
+                      label="Start Date"
                       type="datetime-local"
                       name="date_debut"
                       onChangeHandler={onChangeHandler}
@@ -120,7 +139,7 @@ function Entretien() {
 
                   <div className="w-1/2">
                     <InputGroup
-                      label="Date fin"
+                      label="End Date"
                       type="datetime-local"
                       name="date_fin"
                       min={formData.date_debut}
@@ -129,7 +148,7 @@ function Entretien() {
                     />
                   </div>
 
-                  <div className="w-1/2">
+                  <div className="w-1" style={{ width:'300px'}}>
                     <InputGroup
                       label="Type"
                       type="select"
@@ -145,12 +164,42 @@ function Entretien() {
 
                 <div className="left">
                   <div className="col-lg-4 col-md-6 footer-newsletter">
-                    <button type="submit">Envoyer</button>
+                    <button type="submit" style={{ width:'200px' , paddingRight:'5%'}}>Send</button>
                   </div>
                 </div>
               </form>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="card" style={spacer}>
+        <div className="card-header">
+          <h2 className="card-title">Send SMS message</h2>
+        </div>
+        <div className="card-body">
+          <div className="form-group">
+            <label htmlFor="phone">Phone number</label>
+            <input
+              id="phone"
+              className="form-control form-control-sm"
+              value={text.recipient}
+              onChange={(e) => setText({ ...text, recipient: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="message">Message</label>
+            <textarea
+              id="message"
+              className="form-control"
+              rows={3}
+              value={text.textmessage}
+              style={textAreaStyle}
+              onChange={(e) => setText({ ...text, textmessage: e.target.value })}
+            />
+          </div>
+          <button className="btn btn-danger" onClick={sendText}>
+            Send SMS
+          </button>
         </div>
       </div>
       <Footer />

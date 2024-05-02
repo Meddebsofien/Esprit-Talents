@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 const entretienController = require('../Controllers/entretien-controller');
 const { google } = require('googleapis');
+const twilio = require('twilio');
+
+
+const accountSid='AC8428490632a897b2d45737bd00f95760';
+const authToken='d688b25e0383323550e7407273debcf8';
+const client1 = twilio(accountSid, authToken);
 
 const GOOGLE_CLIENT_ID = '378674684451-92bus170ne1jlv9tn64ontuqtcopi32i.apps.googleusercontent.com';
 const GOOGLE_CLIENT_SECRET = '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';
@@ -70,4 +76,7 @@ router.post('/create-event',async(req,res,next)=>{
     next(error);
   }
 })
+//Twilio text
+
+
 module.exports = router;
