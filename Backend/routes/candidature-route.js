@@ -10,7 +10,8 @@ var {
   rejectCandidatureById,
   acceptTopCvAverage,
   getCandidatureByStudentId,
-  getCandidatureByIdOffer
+  getCandidatureByIdOffer,
+  
 } = require("../Controllers/candidature-controller");
 var {
   extractTextAndContactInfoFromPDF,
@@ -20,6 +21,7 @@ var {
   updateCandidacyByID,
   acceptTopCvAverage,
   getOneCandidacy,
+  deleteCandidacyById
 }= require("../Controllers/textExtractor")
 const upload = multer();
 
@@ -55,7 +57,8 @@ router.get("/candidacy/:candidacyid",getCandidacyByID)
 router.put("/candidacy/:candidacyid",updateCandidacyByID)
 router.put("/aceept-top-candidacies/:limit/:offerid",acceptTopCvAverage)
 router.get("/one/:offerid",getOneCandidacy)
-router.get("/getCandidatureById/:id", getCandidatureByIdOffer);
+router.get("/getCandidatureById/:id", getCandidatureByIdOffer)
+router.delete("/delete",deleteCandidacyById)
 
 
 

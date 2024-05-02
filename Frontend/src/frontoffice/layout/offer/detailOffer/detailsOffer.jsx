@@ -331,13 +331,19 @@ const DetailsOffer = () => {
                 variant="h5"
                 gutterBottom
               >
-                Please fill out this {data.type} application form
+                Please fill in this{" "}
+                {data.type === "Emploi"
+                  ? "Job"
+                  : data.type === "Stage"
+                  ? "Internship"
+                  : data.type}
               </Typography>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             
               <>
+              
                 <Form.Group controlId="cv">
                   <Form.Label>Upload your CV PDF</Form.Label>
                   <input

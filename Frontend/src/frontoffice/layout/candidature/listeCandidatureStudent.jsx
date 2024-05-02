@@ -22,47 +22,77 @@ function ListeCandidatureStudent() {
         return "default";
     }
   };
-  const [offer, setOffer] = useState([]);
-  useEffect(() => {
-    const fetchCandidatures = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  //const [user, setUser] = useState({});
+  const [idc, setIdc] = useState("");
+  const [offer, setOffer] = useState([]); 
+  const [data, setData] = useState([]);
 
-        const response = await axios.get(
-          `http://localhost:3700/candidatures/getAllCandidatureStudent`,
-          {
-            headers: {
-              "x-access-token": token,
-            },
-          }
-        );
-        console.log(response);
-        setOffer(response?.data);
-      } catch (error) {
-        console.error("Error fetching candidatures:", error);
+useEffect(() => {
+  const fetchCandidatures = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      var decodedPayload;
+      var user_id;
+
+      if (token) {
+        const [header, payload, signature] = token.split(".");
+        decodedPayload = JSON.parse(atob(payload));
+        user_id = decodedPayload.id;
+      } else {
+        console.log("Token non trouvé dans localStorage");
+        throw new Error('Invalid user data or missing _id property');
       }
-    };
 
-    fetchCandidatures();
-  }, []);
+      const response = await axios.get(
+        `http://localhost:3700/candidatures/getAllCandidatureStudent/${user_id}`,
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
 
-  const onDelete = async (id) => {
-    const token = localStorage.getItem("token");
-
-    const response = await axios.delete(
-      `http://localhost:3700/candidatures/deleteCandidature/${id}`,
-      {
-        headers: {
-          "x-access-token": token,
-        },
+      if (!response.data) {
+        throw new Error('Empty response data');
       }
-    );
+      const dataDetails = [];
 
-    if (response.status === 200) {
-      const newOffer = offer.filter((item) => item._id !== id);
-      setOffer(newOffer);
+      // Iterate through each candidacy object in the response
+      for (const candidacy of response.data) {
+          const id_offer = candidacy.offerID;
+          // Make a separate API call to get offer details by ID
+          const offerResponse = await axios.get(
+              `http://localhost:3700/offers/getOfferById/${id_offer}`
+          );
+
+          // Create an object with desired information from both candidacy and offer
+          const dataObject = {
+              candidacyId: candidacy._id,
+              status: candidacy.status,
+              title: offerResponse.data.title,
+              company: offerResponse.data.company,
+              dateOffer: offerResponse.data.startDate,
+              type: offerResponse.data.type
+          };
+
+          console.log("*************",dataObject.candidacyId)
+          dataDetails.push(dataObject);
+      }
+
+      // Update state with the array of objects
+      setData(dataDetails);
+
+    } catch (error) {
+      console.error("Error fetching candidatures:", error);
+      // Handle error state or display error message to the user
     }
   };
+
+  fetchCandidatures();
+}, []);
+
+
+
   return (
     <div className="m-5">
       {" "}
@@ -76,21 +106,20 @@ function ListeCandidatureStudent() {
 
               <TableCell className="tableCell">type</TableCell>
               <TableCell className="tableCell">Status Candidature</TableCell>
-              <TableCell className="tableCell">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {offer?.map((item) => (
+            {data?.map((item) => (
               <TableRow key={item?._id}>
                 <TableCell className="tableCell">
-                  {item?.idOffer?.title}
+                  {item?.title}
                 </TableCell>
                 <TableCell className="tableCell">
-                  {item?.idOffer?.company}{" "}
+                  {item?.company}{" "}
                 </TableCell>{" "}
-                <TableCell className="tableCell">{item.date}</TableCell>
+                <TableCell className="tableCell">{item?.dateOffer}</TableCell>
                 <TableCell className="tableCell">
-                  {item?.idOffer?.type}
+                  {item?.type}
                 </TableCell>
                 <TableCell className="tableCell">
                   {" "}
@@ -101,16 +130,7 @@ function ListeCandidatureStudent() {
                     color={getColorVariant(item?.status)}
                   />{" "}
                 </TableCell>
-                <TableCell className="tableCell">
-                  <Button
-                    variant="outlined"
-                    startIcon={<DeleteIcon />}
-                    onClick={() => onDelete(item?._id)}
-                  >
-                    Delete
-                  </Button>{" "}
-                </TableCell>
-              </TableRow>
+                             </TableRow>
             ))}
           </TableBody>
         </Table>

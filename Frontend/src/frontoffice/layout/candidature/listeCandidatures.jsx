@@ -72,18 +72,7 @@ const Filter = [
     value: "status",
     label: "Status",
   },
-  {
-    value: "idUser.nom",
-    label: "Name",
-  },
-  {
-    value: "idUser.mail",
-    label: "Email",
-  },
-  {
-    value: "date",
-    label: "Date ",
-  },
+  
 ];
 
 const CandidaturesList = () => {
@@ -254,6 +243,11 @@ const CandidaturesList = () => {
                   sx={{ width: 200, marginLeft: "20px" }}
                   type="submit"
                   onClick={handleAcceptTopCandidacies}
+                  style={{ 
+                    borderColor: '#ad1328', // Bordure rouge clair
+                    color: 'white', // Écriture blanche
+                    backgroundColor: '#ad1328' // Fond rouge clair
+                  }}   
                 >
                   Accept top candidacies
                 </Button>

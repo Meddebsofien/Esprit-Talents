@@ -164,8 +164,12 @@ const ListOffers = () => {
                         variant="outlined"
                         onClick={() => onViewCandidatures(_id)}
                         size="small"
-                      >
-                        Candidatures
+                        style={{ 
+                          borderColor: '#ad1328', // Bordure rouge clair
+                          color: 'white', // Écriture blanche
+                          backgroundColor: '#ad1328' // Fond rouge clair
+                        }}                      >
+                        Manage Applications
                       </Button>
                     </TableCell>
                   </TableRow>

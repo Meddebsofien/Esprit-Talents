@@ -45,7 +45,31 @@ const acceptTopCvAverage = async (req, res) => {
           { new: true }
       );
       console.log("Updated candidacy:", updatedCandidacy);
-   }
+
+      // Envoi d'un e-mail d'acceptation
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'talentsesprit@gmail.com',
+          pass: 'wldp tydr nckz skjh'
+        }
+      });
+
+      var mailOptions = {
+        from: 'talentsesprit@gmail.com',
+        to: user.mail,
+        subject: 'we have updates for you ',
+        text: `your are accepted  for an interview you receive the date later . `
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
 
     const lessCandidacies = await Candidacy.find({ offerID, status: "Pending" });
     for (let i = 0; i < lessCandidacies.length; i++) {
@@ -57,9 +81,32 @@ const acceptTopCvAverage = async (req, res) => {
           { new: true }
       );
       console.log("Updated candidacy:", updatedCandidacy);
-      
-  }
-  res.status(201).json({ message: 'all best Candidacies accepted !!!' });
+
+      // Envoi d'un e-mail de refus
+      var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'talentsesprit@gmail.com',
+          pass: 'wldp tydr nckz skjh'
+        }
+      });
+
+      var mailOptions = {
+        from: 'talentsesprit@gmail.com',
+        to: user.mail,
+        subject: 'we have updates for you ',
+        text: `your are rejected for the post de ${offer.title}  `
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+    res.status(201).json({ message: 'all best Candidacies accepted !!!' });
   } catch (error) {
     console.error('Error fetching top candidacies:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -481,6 +528,21 @@ function extractLanguagesFromPDF(pdfText) {
   
   return languagesArray;
 }
+const deleteCandidacyById = async(req, res) => {
+  try {
+      // Use Mongoose's findByIdAndDelete method to delete the candidacy by its ID
+      const deletedCandidacy = await Candidacy.findByIdAndDelete({_id: req.params.id});
+      
+      if (!deletedCandidacy) {
+          throw new Error('Candidacy not found'); // Throw an error if the candidacy was not found
+      }
+
+      res.status(200).json({ message: 'deleted' });
+  } catch (error) {
+      throw new Error(`Error deleting candidacy: ${error.message}`);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+}
   
 module.exports = { extractTextAndContactInfoFromPDF,
                    uplodCv,
@@ -488,4 +550,5 @@ module.exports = { extractTextAndContactInfoFromPDF,
                    getCandidacyByID,
                    updateCandidacyByID,
                    acceptTopCvAverage,
-                   getOneCandidacy };
+                   getOneCandidacy ,
+                   deleteCandidacyById};
